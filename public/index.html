@@ -2,114 +2,185 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Municipal BI Navigation1</title>
+<title>Municipal Dashboard</title>
 
 <style>
     body {
         margin: 0;
         font-family: Arial, sans-serif;
-        background: #f0f0f0;
-    }
-
-    /* מכולה ראשית */
-    .container {
-        display: flex;
-        height: 100vh;
-        overflow: hidden;
-    }
-
-    /* תפריט צד */
-    .sidebar {
-        width: 260px;
-        background: #001f33;
+        background: #021C32;
         color: white;
-        transition: width 0.3s;
-        overflow: hidden;
     }
 
-    .sidebar.collapsed {
-        width: 60px;
-    }
-
-    .sidebar h2 {
-        padding: 15px;
-        text-align: center;
-        font-size: 20px;
-        margin: 0;
-        background: #00334d;
-    }
-
-    .menu-btn {
-        display: block;
-        padding: 12px 20px;
-        cursor: pointer;
-        border-bottom: 1px solid #00334d;
-    }
-
-    .menu-btn:hover {
-        background: #004466;
-    }
-
-    /* אייקון לתפריט מתקפל */
-    .toggle-btn {
-        background: #002233;
-        padding: 10px;
-        text-align: center;
-        cursor: pointer;
-        border-bottom: 1px solid #00334d;
-        font-size: 20px;
-    }
-
-    /* אזור ה־IFRAME */
-    .content {
-        flex-grow: 1;
-        background: white;
-    }
-
-    iframe {
+    /* אזור עליון */
+    .header {
         width: 100%;
-        height: 100%;
-        border: none;
+        padding: 20px 40px;
+        background: url('https://i.imgur.com/ZQcU9pR.png'); /* ניתן להחליף לרקע שלך */
+        background-size: cover;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
-</style>
 
+    .header .title-block {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .header .logo {
+        height: 85px;
+    }
+
+    /* רשת קוביות */
+    .grid {
+        margin: 40px auto;
+        width: 85%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+    }
+
+    /* קוביה */
+    .tile {
+        background: #08263D;
+        border-radius: 14px;
+        padding: 25px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 1px solid #0C354E;
+    }
+
+    .tile:hover {
+        background: #0C3A54;
+        transform: translateY(-4px);
+    }
+
+    .tile img {
+        width: 85px;
+        height: 85px;
+        margin-bottom: 15px;
+    }
+
+    .tile-text {
+        font-size: 18px;
+        margin-top: 5px;
+    }
+
+    /* כפתור למטה */
+    .bottom-button-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .bottom-button {
+        display: inline-block;
+        background: #08263D;
+        padding: 20px 40px;
+        border-radius: 18px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 1px solid #0C354E;
+    }
+
+    .bottom-button:hover {
+        background: #0C3A54;
+    }
+
+</style>
 </head>
+
 <body>
 
-<div class="container">
-
-    <!-- תפריט צד -->
-    <div id="sidebar" class="sidebar">
-
-        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
-
-        <h2>תפריט ניווט</h2>
-
-        <div class="menu-btn" onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
-            📊 דוח ראשון
-        </div>
-
-        <div class="menu-btn" onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
-            📈 דוח שני
-        </div>
-
+<!-- אזור עליון -->
+<div class="header">
+    <div class="title-block">
+        <div>03-12-2025 14:17</div>
+        <div>בוקר טוב,</div>
     </div>
 
-    <!-- תוכן מרכזי -->
-    <div class="content">
-        <iframe id="mainFrame" src=""></iframe>
+    <img class="logo" src="https://i.imgur.com/x6kmhfi.png" alt="logo"/>
+</div>
+
+<!-- רשת הקוביות -->
+<div class="grid">
+
+    <div class="tile" onclick="goTo('LINK1')">
+        <img src="https://i.imgur.com/uQ7bC3I.png">
+        <div class="tile-text">הסעות עירוניות</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK2')">
+        <img src="https://i.imgur.com/0u3xY5y.png">
+        <div class="tile-text">ארנונה</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK3')">
+        <img src="https://i.imgur.com/JRu9NL4.png">
+        <div class="tile-text">זימון תורים למחלקות</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK4')">
+        <img src="https://i.imgur.com/jzll5Rm.png">
+        <div class="tile-text">צריכת מים</div>
+    </div>
+
+    <!-- שורה 2 -->
+    <div class="tile" onclick="goTo('LINK5')">
+        <img src="https://i.imgur.com/aJ6yaJe.png">
+        <div class="tile-text">פינוי אשפה</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK6')">
+        <img src="https://i.imgur.com/1Cvw9eZ.png">
+        <div class="tile-text">רכבים עירוניים</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK7')">
+        <img src="https://i.imgur.com/5Wj2YrG.png">
+        <div class="tile-text">מרשם אוכלוסין שכונה</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK8')">
+        <img src="https://i.imgur.com/DmPmT6U.png">
+        <div class="tile-text">מרשם אוכלוסין עיר</div>
+    </div>
+
+    <!-- שורה 3 -->
+    <div class="tile" onclick="goTo('LINK9')">
+        <img src="https://i.imgur.com/y1Je12s.png">
+        <div class="tile-text">תעסוקה עירונית</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK10')">
+        <img src="https://i.imgur.com/uqw8rGt.png">
+        <div class="tile-text">מדד השוואתי</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK11')">
+        <img src="https://i.imgur.com/I7rAHMh.png">
+        <div class="tile-text">מוקד 106</div>
+    </div>
+
+    <div class="tile" onclick="goTo('LINK12')">
+        <img src="https://i.imgur.com/LoXbRXW.png">
+        <div class="tile-text">בקרה וחירום</div>
     </div>
 
 </div>
 
-<script>
-    function loadReport(url) {
-        document.getElementById("mainFrame").src = url;
-    }
+<!-- כפתור תחתון -->
+<div class="bottom-button-container">
+    <div class="bottom-button" onclick="goTo('HOME_LINK')">📊 לוח בקרה ראשי</div>
+</div>
 
-    function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle("collapsed");
-    }
+<script>
+function goTo(url) {
+    window.location.href = url;
+}
 </script>
 
 </body>
