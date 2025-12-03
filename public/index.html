@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Municipal BI Navigation</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+    }
+
+    /* מכולה ראשית */
+    .container {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* תפריט צד */
+    .sidebar {
+        width: 260px;
+        background: #001f33;
+        color: white;
+        transition: width 0.3s;
+        overflow: hidden;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .sidebar h2 {
+        padding: 15px;
+        text-align: center;
+        font-size: 20px;
+        margin: 0;
+        background: #00334d;
+    }
+
+    .menu-btn {
+        display: block;
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #00334d;
+    }
+
+    .menu-btn:hover {
+        background: #004466;
+    }
+
+    /* אייקון לתפריט מתקפל */
+    .toggle-btn {
+        background: #002233;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        border-bottom: 1px solid #00334d;
+        font-size: 20px;
+    }
+
+    /* אזור ה־IFRAME */
+    .content {
+        flex-grow: 1;
+        background: white;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- תפריט צד -->
+    <div id="sidebar" class="sidebar">
+
+        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
+
+        <h2>תפריט ניווט</h2>
+
+        <div class="menu-btn" onclick="loadReport('https://app.powerbi.com/groups/me/apps/74b14407-8c1b-4842-8745-a64f3319ec34/reports/7f99c6b3-6ead-4a3a-a21e-f15b9262efdd/ReportSectionae360be5dc08cac81726?chromeless=1')">
+            📊 דוח ראשון
+        </div>
+
+        <div class="menu-btn" onclick="loadReport('https://app.powerbi.com/groups/me/apps/74b14407-8c1b-4842-8745-a64f3319ec34/reports/f799c6b3-6ead-4a3a-a21e-f15b9262efaa/ReportSectionxxxxxxx?chromeless=1')">
+            📈 דוח שני
+        </div>
+
+    </div>
+
+    <!-- תוכן מרכזי -->
+    <div class="content">
+        <iframe id="mainFrame" src=""></iframe>
+    </div>
+
+</div>
+
+<script>
+    function loadReport(url) {
+        document.getElementById("mainFrame").src = url;
+    }
+
+    function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("collapsed");
+    }
+</script>
+
+</body>
+</html>
