@@ -11,11 +11,11 @@ html, body {
     width: 100%;
     height: 100%;
     background: #030E1D;
-    font-family: Arial, sans-serif;
     overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
-/* כפתור מסך מלא – שמאל */
+/* ===== כפתור מסך מלא – שמאל ===== */
 .top-left-buttons {
     position: fixed;
     top: 12px;
@@ -30,9 +30,10 @@ html, body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+    user-select: none;
 }
 
-/* כפתור תפריט – ימין */
+/* ===== כפתור תפריט – ימין ===== */
 .top-right-button {
     position: fixed;
     top: 12px;
@@ -40,7 +41,7 @@ html, body {
     z-index: 4000;
 }
 
-/* תפריט צד */
+/* ===== תפריט צד ===== */
 .sidebar {
     position: fixed;
     top: 0;
@@ -60,8 +61,8 @@ html, body {
 }
 
 .sidebar h2 {
-    margin: 0;
     padding: 15px;
+    margin: 0;
     background: #00334d;
     text-align: center;
 }
@@ -76,7 +77,7 @@ html, body {
     background: #004466;
 }
 
-/* אזור ריבועים */
+/* ===== אזור גריד ===== */
 .main {
     width: 100%;
     height: 100vh;
@@ -86,14 +87,17 @@ html, body {
     align-items: center;
 }
 
+/* ===== גריד ריבועים ===== */
 .tiles-wrapper {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 18px;
     width: calc(100% - 120px);
     max-width: 1600px;
+    justify-items: center;
 }
 
+/* ===== ריבוע ===== */
 .tile {
     width: 185px;
     height: 185px;
@@ -106,6 +110,7 @@ html, body {
     gap: 10px;
     color: white;
     text-align: center;
+    font-size: 15px;
     cursor: pointer;
 }
 
@@ -115,7 +120,7 @@ html, body {
     object-fit: contain;
 }
 
-/* כפתור תחתון */
+/* ===== כפתור תחתון ===== */
 .main-dashboard {
     margin-top: 40px;
     width: 360px;
@@ -130,7 +135,7 @@ html, body {
     cursor: pointer;
 }
 
-/* iframe – מסך מלא */
+/* ===== iframe ===== */
 #reportFrame {
     position: fixed;
     inset: 0;
@@ -141,10 +146,35 @@ html, body {
     z-index: 3000;
     background: #030E1D;
 }
+
+/* ===================================================== */
+/* ===== תוספת יחידה: כיסוי פסים לבנים בצדדים ===== */
+/* ===================================================== */
+.side-mask {
+    position: fixed;
+    top: 0;
+    width: 80px;              /* אפשר לשנות ל־60 / 100 לפי הצורך */
+    height: 100vh;
+    background: #030E1D;
+    z-index: 2500;
+    pointer-events: none;
+}
+
+.side-mask.left {
+    left: 0;
+}
+
+.side-mask.right {
+    right: 0;
+}
 </style>
 </head>
 
 <body>
+
+<!-- כיסוי פסים לבנים -->
+<div class="side-mask left"></div>
+<div class="side-mask right"></div>
 
 <!-- כפתורים -->
 <div class="top-left-buttons">
@@ -157,55 +187,53 @@ html, body {
 
 <!-- תפריט צד -->
 <div id="sidebar" class="sidebar">
-    <h2>ניווט</h2>
+    <h2>פריט ניווט</h2>
     <div class="menu-btn" onclick="loadReport(URLS.cityPopulation)">מרשם אוכלוסין עיר</div>
     <div class="menu-btn" onclick="loadReport(URLS.neighborhoodPopulation)">מרשם אוכלוסין שכונה</div>
     <div class="menu-btn" onclick="loadReport(URLS.vehicles)">רכבים עירוניים</div>
-    <div class="menu-btn" onclick="loadReport(URLS.garbage)">פינוי אשפה ומיחזור</div>
-    <div class="menu-btn" onclick="loadReport(URLS.water)">צריכת מים והשקייה</div>
-    <div class="menu-btn" onclick="loadReport(URLS.appointments)">זימון תורים</div>
+    <div class="menu-btn" onclick="loadReport(URLS.garbage)">פינוי אשפה ומיחזור ברשות</div>
+    <div class="menu-btn" onclick="loadReport(URLS.water)">צריכת מים והשקייה עירונית</div>
+    <div class="menu-btn" onclick="loadReport(URLS.appointments)">זימון תורים למחלקות ברשות</div>
     <div class="menu-btn" onclick="loadReport(URLS.arnona)">ארנונה</div>
     <div class="menu-btn" onclick="loadReport(URLS.transport)">הסעות עירוניות</div>
     <div class="menu-btn" onclick="loadReport(URLS.businessLicensing)">רישוי עסקים</div>
     <div class="menu-btn" onclick="loadReport(URLS.businessPromotion)">קידום עסקים</div>
-    <div class="menu-btn" onclick="loadReport(URLS.parking)">תחבורה וחנייה</div>
+    <div class="menu-btn" onclick="loadReport(URLS.parking)">תחבורה וחנייה עירונית</div>
     <div class="menu-btn" onclick="loadReport(URLS.emergency)">בקרת חירום</div>
-    <div class="menu-btn" onclick="loadReport(URLS.crime)">פשיעה ואכיפה</div>
+    <div class="menu-btn" onclick="loadReport(URLS.crime)">נתוני פשיעה ואכיפה</div>
     <div class="menu-btn" onclick="loadReport(URLS.center106)">מוקד 106</div>
-    <div class="menu-btn" onclick="loadReport(URLS.benchmark)">מדרג רשויות</div>
+    <div class="menu-btn" onclick="loadReport(URLS.benchmark)">מדרג השוואתי בין רשויות</div>
     <div class="menu-btn" onclick="loadReport(URLS.employment)">תעסוקה עירונית</div>
-    <div class="menu-btn" onclick="loadReport(URLS.main)">לוח בקרה ראשי</div>
+    <div class="menu-btn" onclick="loadReport(URLS.mainDashboard)">לוח בקרה ראשי</div>
 </div>
 
-<!-- ריבועים -->
-<div class="main">
-    <div class="tiles-wrapper">
-        <div class="tile" onclick="loadReport(URLS.cityPopulation)"><span>מרשם אוכלוסין עיר</span></div>
-        <div class="tile" onclick="loadReport(URLS.neighborhoodPopulation)"><span>מרשם אוכלוסין שכונה</span></div>
-        <div class="tile" onclick="loadReport(URLS.vehicles)"><span>רכבים עירוניים</span></div>
-        <div class="tile" onclick="loadReport(URLS.garbage)"><span>פינוי אשפה</span></div>
-        <div class="tile" onclick="loadReport(URLS.water)"><span>צריכת מים</span></div>
-        <div class="tile" onclick="loadReport(URLS.appointments)"><span>זימון תורים</span></div>
-        <div class="tile" onclick="loadReport(URLS.arnona)"><span>ארנונה</span></div>
-        <div class="tile" onclick="loadReport(URLS.transport)"><span>הסעות עירוניות</span></div>
-        <div class="tile" onclick="loadReport(URLS.businessLicensing)"><span>רישוי עסקים</span></div>
-        <div class="tile" onclick="loadReport(URLS.businessPromotion)"><span>קידום עסקים</span></div>
-        <div class="tile" onclick="loadReport(URLS.parking)"><span>תחבורה וחנייה</span></div>
-        <div class="tile" onclick="loadReport(URLS.emergency)"><span>בקרת חירום</span></div>
-        <div class="tile" onclick="loadReport(URLS.crime)"><span>פשיעה ואכיפה</span></div>
-        <div class="tile" onclick="loadReport(URLS.center106)"><span>מוקד 106</span></div>
-        <div class="tile" onclick="loadReport(URLS.benchmark)"><span>מדרג רשויות</span></div>
-        <div class="tile" onclick="loadReport(URLS.employment)"><span>תעסוקה עירונית</span></div>
-    </div>
-
-    <div class="main-dashboard" onclick="loadReport(URLS.main)">
-        לוח בקרה ראשי
-    </div>
-</div>
-
+<!-- iframe -->
 <iframe id="reportFrame"></iframe>
 
 <script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+}
+
+function loadReport(url) {
+    const f = document.getElementById("reportFrame");
+    f.src = url;
+    f.style.display = "block";
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+document.addEventListener("fullscreenchange", () => {
+    document.getElementById("fullscreenBtn").textContent =
+        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
+});
+
 const URLS = {
     cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
     neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
@@ -223,31 +251,8 @@ const URLS = {
     center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
     benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
     employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
-    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false"
+    mainDashboard: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false"
 };
-
-function toggleSidebar() {
-    document.getElementById("sidebar").classList.toggle("open");
-}
-
-function loadReport(url) {
-    const frame = document.getElementById("reportFrame");
-    frame.src = url;
-    frame.style.display = "block";
-}
-
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-    } else {
-        document.exitFullscreen();
-    }
-}
-
-document.addEventListener("fullscreenchange", () => {
-    document.getElementById("fullscreenBtn").textContent =
-        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
-});
 </script>
 
 </body>
