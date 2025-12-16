@@ -14,22 +14,26 @@ html, body {
 
 /* ===== Layout ===== */
 .container {
-    display: flex;
     height: 100vh;
     background: #030E1D;
 }
 
-/* ===== Sidebar ===== */
+/* ===== Sidebar (עולה מעל התוכן) ===== */
 .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
     width: 260px;
+    height: 100%;
     background: #001f33;
     color: white;
+    transform: translateX(100%);
     transition: transform 0.3s;
-    flex-shrink: 0;
+    z-index: 1000;
 }
 
-.sidebar.hidden {
-    transform: translateX(100%);
+.sidebar.open {
+    transform: translateX(0);
 }
 
 .toggle-btn {
@@ -58,26 +62,23 @@ html, body {
     background: #004466;
 }
 
-/* ===== Content ===== */
-.content {
-    flex-grow: 1;
-    position: relative;
-    background: #030E1D;
-    overflow: visible; /* חשוב – מונע חיתוך */
-}
-
-/* כפתור פתיחת תפריט – תמיד בקצה המסך */
-.show-sidebar {
+/* ===== כפתורים קבועים ===== */
+.top-buttons {
     position: fixed;
     top: 12px;
     right: 12px;
+    display: flex;
+    gap: 10px;
+    z-index: 2000;
+}
+
+.top-btn {
     background: #004466;
     color: white;
     padding: 8px 12px;
     border-radius: 6px;
     cursor: pointer;
-    z-index: 9999;
-    display: none;
+    font-size: 14px;
 }
 
 /* ===== Landing ===== */
@@ -85,24 +86,24 @@ html, body {
     position: absolute;
     inset: 0;
     display: flex;
-    justify-content: center;   /* מרכז אופקית */
-    align-items: center;       /* מרכז אנכית */
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+/* הזזה קלה ימינה + מרכוז */
 .landing-grid {
     display: grid;
-    grid-template-columns: repeat(8, 195px);
-    grid-template-rows: repeat(2, 195px);
-    gap: 20px;
-    justify-content: center;   /* מונע חיתוך שמאלה */
+    grid-template-columns: repeat(8, 190px);
+    grid-template-rows: repeat(2, 190px);
+    gap: 22px;
+    margin-right: 40px; /* הזזה ימינה */
 }
 
-/* Tile */
+/* ===== Tile – רק מסגרת ===== */
 .tile {
-    width: 195px;
-    height: 195px;
-    background: #081B33;
+    width: 190px;
+    height: 190px;
     border: 1px solid #1C3B5A;
     border-radius: 14px;
     color: white;
@@ -114,25 +115,25 @@ html, body {
     text-align: center;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    background: transparent; /* אין רקע */
+    transition: border-color 0.2s, transform 0.2s;
 }
 
 .tile:hover {
-    background: #0B2545;
+    border-color: #4DA3FF;
     transform: translateY(-3px);
 }
 
 .tile img {
-    max-width: 70px;
+    max-width: 65px;
     margin-bottom: 10px;
 }
 
-/* Bottom tile */
+/* ===== Bottom tile ===== */
 .bottom-tile {
     margin-top: 36px;
     width: 353px;
     height: 124px;
-    background: #081B33;
     border: 1px solid #1C3B5A;
     border-radius: 14px;
     color: white;
@@ -143,102 +144,80 @@ html, body {
     justify-content: center;
     cursor: pointer;
     text-decoration: none;
+    background: transparent;
 }
 
 .bottom-tile:hover {
-    background: #0B2545;
-}
-
-/* ===== IFRAME ===== */
-#mainFrame {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none;
+    border-color: #4DA3FF;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- כפתורים קבועים -->
+<div class="top-buttons">
+    <div class="top-btn" onclick="toggleSidebar()">☰ תפריט</div>
+    <div class="top-btn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
+</div>
 
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar">
-        <div class="toggle-btn" onclick="hideSidebar()">☰</div>
-        <h2>תפריט ניווט</h2>
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <div class="toggle-btn" onclick="toggleSidebar()">✖</div>
+    <h2>תפריט ניווט</h2>
 
-        <div class="menu-btn"
-             onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
-            📊 דוח ראשון
-        </div>
-
-        <div class="menu-btn"
-             onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
-            📈 דוח שני
-        </div>
+    <div class="menu-btn"
+         onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c')">
+        📊 דוח ראשון
     </div>
 
-    <!-- Content -->
-    <div class="content">
-        <div id="showSidebarBtn" class="show-sidebar" onclick="showSidebar()">☰</div>
-
-        <!-- Landing -->
-        <div id="landing">
-
-            <div class="landing-grid">
-                <!-- שורה 1 -->
-                <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין עיר</span></a>
-                <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין שכונה</span></a>
-                <a class="tile" href="#"><img src=""><span>רכבים עירוניים</span></a>
-                <a class="tile" href="#"><img src=""><span>פינוי אשפה ומיחזור ברשות</span></a>
-                <a class="tile" href="#"><img src=""><span>צריכת מים והשקייה עירונית</span></a>
-                <a class="tile" href="#"><img src=""><span>זימון תואם למחלקות ברשות</span></a>
-                <a class="tile" href="#"><img src=""><span>ארנונה</span></a>
-                <a class="tile" href="#"><img src=""><span>הסעות עירוניות</span></a>
-
-                <!-- שורה 2 -->
-                <a class="tile" href="#"><img src=""><span>רישוי עסקים</span></a>
-                <a class="tile" href="#"><img src=""><span>קידום עסקים</span></a>
-                <a class="tile" href="#"><img src=""><span>תחבורה עירונית וחנייה</span></a>
-                <a class="tile" href="#"><img src=""><span>בקרה וחירום</span></a>
-                <a class="tile" href="#"><img src=""><span>נתוני פשיעה ואכיפה</span></a>
-                <a class="tile" href="#"><img src=""><span>מוקד 106</span></a>
-                <a class="tile" href="#"><img src=""><span>מדרג השוואתי בין רשויות</span></a>
-                <a class="tile" href="#"><img src=""><span>תעסוקה עירונית</span></a>
-            </div>
-
-            <a class="bottom-tile" href="#" onclick="showLanding()">
-                לוח בקרה ראשי
-            </a>
-
-        </div>
-
-        <iframe id="mainFrame"></iframe>
+    <div class="menu-btn"
+         onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c')">
+        📈 דוח שני
     </div>
 </div>
 
+<!-- Landing -->
+<div id="landing">
+
+    <div class="landing-grid">
+        <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין עיר</span></a>
+        <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין שכונה</span></a>
+        <a class="tile" href="#"><img src=""><span>רכבים עירוניים</span></a>
+        <a class="tile" href="#"><img src=""><span>פינוי אשפה ומיחזור ברשות</span></a>
+        <a class="tile" href="#"><img src=""><span>צריכת מים והשקייה עירונית</span></a>
+        <a class="tile" href="#"><img src=""><span>זימון תואם למחלקות ברשות</span></a>
+        <a class="tile" href="#"><img src=""><span>ארנונה</span></a>
+        <a class="tile" href="#"><img src=""><span>הסעות עירוניות</span></a>
+
+        <a class="tile" href="#"><img src=""><span>רישוי עסקים</span></a>
+        <a class="tile" href="#"><img src=""><span>קידום עסקים</span></a>
+        <a class="tile" href="#"><img src=""><span>תחבורה עירונית וחנייה</span></a>
+        <a class="tile" href="#"><img src=""><span>בקרה וחירום</span></a>
+        <a class="tile" href="#"><img src=""><span>נתוני פשיעה ואכיפה</span></a>
+        <a class="tile" href="#"><img src=""><span>מוקד 106</span></a>
+        <a class="tile" href="#"><img src=""><span>מדרג השוואתי בין רשויות</span></a>
+        <a class="tile" href="#"><img src=""><span>תעסוקה עירונית</span></a>
+    </div>
+
+    <a class="bottom-tile" href="#">לוח בקרה ראשי</a>
+</div>
+
 <script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+
 function loadReport(url) {
-    document.getElementById("landing").style.display = "none";
-    const frame = document.getElementById("mainFrame");
-    frame.style.display = "block";
-    frame.src = url;
-}
-
-function showLanding() {
-    document.getElementById("mainFrame").style.display = "none";
-    document.getElementById("landing").style.display = "flex";
-}
-
-function hideSidebar() {
-    document.getElementById("sidebar").classList.add("hidden");
-    document.getElementById("showSidebarBtn").style.display = "block";
-}
-
-function showSidebar() {
-    document.getElementById("sidebar").classList.remove("hidden");
-    document.getElementById("showSidebarBtn").style.display = "none";
+    alert("כאן בעתיד תיטען תצוגת דוח");
 }
 </script>
 
