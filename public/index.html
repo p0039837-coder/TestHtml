@@ -5,20 +5,33 @@
 <title>Municipal BI Navigation</title>
 
 <style>
-html, body {
+body {
     margin: 0;
-    height: 100%;
     font-family: Arial, sans-serif;
     background: #030E1D;
+    overflow: hidden;
 }
 
-/* ===== Layout ===== */
-.container {
-    height: 100vh;
-    background: #030E1D;
+/* כפתורים עליונים */
+.top-buttons {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 10px;
+    z-index: 3000;
 }
 
-/* ===== Sidebar (עולה מעל התוכן) ===== */
+.top-btn {
+    background: #0b3a53;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* תפריט צד */
 .sidebar {
     position: fixed;
     top: 0;
@@ -29,178 +42,193 @@ html, body {
     color: white;
     transform: translateX(100%);
     transition: transform 0.3s;
-    z-index: 1000;
+    z-index: 2500;
 }
 
 .sidebar.open {
     transform: translateX(0);
 }
 
-.toggle-btn {
-    background: #002233;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-    border-bottom: 1px solid #00334d;
-    font-size: 20px;
-}
-
 .sidebar h2 {
     padding: 15px;
-    text-align: center;
     margin: 0;
     background: #00334d;
+    text-align: center;
 }
 
 .menu-btn {
-    padding: 12px 20px;
-    cursor: pointer;
+    padding: 14px;
     border-bottom: 1px solid #00334d;
-}
-
-.menu-btn:hover {
-    background: #004466;
-}
-
-/* ===== כפתורים קבועים ===== */
-.top-buttons {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    display: flex;
-    gap: 10px;
-    z-index: 2000;
-}
-
-.top-btn {
-    background: #004466;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
 }
 
-/* ===== Landing ===== */
-#landing {
-    position: absolute;
-    inset: 0;
+/* אזור ראשי */
+.main {
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* הזזה קלה ימינה + מרכוז */
-.landing-grid {
+/* גריד */
+.tiles-wrapper {
     display: grid;
-    grid-template-columns: repeat(8, 190px);
-    grid-template-rows: repeat(2, 190px);
-    gap: 22px;
-    margin-right: 40px; /* הזזה ימינה */
+    grid-template-columns: repeat(8, 1fr);
+    gap: 18px;
+    width: calc(100% - 80px);
+    max-width: 1600px;
+    justify-items: center;
 }
 
-/* ===== Tile – רק מסגרת ===== */
+/* ריבוע */
 .tile {
-    width: 190px;
-    height: 190px;
-    border: 1px solid #1C3B5A;
+    width: 185px;
+    height: 185px;
+    border: 1px solid rgba(255,255,255,0.25);
     border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     color: white;
     text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* לוגו */
+.tile img {
+    max-width: 64px;
+    max-height: 64px;
+    object-fit: contain;
+}
+
+/* ריבוע תחתון */
+.main-dashboard {
+    margin-top: 40px;
+    width: 360px;
+    height: 120px;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 16px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    font-weight: bold;
-    cursor: pointer;
-    background: transparent; /* אין רקע */
-    transition: border-color 0.2s, transform 0.2s;
-}
-
-.tile:hover {
-    border-color: #4DA3FF;
-    transform: translateY(-3px);
-}
-
-.tile img {
-    max-width: 65px;
-    margin-bottom: 10px;
-}
-
-/* ===== Bottom tile ===== */
-.bottom-tile {
-    margin-top: 36px;
-    width: 353px;
-    height: 124px;
-    border: 1px solid #1C3B5A;
-    border-radius: 14px;
     color: white;
     font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    text-decoration: none;
-    background: transparent;
-}
-
-.bottom-tile:hover {
-    border-color: #4DA3FF;
 }
 </style>
 </head>
 
 <body>
 
-<!-- כפתורים קבועים -->
+<!-- כפתורים -->
 <div class="top-buttons">
     <div class="top-btn" onclick="toggleSidebar()">☰ תפריט</div>
-    <div class="top-btn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
+    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
 </div>
 
-<!-- Sidebar -->
+<!-- תפריט צד -->
 <div id="sidebar" class="sidebar">
-    <div class="toggle-btn" onclick="toggleSidebar()">✖</div>
     <h2>תפריט ניווט</h2>
-
-    <div class="menu-btn"
-         onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c')">
-        📊 דוח ראשון
-    </div>
-
-    <div class="menu-btn"
-         onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c')">
-        📈 דוח שני
-    </div>
+    <div class="menu-btn">דוח ראשון</div>
+    <div class="menu-btn">דוח שני</div>
 </div>
 
-<!-- Landing -->
-<div id="landing">
+<!-- תוכן -->
+<div class="main">
 
-    <div class="landing-grid">
-        <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין עיר</span></a>
-        <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין שכונה</span></a>
-        <a class="tile" href="#"><img src=""><span>רכבים עירוניים</span></a>
-        <a class="tile" href="#"><img src=""><span>פינוי אשפה ומיחזור ברשות</span></a>
-        <a class="tile" href="#"><img src=""><span>צריכת מים והשקייה עירונית</span></a>
-        <a class="tile" href="#"><img src=""><span>זימון תואם למחלקות ברשות</span></a>
-        <a class="tile" href="#"><img src=""><span>ארנונה</span></a>
-        <a class="tile" href="#"><img src=""><span>הסעות עירוניות</span></a>
+    <div class="tiles-wrapper">
 
-        <a class="tile" href="#"><img src=""><span>רישוי עסקים</span></a>
-        <a class="tile" href="#"><img src=""><span>קידום עסקים</span></a>
-        <a class="tile" href="#"><img src=""><span>תחבורה עירונית וחנייה</span></a>
-        <a class="tile" href="#"><img src=""><span>בקרה וחירום</span></a>
-        <a class="tile" href="#"><img src=""><span>נתוני פשיעה ואכיפה</span></a>
-        <a class="tile" href="#"><img src=""><span>מוקד 106</span></a>
-        <a class="tile" href="#"><img src=""><span>מדרג השוואתי בין רשויות</span></a>
-        <a class="tile" href="#"><img src=""><span>תעסוקה עירונית</span></a>
+        <!-- שורה 1 -->
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>מרשם אוכלוסין עיר</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>מרשם אוכלוסין שכונה</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>רכבים עירוניים</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>פינוי אשפה ומיחזור ברשות</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>צריכת מים והשקייה עירונית</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>זימון תואם למחלקות ברשות</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>ארנונה</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>הסעות עירוניות</span>
+        </a>
+
+        <!-- שורה 2 -->
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>רישוי עסקים</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>קידום עסקים</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>תחבורה עירונית וחנייה</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>בקרה וחירום</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>נתוני פשיעה ואכיפה</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>מוקד 106</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>מדרג השוואתי בין רשויות</span>
+        </a>
+
+        <a class="tile" href="#">
+            <img src="PASTE_IMAGE_URL_HERE">
+            <span>תעסוקה עירונית</span>
+        </a>
+
     </div>
 
-    <a class="bottom-tile" href="#">לוח בקרה ראשי</a>
+    <div class="main-dashboard">
+        לוח בקרה ראשי
+    </div>
+
 </div>
 
 <script>
@@ -216,9 +244,10 @@ function toggleFullscreen() {
     }
 }
 
-function loadReport(url) {
-    alert("כאן בעתיד תיטען תצוגת דוח");
-}
+document.addEventListener("fullscreenchange", () => {
+    document.getElementById("fullscreenBtn").textContent =
+        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
+});
 </script>
 
 </body>
