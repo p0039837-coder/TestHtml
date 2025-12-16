@@ -5,137 +5,112 @@
 <title>Municipal BI Navigation</title>
 
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
-    /* ===== Layout קיים ===== */
-    .container {
-        display: flex;
-        height: 100vh;
-    }
+/* ===== Layout ===== */
+.container {
+    display: flex;
+    height: 100vh;
+}
 
-    .sidebar {
-        width: 260px;
-        background: #001f33;
-        color: white;
-        transition: width 0.3s;
-    }
+.sidebar {
+    width: 260px;
+    background: #001f33;
+    color: white;
+    transition: transform 0.3s;
+}
 
-    .sidebar.collapsed {
-        width: 60px;
-    }
+.sidebar.hidden {
+    transform: translateX(100%);
+}
 
-    .toggle-btn {
-        background: #002233;
-        padding: 10px;
-        cursor: pointer;
-        text-align: center;
-    }
+.toggle-btn {
+    background: #002233;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+}
 
-    .menu-btn {
-        padding: 12px 20px;
-        cursor: pointer;
-        border-bottom: 1px solid #00334d;
-    }
+.menu-btn {
+    padding: 12px 20px;
+    border-bottom: 1px solid #00334d;
+}
 
-    .menu-btn:hover {
-        background: #004466;
-    }
+.content {
+    flex-grow: 1;
+    position: relative;
+    background: #030E1D;
+    overflow: hidden;
+}
 
-    .content {
-        flex-grow: 1;
-        position: relative;
-        background: #030E1D;
-    }
+/* כפתור החזרת תפריט */
+.show-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #004466;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 20;
+    display: none;
+}
 
-    iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
+/* ===== Landing ===== */
+#landing {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-    /* ===== Landing בתוך ה־Content ===== */
-    #landing {
-        position: absolute;
-        inset: 0;
-        background: #030E1D;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-    }
+.landing-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 211px);
+    grid-template-rows: repeat(2, 210px);
+    gap: 24px;
+}
 
-    .landing-grid {
-        display: grid;
-        grid-template-columns: repeat(8, 211px);
-        gap: 24px;
-        justify-content: center;
-    }
+.tile {
+    width: 211px;
+    height: 210px;
+    background: #081B33;
+    border: 1px solid #1C3B5A;
+    border-radius: 14px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-    .landing-tile {
-        width: 211px;
-        height: 210px;
-        background: #081B33;
-        border: 1px solid #1C3B5A;
-        border-radius: 14px;
-        color: white;
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.2s, background 0.2s;
-    }
+.tile:hover {
+    background: #0B2545;
+}
 
-    .landing-tile:hover {
-        background: #0B2545;
-        transform: translateY(-4px);
-    }
-
-    .landing-tile img {
-        max-width: 80px;
-        margin-bottom: 12px;
-    }
-
-    .landing-tile span {
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-    /* ריבוע תחתון */
-    .landing-bottom {
-        width: 353px;
-        height: 124px;
-        margin-top: 40px;
-        background: #081B33;
-        border: 1px solid #1C3B5A;
-        border-radius: 14px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    /* כפתור מסך מלא */
-    .fullscreen-btn {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        background: #004466;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        cursor: pointer;
-        border-radius: 6px;
-        z-index: 20;
-    }
+/* ריבוע תחתון */
+.bottom-tile {
+    margin-top: 40px;
+    width: 353px;
+    height: 124px;
+    background: #081B33;
+    border: 1px solid #1C3B5A;
+    border-radius: 14px;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 </style>
 </head>
 
@@ -145,79 +120,57 @@
 
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
-        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
-
-        <div class="menu-btn" onclick="loadReport('')">דוח ראשון</div>
-        <div class="menu-btn" onclick="loadReport('')">דוח שני</div>
+        <div class="toggle-btn" onclick="hideSidebar()">☰</div>
+        <div class="menu-btn">דוח ראשון</div>
+        <div class="menu-btn">דוח שני</div>
     </div>
 
     <!-- Content -->
     <div class="content">
+        <div id="showSidebarBtn" class="show-sidebar" onclick="showSidebar()">☰</div>
 
-        <button class="fullscreen-btn" onclick="goFullScreen()">מסך מלא</button>
-
-        <!-- Landing -->
         <div id="landing">
 
             <div class="landing-grid">
+                <!-- שורה 1 -->
+                <div class="tile">מרשם אוכלוסין עיר</div>
+                <div class="tile">מרשם אוכלוסין שכונה</div>
+                <div class="tile">רכבים עירוניים</div>
+                <div class="tile">פינוי אשפה ומיחזור ברשות</div>
+                <div class="tile">צריכת מים והשקייה עירונית</div>
+                <div class="tile">זימון תואם למחלקות ברשות</div>
+                <div class="tile">ארנונה</div>
+                <div class="tile">הסעות עירוניות</div>
 
-                <!-- 16 ריבועים -->
-                <!-- בכל אחד: לוגו + לינק -->
-
-                <a class="landing-tile" href="#" onclick="enterApp()">
-                    <!-- <img src='logo1.png'> -->
-                    <span>רווחה</span>
-                </a>
-
-                <a class="landing-tile" href="#" onclick="enterApp()">
-                    <span>מים וביוב</span>
-                </a>
-
-                <a class="landing-tile" href="#" onclick="enterApp()">
-                    <span>מוקד 106</span>
-                </a>
-
-                <a class="landing-tile" href="#" onclick="enterApp()">
-                    <span>חניה</span>
-                </a>
-
-                <a class="landing-tile" href="#" onclick="enterApp()">
-                    <span>רישוי עסקים</span>
-                </a>
-
-                <!-- המשך עד 16 -->
-                <!-- TODO: שכפל לפי הצורך -->
-
+                <!-- שורה 2 -->
+                <div class="tile">רישוי עסקים</div>
+                <div class="tile">קידום עסקים</div>
+                <div class="tile">תחבורה עירונית וחנייה</div>
+                <div class="tile">בקרה וחירום</div>
+                <div class="tile">נתוני פשיעה ואכיפה</div>
+                <div class="tile">מוקד 106</div>
+                <div class="tile">מדרג השוואתי בין רשויות</div>
+                <div class="tile">תעסוקה עירונית</div>
             </div>
 
-            <div class="landing-bottom" onclick="enterApp()">
+            <div class="bottom-tile">
                 לוח בקרה ראשי
             </div>
 
         </div>
-
-        <iframe id="mainFrame"></iframe>
-
     </div>
 </div>
 
 <script>
-    function loadReport(url) {
-        document.getElementById("mainFrame").src = url;
-        enterApp();
-    }
+function hideSidebar() {
+    document.getElementById("sidebar").classList.add("hidden");
+    document.getElementById("showSidebarBtn").style.display = "block";
+}
 
-    function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle("collapsed");
-    }
-
-    function enterApp() {
-        document.getElementById("landing").style.display = "none";
-    }
-
-    function goFullScreen() {
-        document.documentElement.requestFullscreen();
-    }
+function showSidebar() {
+    document.getElementById("sidebar").classList.remove("hidden");
+    document.getElementById("showSidebarBtn").style.display = "none";
+}
 </script>
 
 </body>
