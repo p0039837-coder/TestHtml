@@ -63,11 +63,12 @@ html, body {
     flex-grow: 1;
     position: relative;
     background: #030E1D;
-    overflow: hidden;
+    overflow: visible; /* חשוב – מונע חיתוך */
 }
 
+/* כפתור פתיחת תפריט – תמיד בקצה המסך */
 .show-sidebar {
-    position: absolute;
+    position: fixed;
     top: 12px;
     right: 12px;
     background: #004466;
@@ -75,7 +76,7 @@ html, body {
     padding: 8px 12px;
     border-radius: 6px;
     cursor: pointer;
-    z-index: 30;
+    z-index: 9999;
     display: none;
 }
 
@@ -84,9 +85,9 @@ html, body {
     position: absolute;
     inset: 0;
     display: flex;
+    justify-content: center;   /* מרכז אופקית */
+    align-items: center;       /* מרכז אנכית */
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .landing-grid {
@@ -94,8 +95,10 @@ html, body {
     grid-template-columns: repeat(8, 195px);
     grid-template-rows: repeat(2, 195px);
     gap: 20px;
+    justify-content: center;   /* מונע חיתוך שמאלה */
 }
 
+/* Tile */
 .tile {
     width: 195px;
     height: 195px;
@@ -124,6 +127,7 @@ html, body {
     margin-bottom: 10px;
 }
 
+/* Bottom tile */
 .bottom-tile {
     margin-top: 36px;
     width: 353px;
@@ -159,7 +163,7 @@ html, body {
 
 <div class="container">
 
-    <!-- ===== Sidebar ===== -->
+    <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <div class="toggle-btn" onclick="hideSidebar()">☰</div>
         <h2>תפריט ניווט</h2>
@@ -175,12 +179,13 @@ html, body {
         </div>
     </div>
 
-    <!-- ===== Content ===== -->
+    <!-- Content -->
     <div class="content">
         <div id="showSidebarBtn" class="show-sidebar" onclick="showSidebar()">☰</div>
 
         <!-- Landing -->
         <div id="landing">
+
             <div class="landing-grid">
                 <!-- שורה 1 -->
                 <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין עיר</span></a>
@@ -206,6 +211,7 @@ html, body {
             <a class="bottom-tile" href="#" onclick="showLanding()">
                 לוח בקרה ראשי
             </a>
+
         </div>
 
         <iframe id="mainFrame"></iframe>
