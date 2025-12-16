@@ -50,9 +50,7 @@ body {
     transform: translateX(100%);
     transition: transform 0.3s ease;
     z-index: 2500;
-
-    /* ⭐ זה השינוי החשוב ⭐ */
-    padding-top: 70px; /* רווח מתחת לכפתור */
+    padding-top: 70px;
 }
 
 .sidebar.open {
@@ -110,6 +108,7 @@ body {
     text-decoration: none;
     text-align: center;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .tile img {
@@ -131,6 +130,19 @@ body {
     color: white;
     font-size: 18px;
     text-decoration: none;
+    cursor: pointer;
+}
+
+/* ===== iframe של הדוחות ===== */
+#reportFrame {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none;
+    z-index: 2000;
+    background: #030E1D;
 }
 </style>
 </head>
@@ -151,49 +163,34 @@ body {
 <div id="sidebar" class="sidebar">
     <h2>פריט ניווט</h2>
 
-    <div class="menu-btn">מרשם אוכלוסין עיר</div>
-    <div class="menu-btn">מרשם אוכלוסין שכונה</div>
-    <div class="menu-btn">רכבים עירוניים</div>
-    <div class="menu-btn">פינוי אשפה ומיחזור ברשות</div>
-    <div class="menu-btn">צריכת מים והשקייה עירונית</div>
-    <div class="menu-btn">זימון תואם למחלקות ברשות</div>
-    <div class="menu-btn">ארנונה</div>
-    <div class="menu-btn">הסעות עירוניות</div>
-    <div class="menu-btn">רישוי עסקים</div>
-    <div class="menu-btn">קידום עסקים</div>
-    <div class="menu-btn">תחבורה עירונית וחנייה</div>
-    <div class="menu-btn">בקרה וחירום</div>
-    <div class="menu-btn">נתוני פשיעה ואכיפה</div>
-    <div class="menu-btn">מוקד 106</div>
-    <div class="menu-btn">מדרג השוואתי בין רשויות</div>
-    <div class="menu-btn">תעסוקה עירונית</div>
-    <div class="menu-btn">לוח בקרה ראשי</div>
+    <div class="menu-btn" onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
+        מרשם אוכלוסין עיר
+    </div>
+
+    <div class="menu-btn" onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
+        מרשם אוכלוסין שכונה
+    </div>
 </div>
 
 <!-- תוכן -->
 <div class="main">
     <div class="tiles-wrapper">
-        <a class="tile" href="https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false"><img src=""><span>מרשם אוכלוסין עיר</span></a>
-        <a class="tile" href="https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false"><img src=""><span>מרשם אוכלוסין שכונה</span></a>
-        <a class="tile" href="#"><img src=""><span>רכבים עירוניים</span></a>
-        <a class="tile" href="#"><img src=""><span>פינוי אשפה ומיחזור ברשות</span></a>
-        <a class="tile" href="#"><img src=""><span>צריכת מים והשקייה עירונית</span></a>
-        <a class="tile" href="#"><img src=""><span>זימון תואם למחלקות ברשות</span></a>
-        <a class="tile" href="#"><img src=""><span>ארנונה</span></a>
-        <a class="tile" href="#"><img src=""><span>הסעות עירוניות</span></a>
+        <div class="tile" onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
+            <img src="">
+            <span>מרשם אוכלוסין עיר</span>
+        </div>
 
-        <a class="tile" href="#"><img src=""><span>רישוי עסקים</span></a>
-        <a class="tile" href="#"><img src=""><span>קידום עסקים</span></a>
-        <a class="tile" href="#"><img src=""><span>תחבורה עירונית וחנייה</span></a>
-        <a class="tile" href="#"><img src=""><span>בקרה וחירום</span></a>
-        <a class="tile" href="#"><img src=""><span>נתוני פשיעה ואכיפה</span></a>
-        <a class="tile" href="#"><img src=""><span>מוקד 106</span></a>
-        <a class="tile" href="#"><img src=""><span>מדרג השוואתי בין רשויות</span></a>
-        <a class="tile" href="#"><img src=""><span>תעסוקה עירונית</span></a>
+        <div class="tile" onclick="loadReport('https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false')">
+            <img src="">
+            <span>מרשם אוכלוסין שכונה</span>
+        </div>
     </div>
 
-    <a class="main-dashboard" href="#">לוח בקרה ראשי</a>
+    <div class="main-dashboard" onclick="hideReport()">לוח בקרה ראשי</div>
 </div>
+
+<!-- iframe -->
+<iframe id="reportFrame"></iframe>
 
 <script>
 function toggleSidebar() {
@@ -212,6 +209,18 @@ document.addEventListener("fullscreenchange", () => {
     document.getElementById("fullscreenBtn").textContent =
         document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
 });
+
+function loadReport(url) {
+    const frame = document.getElementById("reportFrame");
+    frame.src = url;
+    frame.style.display = "block";
+}
+
+function hideReport() {
+    const frame = document.getElementById("reportFrame");
+    frame.src = "";
+    frame.style.display = "none";
+}
 </script>
 
 </body>
