@@ -300,24 +300,24 @@ function loadReportAndFullscreen(url) {
     frame.src = url;
     frame.style.display = "block";
     
-    // טיימר גיבוי - אם אחרי 10 שניות עדיין לא נטען, הסתר בכל מקרה
+    // טיימר גיבוי - אם אחרי 15 שניות עדיין לא נטען, הסתר בכל מקרה
     loadingTimeout = setTimeout(() => {
         loadingScreen.style.display = "none";
-    }, 10000);
+    }, 15000);
 }
 
 // האזן לאירוע load של ה-iframe
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
-    // נתן עוד רגע קטן (0.5 שניות) שהדוח יירגע
+    // נתן עוד 1.5 שניות שהלוגו של Power BI ייעלם
     setTimeout(() => {
         loadingScreen.style.display = "none";
         // נקה את הטיימר הגיבוי
         if (loadingTimeout) {
             clearTimeout(loadingTimeout);
         }
-    }, 500);
+    }, 1500);
 });
 
 function toggleFullscreen() {
