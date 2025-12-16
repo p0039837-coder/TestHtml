@@ -141,6 +141,44 @@ html, body {
     z-index: 3000;
     background: #030E1D;
 }
+
+/* מסך טעינה */
+#loadingScreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #030E1D;
+    display: none;
+    z-index: 3100;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loading-text {
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.loading-dots {
+    display: inline-block;
+    width: 60px;
+    text-align: left;
+}
+
+@keyframes dotAnimation {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dotAnimation 1.5s infinite;
+}
 </style>
 </head>
 
@@ -203,6 +241,13 @@ html, body {
     </div>
 </div>
 
+<!-- מסך טעינה -->
+<div id="loadingScreen">
+    <div class="loading-text">
+        טעינה<span class="loading-dots"></span>
+    </div>
+</div>
+
 <iframe id="reportFrame"></iframe>
 
 <script>
@@ -232,8 +277,20 @@ function toggleSidebar() {
 
 function loadReport(url) {
     const frame = document.getElementById("reportFrame");
+    const loadingScreen = document.getElementById("loadingScreen");
+    
+    // הצג מסך טעינה
+    loadingScreen.style.display = "flex";
+    
+    // טען את הדוח
     frame.src = url;
     frame.style.display = "block";
+    
+    // הסתר את מסך הטעינה אחרי 3 שניות
+    // (Power BI לא תמיד שולח event של load, אז משתמשים בטיימר)
+    setTimeout(() => {
+        loadingScreen.style.display = "none";
+    }, 3000);
 }
 
 function toggleFullscreen() {
