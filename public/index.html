@@ -287,10 +287,21 @@ function loadReport(url) {
     frame.style.display = "block";
     
     // הסתר את מסך הטעינה אחרי 3 שניות
-    // (Power BI לא תמיד שולח event של load, אז משתמשים בטיימר)
     setTimeout(() => {
         loadingScreen.style.display = "none";
     }, 3000);
+    
+    // נסה להיכנס למסך מלא אוטומטית
+    enterFullscreenAuto();
+}
+
+function enterFullscreenAuto() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            // אם נכשל, זה בסדר - המשתמש יוכל ללחוץ על הכפתור
+            console.log('לא ניתן להיכנס למסך מלא אוטומטית');
+        });
+    }
 }
 
 function toggleFullscreen() {
@@ -304,6 +315,14 @@ function toggleFullscreen() {
 document.addEventListener("fullscreenchange", () => {
     document.getElementById("fullscreenBtn").textContent =
         document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
+});
+
+// נסה להיכנס למסך מלא כשהדף נטען
+window.addEventListener('load', () => {
+    // המתן רגע קט שהדף יהיה מוכן
+    setTimeout(() => {
+        enterFullscreenAuto();
+    }, 500);
 });
 </script>
 
