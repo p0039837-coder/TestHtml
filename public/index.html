@@ -15,11 +15,18 @@ html, body {
     font-family: Arial, sans-serif;
 }
 
-/* ===== כפתור מסך מלא – שמאל ===== */
+/* ===== כפתורים עליונים ===== */
 .top-left-buttons {
     position: fixed;
     top: 12px;
     left: 12px;
+    z-index: 4000;
+}
+
+.top-right-button {
+    position: fixed;
+    top: 12px;
+    right: 12px;
     z-index: 4000;
 }
 
@@ -30,14 +37,6 @@ html, body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
-}
-
-/* ===== כפתור תפריט – ימין ===== */
-.top-right-button {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 4000;
 }
 
 /* ===== תפריט צד ===== */
@@ -76,7 +75,7 @@ html, body {
     background: #004466;
 }
 
-/* ===== אזור גריד ===== */
+/* ===== גריד ===== */
 .main {
     width: 100%;
     height: 100vh;
@@ -103,15 +102,9 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     color: white;
     text-align: center;
     cursor: pointer;
-}
-
-.tile img {
-    max-width: 64px;
-    max-height: 64px;
 }
 
 /* ===== כפתור תחתון ===== */
@@ -129,7 +122,7 @@ html, body {
     cursor: pointer;
 }
 
-/* ===== iframe – מתיחה מלאה ===== */
+/* ===== iframe ===== */
 #reportFrame {
     position: fixed;
     inset: 0;
@@ -139,6 +132,35 @@ html, body {
     display: none;
     z-index: 3000;
     background: #030E1D;
+}
+
+/* ===== מסך טעינה ===== */
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #030E1D;
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-text {
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.loader-text .dots::after {
+    content: "";
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+    0%   { content: ""; }
+    25%  { content: "."; }
+    50%  { content: ".."; }
+    75%  { content: "..."; }
 }
 </style>
 </head>
@@ -176,60 +198,73 @@ html, body {
     <div class="menu-btn" onclick="loadReport(URLS.main)">לוח בקרה ראשי</div>
 </div>
 
-<!-- גריד -->
+<!-- מסך פתיחה -->
 <div class="main">
     <div class="tiles-wrapper">
-        <div class="tile" onclick="loadReport(URLS.city)"><span>מרשם אוכלוסין עיר</span></div>
-        <div class="tile" onclick="loadReport(URLS.neighborhood)"><span>מרשם אוכלוסין שכונה</span></div>
-        <div class="tile" onclick="loadReport(URLS.vehicles)"><span>רכבים עירוניים</span></div>
-        <div class="tile" onclick="loadReport(URLS.garbage)"><span>פינוי אשפה</span></div>
-        <div class="tile" onclick="loadReport(URLS.water)"><span>צריכת מים</span></div>
-        <div class="tile" onclick="loadReport(URLS.appointments)"><span>זימון תורים</span></div>
-        <div class="tile" onclick="loadReport(URLS.arnona)"><span>ארנונה</span></div>
-        <div class="tile" onclick="loadReport(URLS.transport)"><span>הסעות עירוניות</span></div>
+        <div class="tile" onclick="loadReport(URLS.city)">מרשם אוכלוסין עיר</div>
+        <div class="tile" onclick="loadReport(URLS.neighborhood)">מרשם אוכלוסין שכונה</div>
+        <div class="tile" onclick="loadReport(URLS.vehicles)">רכבים עירוניים</div>
+        <div class="tile" onclick="loadReport(URLS.garbage)">פינוי אשפה</div>
+        <div class="tile" onclick="loadReport(URLS.water)">צריכת מים</div>
+        <div class="tile" onclick="loadReport(URLS.appointments)">זימון תורים</div>
+        <div class="tile" onclick="loadReport(URLS.arnona)">ארנונה</div>
+        <div class="tile" onclick="loadReport(URLS.transport)">הסעות עירוניות</div>
 
-        <div class="tile" onclick="loadReport(URLS.businessLic)"><span>רישוי עסקים</span></div>
-        <div class="tile" onclick="loadReport(URLS.businessProm)"><span>קידום עסקים</span></div>
-        <div class="tile" onclick="loadReport(URLS.parking)"><span>תחבורה וחנייה</span></div>
-        <div class="tile" onclick="loadReport(URLS.emergency)"><span>בקרת חירום</span></div>
-        <div class="tile" onclick="loadReport(URLS.crime)"><span>פשיעה ואכיפה</span></div>
-        <div class="tile" onclick="loadReport(URLS.center106)"><span>מוקד 106</span></div>
-        <div class="tile" onclick="loadReport(URLS.benchmark)"><span>מדרג רשויות</span></div>
-        <div class="tile" onclick="loadReport(URLS.employment)"><span>תעסוקה עירונית</span></div>
+        <div class="tile" onclick="loadReport(URLS.businessLic)">רישוי עסקים</div>
+        <div class="tile" onclick="loadReport(URLS.businessProm)">קידום עסקים</div>
+        <div class="tile" onclick="loadReport(URLS.parking)">תחבורה וחנייה</div>
+        <div class="tile" onclick="loadReport(URLS.emergency)">בקרת חירום</div>
+        <div class="tile" onclick="loadReport(URLS.crime)">פשיעה ואכיפה</div>
+        <div class="tile" onclick="loadReport(URLS.center106)">מוקד 106</div>
+        <div class="tile" onclick="loadReport(URLS.benchmark)">מדרג רשויות</div>
+        <div class="tile" onclick="loadReport(URLS.employment)">תעסוקה עירונית</div>
     </div>
 
-    <div class="main-dashboard" onclick="loadReport(URLS.main)">
-        לוח בקרה ראשי
+    <div class="main-dashboard" onclick="loadReport(URLS.main)">לוח בקרה ראשי</div>
+</div>
+
+<!-- iframe -->
+<iframe id="reportFrame"></iframe>
+
+<!-- loader -->
+<div id="loader">
+    <div class="loader-text">
+        טוען<span class="dots"></span>
     </div>
 </div>
 
-<iframe id="reportFrame"></iframe>
-
 <script>
 const URLS = {
-    city: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    neighborhood: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    vehicles: "https://app.powerbi.com/reportEmbed?reportId=a4ec7683-19f1-45e9-8e1c-6e9aaeb55bc9&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    arnona: "https://app.powerbi.com/reportEmbed?reportId=bc90014d-042e-4c88-a795-790a681656e7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    businessLic: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    businessProm: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    parking: "https://app.powerbi.com/reportEmbed?reportId=593c46a6-2e79-44d2-9bab-8080d24fba96&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    emergency: "https://app.powerbi.com/reportEmbed?reportId=ad06f4e7-ede5-4661-8d25-58eccd4f6e75&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    crime: "https://app.powerbi.com/reportEmbed?reportId=56348d10-c389-43cd-bcb0-5ae3a3f81cc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent",
-    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&background=transparent"
+    city: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    neighborhood: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    vehicles: "https://app.powerbi.com/reportEmbed?reportId=a4ec7683-19f1-45e9-8e1c-6e9aaeb55bc9&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    arnona: "https://app.powerbi.com/reportEmbed?reportId=bc90014d-042e-4c88-a795-790a681656e7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    businessLic: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    businessProm: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    parking: "https://app.powerbi.com/reportEmbed?reportId=593c46a6-2e79-44d2-9bab-8080d24fba96&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    emergency: "https://app.powerbi.com/reportEmbed?reportId=ad06f4e7-ede5-4661-8d25-58eccd4f6e75&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    crime: "https://app.powerbi.com/reportEmbed?reportId=56348d10-c389-43cd-bcb0-5ae3a3f81cc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c",
+    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c"
 };
 
 function loadReport(url) {
-    const f = document.getElementById("reportFrame");
-    f.src = url;
-    f.style.display = "block";
+    const frame = document.getElementById("reportFrame");
+    const loader = document.getElementById("loader");
+
+    loader.style.display = "flex";
+    frame.style.display = "block";
+    frame.src = url;
+
+    frame.onload = () => {
+        loader.style.display = "none";
+    };
 }
 
 function toggleSidebar() {
