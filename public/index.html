@@ -52,7 +52,9 @@ html, body {
     transform: translateX(100%);
     transition: transform 0.3s ease;
     z-index: 3500;
-    padding-top: 70px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .sidebar.open {
@@ -64,12 +66,24 @@ html, body {
     padding: 15px;
     background: #00334d;
     text-align: center;
+    flex-shrink: 0;
+}
+
+.menu-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 10px 0;
 }
 
 .menu-btn {
-    padding: 14px;
-    border-bottom: 1px solid #00334d;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(0, 51, 77, 0.5);
     cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    transition: background 0.2s;
 }
 
 .menu-btn:hover {
@@ -196,47 +210,49 @@ html, body {
 <!-- תפריט צד -->
 <div id="sidebar" class="sidebar">
     <h2>ניווט</h2>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.cityPopulation)">מרשם אוכלוסין עיר</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.neighborhoodPopulation)">מרשם אוכלוסין שכונה</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.vehicles)">רכבים עירוניים</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.garbage)">פינוי אשפה ומיחזור</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.water)">צריכת מים והשקייה</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.appointments)">זימון תורים</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.arnona)">ארנונה</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.transport)">הסעות עירוניות</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.businessLicensing)">רישוי עסקים</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.businessPromotion)">קידום עסקים</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.parking)">תחבורה וחנייה</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.emergency)">בקרת חירום</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.crime)">פשיעה ואכיפה</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.center106)">מוקד 106</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.benchmark)">מדרג רשויות</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.employment)">תעסוקה עירונית</div>
-    <div class="menu-btn" onclick="loadReportAndFullscreen(URLS.main)">לוח בקרה ראשי</div>
+    <div class="menu-container">
+        <div class="menu-btn" onclick="loadReport(URLS.cityPopulation)">מרשם אוכלוסין עיר</div>
+        <div class="menu-btn" onclick="loadReport(URLS.neighborhoodPopulation)">מרשם אוכלוסין שכונה</div>
+        <div class="menu-btn" onclick="loadReport(URLS.vehicles)">רכבים עירוניים</div>
+        <div class="menu-btn" onclick="loadReport(URLS.garbage)">פינוי אשפה ומיחזור</div>
+        <div class="menu-btn" onclick="loadReport(URLS.water)">צריכת מים והשקייה</div>
+        <div class="menu-btn" onclick="loadReport(URLS.appointments)">זימון תורים</div>
+        <div class="menu-btn" onclick="loadReport(URLS.arnona)">ארנונה</div>
+        <div class="menu-btn" onclick="loadReport(URLS.transport)">הסעות עירוניות</div>
+        <div class="menu-btn" onclick="loadReport(URLS.businessLicensing)">רישוי עסקים</div>
+        <div class="menu-btn" onclick="loadReport(URLS.businessPromotion)">קידום עסקים</div>
+        <div class="menu-btn" onclick="loadReport(URLS.parking)">תחבורה וחנייה</div>
+        <div class="menu-btn" onclick="loadReport(URLS.emergency)">בקרת חירום</div>
+        <div class="menu-btn" onclick="loadReport(URLS.crime)">פשיעה ואכיפה</div>
+        <div class="menu-btn" onclick="loadReport(URLS.center106)">מוקד 106</div>
+        <div class="menu-btn" onclick="loadReport(URLS.benchmark)">מדרג רשויות</div>
+        <div class="menu-btn" onclick="loadReport(URLS.employment)">תעסוקה עירונית</div>
+        <div class="menu-btn" onclick="loadReport(URLS.main)">לוח בקרה ראשי</div>
+    </div>
 </div>
 
 <!-- ריבועים -->
 <div class="main">
     <div class="tiles-wrapper">
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.cityPopulation)"><span>מרשם אוכלוסין עיר</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.neighborhoodPopulation)"><span>מרשם אוכלוסין שכונה</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.vehicles)"><span>רכבים עירוניים</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.garbage)"><span>פינוי אשפה</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.water)"><span>צריכת מים</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.appointments)"><span>זימון תורים</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.arnona)"><span>ארנונה</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.transport)"><span>הסעות עירוניות</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.businessLicensing)"><span>רישוי עסקים</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.businessPromotion)"><span>קידום עסקים</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.parking)"><span>תחבורה וחנייה</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.emergency)"><span>בקרת חירום</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.crime)"><span>פשיעה ואכיפה</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.center106)"><span>מוקד 106</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.benchmark)"><span>מדרג רשויות</span></div>
-        <div class="tile" onclick="loadReportAndFullscreen(URLS.employment)"><span>תעסוקה עירונית</span></div>
+        <div class="tile" onclick="loadReport(URLS.cityPopulation)"><span>מרשם אוכלוסין עיר</span></div>
+        <div class="tile" onclick="loadReport(URLS.neighborhoodPopulation)"><span>מרשם אוכלוסין שכונה</span></div>
+        <div class="tile" onclick="loadReport(URLS.vehicles)"><span>רכבים עירוניים</span></div>
+        <div class="tile" onclick="loadReport(URLS.garbage)"><span>פינוי אשפה</span></div>
+        <div class="tile" onclick="loadReport(URLS.water)"><span>צריכת מים</span></div>
+        <div class="tile" onclick="loadReport(URLS.appointments)"><span>זימון תורים</span></div>
+        <div class="tile" onclick="loadReport(URLS.arnona)"><span>ארנונה</span></div>
+        <div class="tile" onclick="loadReport(URLS.transport)"><span>הסעות עירוניות</span></div>
+        <div class="tile" onclick="loadReport(URLS.businessLicensing)"><span>רישוי עסקים</span></div>
+        <div class="tile" onclick="loadReport(URLS.businessPromotion)"><span>קידום עסקים</span></div>
+        <div class="tile" onclick="loadReport(URLS.parking)"><span>תחבורה וחנייה</span></div>
+        <div class="tile" onclick="loadReport(URLS.emergency)"><span>בקרת חירום</span></div>
+        <div class="tile" onclick="loadReport(URLS.crime)"><span>פשיעה ואכיפה</span></div>
+        <div class="tile" onclick="loadReport(URLS.center106)"><span>מוקד 106</span></div>
+        <div class="tile" onclick="loadReport(URLS.benchmark)"><span>מדרג רשויות</span></div>
+        <div class="tile" onclick="loadReport(URLS.employment)"><span>תעסוקה עירונית</span></div>
     </div>
 
-    <div class="main-dashboard" onclick="loadReportAndFullscreen(URLS.main)">
+    <div class="main-dashboard" onclick="loadReport(URLS.main)">
         לוח בקרה ראשי
     </div>
 </div>
@@ -258,7 +274,7 @@ const URLS = {
     garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
     water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
     appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    arnona: "https://app.powerbi.com/reportEmbed?reportId=bc90014d-042e-4c88-a795-790a681656e7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
+    arnona: "https://app.powerbi.com/reportEmbed?reportId=99746334-ff4a-43a9-be32-0caf768e06b7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
     transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
     businessLicensing: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
     businessPromotion: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
@@ -272,25 +288,22 @@ const URLS = {
 };
 
 let loadingTimeout;
+let currentUrl = "";
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
 }
 
-function loadReportAndFullscreen(url) {
+function loadReport(url) {
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
+    
+    // שמור את ה-URL הנוכחי
+    currentUrl = url;
     
     // נקה טיימר קודם אם יש
     if (loadingTimeout) {
         clearTimeout(loadingTimeout);
-    }
-    
-    // היכנס למסך מלא (בזמן הלחיצה!)
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log('Fullscreen request failed:', err);
-        });
     }
     
     // הצג מסך טעינה
@@ -310,14 +323,19 @@ function loadReportAndFullscreen(url) {
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
-    // נתן עוד 1.5 שניות שהלוגו של Power BI ייעלם
+    // בדוק אם זה הסעות עירוניות
+    const isTransport = currentUrl === URLS.transport;
+    
+    // אם זה הסעות - חכה 3 שניות, אחרת 1.5 שניות
+    const waitTime = isTransport ? 3000 : 1500;
+    
     setTimeout(() => {
         loadingScreen.style.display = "none";
         // נקה את הטיימר הגיבוי
         if (loadingTimeout) {
             clearTimeout(loadingTimeout);
         }
-    }, 1500);
+    }, waitTime);
 });
 
 function toggleFullscreen() {
