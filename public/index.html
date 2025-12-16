@@ -16,11 +16,13 @@ body {
     height: 100vh;
 }
 
+/* Sidebar */
 .sidebar {
     width: 260px;
     background: #001f33;
     color: white;
     transition: transform 0.3s;
+    flex-shrink: 0;
 }
 
 .sidebar.hidden {
@@ -39,6 +41,7 @@ body {
     border-bottom: 1px solid #00334d;
 }
 
+/* Content */
 .content {
     flex-grow: 1;
     position: relative;
@@ -77,6 +80,7 @@ body {
     gap: 24px;
 }
 
+/* Tile */
 .tile {
     width: 211px;
     height: 210px;
@@ -84,19 +88,28 @@ body {
     border: 1px solid #1C3B5A;
     border-radius: 14px;
     color: white;
+    text-decoration: none;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     font-weight: bold;
     cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
 }
 
 .tile:hover {
     background: #0B2545;
+    transform: translateY(-4px);
 }
 
-/* ריבוע תחתון */
+.tile img {
+    max-width: 80px;
+    margin-bottom: 12px;
+}
+
+/* Bottom tile */
 .bottom-tile {
     margin-top: 40px;
     width: 353px;
@@ -106,10 +119,16 @@ body {
     border-radius: 14px;
     color: white;
     font-size: 18px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    text-decoration: none;
+}
+
+.bottom-tile:hover {
+    background: #0B2545;
 }
 </style>
 </head>
@@ -129,33 +148,134 @@ body {
     <div class="content">
         <div id="showSidebarBtn" class="show-sidebar" onclick="showSidebar()">☰</div>
 
+        <!-- Landing -->
         <div id="landing">
 
             <div class="landing-grid">
-                <!-- שורה 1 -->
-                <div class="tile">מרשם אוכלוסין עיר</div>
-                <div class="tile">מרשם אוכלוסין שכונה</div>
-                <div class="tile">רכבים עירוניים</div>
-                <div class="tile">פינוי אשפה ומיחזור ברשות</div>
-                <div class="tile">צריכת מים והשקייה עירונית</div>
-                <div class="tile">זימון תואם למחלקות ברשות</div>
-                <div class="tile">ארנונה</div>
-                <div class="tile">הסעות עירוניות</div>
 
-                <!-- שורה 2 -->
-                <div class="tile">רישוי עסקים</div>
-                <div class="tile">קידום עסקים</div>
-                <div class="tile">תחבורה עירונית וחנייה</div>
-                <div class="tile">בקרה וחירום</div>
-                <div class="tile">נתוני פשיעה ואכיפה</div>
-                <div class="tile">מוקד 106</div>
-                <div class="tile">מדרג השוואתי בין רשויות</div>
-                <div class="tile">תעסוקה עירונית</div>
+                <!-- ===== שורה 1 ===== -->
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה: src="assets/logos/population_city.png" -->
+                    <img src="" alt="">
+                    <span>מרשם אוכלוסין עיר</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>מרשם אוכלוסין שכונה</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>רכבים עירוניים</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>פינוי אשפה ומיחזור ברשות</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>צריכת מים והשקייה עירונית</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>זימון תואם למחלקות ברשות</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>ארנונה</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>הסעות עירוניות</span>
+                </a>
+
+                <!-- ===== שורה 2 ===== -->
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>רישוי עסקים</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>קידום עסקים</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>תחבורה עירונית וחנייה</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>בקרה וחירום</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>נתוני פשיעה ואכיפה</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>מוקד 106</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>מדרג השוואתי בין רשויות</span>
+                </a>
+
+                <a class="tile" href="#">
+                    <!-- 🔗 פה להכניס לינק -->
+                    <!-- 🖼️ פה להכניס תמונה -->
+                    <img src="" alt="">
+                    <span>תעסוקה עירונית</span>
+                </a>
+
             </div>
 
-            <div class="bottom-tile">
+            <!-- ריבוע תחתון -->
+            <a class="bottom-tile" href="#">
+                <!-- 🔗 פה להכניס לינק -->
                 לוח בקרה ראשי
-            </div>
+            </a>
 
         </div>
     </div>
