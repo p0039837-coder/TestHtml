@@ -12,13 +12,11 @@ body {
     overflow: hidden;
 }
 
-/* ===== כפתורי על ===== */
-.top-buttons {
+/* ===== כפתורי שמאל (מסך מלא) ===== */
+.top-left-buttons {
     position: fixed;
     top: 12px;
-    left: 12px; /* שמאל */
-    display: flex;
-    gap: 10px;
+    left: 12px;
     z-index: 3000;
 }
 
@@ -32,7 +30,15 @@ body {
     user-select: none;
 }
 
-/* ===== תפריט צד (ימין) ===== */
+/* ===== כפתור תפריט (ימין) ===== */
+.top-right-button {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 3000;
+}
+
+/* ===== תפריט צד ===== */
 .sidebar {
     position: fixed;
     top: 0;
@@ -81,7 +87,7 @@ body {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 18px;
-    width: calc(100% - 80px);
+    width: calc(100% - 120px);
     max-width: 1600px;
     justify-items: center;
 }
@@ -128,114 +134,70 @@ body {
 
 <body>
 
-<!-- כפתורי על -->
-<div class="top-buttons">
-    <div class="top-btn" onclick="toggleFullscreen()" id="fullscreenBtn">⛶ מסך מלא</div>
-    <div class="top-btn" onclick="toggleSidebar()">☰ תפריט</div>
+<!-- כפתור מסך מלא – שמאל -->
+<div class="top-left-buttons">
+    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">
+        ⛶ מסך מלא
+    </div>
+</div>
+
+<!-- כפתור תפריט – ימין -->
+<div class="top-right-button">
+    <div class="top-btn" onclick="toggleSidebar()">
+        ☰ תפריט
+    </div>
 </div>
 
 <!-- תפריט צד -->
 <div id="sidebar" class="sidebar">
     <h2>תפריט ניווט</h2>
 
-    <!-- 1 -->
-    <div class="menu-btn" onclick="/* פה להכניס לינק */">
-        מרשם אוכלוסין עיר
-    </div>
-    <!-- 2 -->
-    <div class="menu-btn">
-        מרשם אוכלוסין שכונה
-    </div>
-    <!-- 3 -->
-    <div class="menu-btn">
-        רכבים עירוניים
-    </div>
-    <!-- 4 -->
-    <div class="menu-btn">
-        פינוי אשפה ומיחזור ברשות
-    </div>
-    <!-- 5 -->
-    <div class="menu-btn">
-        צריכת מים והשקייה עירונית
-    </div>
-    <!-- 6 -->
-    <div class="menu-btn">
-        זימון תואם למחלקות ברשות
-    </div>
-    <!-- 7 -->
-    <div class="menu-btn">
-        ארנונה
-    </div>
-    <!-- 8 -->
-    <div class="menu-btn">
-        הסעות עירוניות
-    </div>
-    <!-- 9 -->
-    <div class="menu-btn">
-        רישוי עסקים
-    </div>
-    <!-- 10 -->
-    <div class="menu-btn">
-        קידום עסקים
-    </div>
-    <!-- 11 -->
-    <div class="menu-btn">
-        תחבורה עירונית וחנייה
-    </div>
-    <!-- 12 -->
-    <div class="menu-btn">
-        בקרה וחירום
-    </div>
-    <!-- 13 -->
-    <div class="menu-btn">
-        נתוני פשיעה ואכיפה
-    </div>
-    <!-- 14 -->
-    <div class="menu-btn">
-        מוקד 106
-    </div>
-    <!-- 15 -->
-    <div class="menu-btn">
-        מדרג השוואתי בין רשויות
-    </div>
-    <!-- 16 -->
-    <div class="menu-btn">
-        תעסוקה עירונית
-    </div>
-    <!-- 17 -->
-    <div class="menu-btn">
-        לוח בקרה ראשי
-    </div>
+    <div class="menu-btn">מרשם אוכלוסין עיר</div>
+    <div class="menu-btn">מרשם אוכלוסין שכונה</div>
+    <div class="menu-btn">רכבים עירוניים</div>
+    <div class="menu-btn">פינוי אשפה ומיחזור ברשות</div>
+    <div class="menu-btn">צריכת מים והשקייה עירונית</div>
+    <div class="menu-btn">זימון תואם למחלקות ברשות</div>
+    <div class="menu-btn">ארנונה</div>
+    <div class="menu-btn">הסעות עירוניות</div>
+    <div class="menu-btn">רישוי עסקים</div>
+    <div class="menu-btn">קידום עסקים</div>
+    <div class="menu-btn">תחבורה עירונית וחנייה</div>
+    <div class="menu-btn">בקרה וחירום</div>
+    <div class="menu-btn">נתוני פשיעה ואכיפה</div>
+    <div class="menu-btn">מוקד 106</div>
+    <div class="menu-btn">מדרג השוואתי בין רשויות</div>
+    <div class="menu-btn">תעסוקה עירונית</div>
+    <div class="menu-btn">לוח בקרה ראשי</div>
 </div>
 
 <!-- תוכן -->
 <div class="main">
-
     <div class="tiles-wrapper">
 
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>מרשם אוכלוסין עיר</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>מרשם אוכלוסין שכונה</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>רכבים עירוניים</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>פינוי אשפה ומיחזור ברשות</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>צריכת מים והשקייה עירונית</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>זימון תואם למחלקות ברשות</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>ארנונה</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>הסעות עירוניות</span></a>
+        <!-- כל ריבוע: כאן לינק + לוגו -->
+        <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין עיר</span></a>
+        <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין שכונה</span></a>
+        <a class="tile" href="#"><img src=""><span>רכבים עירוניים</span></a>
+        <a class="tile" href="#"><img src=""><span>פינוי אשפה ומיחזור ברשות</span></a>
+        <a class="tile" href="#"><img src=""><span>צריכת מים והשקייה עירונית</span></a>
+        <a class="tile" href="#"><img src=""><span>זימון תואם למחלקות ברשות</span></a>
+        <a class="tile" href="#"><img src=""><span>ארנונה</span></a>
+        <a class="tile" href="#"><img src=""><span>הסעות עירוניות</span></a>
 
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>רישוי עסקים</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>קידום עסקים</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>תחבורה עירונית וחנייה</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>בקרה וחירום</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>נתוני פשיעה ואכיפה</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>מוקד 106</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>מדרג השוואתי בין רשויות</span></a>
-        <a class="tile" href="#"><img src="PASTE_IMAGE_URL"><span>תעסוקה עירונית</span></a>
+        <a class="tile" href="#"><img src=""><span>רישוי עסקים</span></a>
+        <a class="tile" href="#"><img src=""><span>קידום עסקים</span></a>
+        <a class="tile" href="#"><img src=""><span>תחבורה עירונית וחנייה</span></a>
+        <a class="tile" href="#"><img src=""><span>בקרה וחירום</span></a>
+        <a class="tile" href="#"><img src=""><span>נתוני פשיעה ואכיפה</span></a>
+        <a class="tile" href="#"><img src=""><span>מוקד 106</span></a>
+        <a class="tile" href="#"><img src=""><span>מדרג השוואתי בין רשויות</span></a>
+        <a class="tile" href="#"><img src=""><span>תעסוקה עירונית</span></a>
     </div>
 
     <a class="main-dashboard" href="#">
         לוח בקרה ראשי
     </a>
-
 </div>
 
 <script>
