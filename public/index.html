@@ -12,7 +12,7 @@ body {
     overflow: hidden;
 }
 
-/* ===== כפתורי שמאל (מסך מלא) ===== */
+/* ===== כפתור מסך מלא – שמאל ===== */
 .top-left-buttons {
     position: fixed;
     top: 12px;
@@ -30,7 +30,7 @@ body {
     user-select: none;
 }
 
-/* ===== כפתור תפריט (ימין) ===== */
+/* ===== כפתור תפריט – ימין ===== */
 .top-right-button {
     position: fixed;
     top: 12px;
@@ -50,6 +50,9 @@ body {
     transform: translateX(100%);
     transition: transform 0.3s ease;
     z-index: 2500;
+
+    /* ⭐ זה השינוי החשוב ⭐ */
+    padding-top: 70px; /* רווח מתחת לכפתור */
 }
 
 .sidebar.open {
@@ -134,23 +137,19 @@ body {
 
 <body>
 
-<!-- כפתור מסך מלא – שמאל -->
+<!-- מסך מלא – שמאל -->
 <div class="top-left-buttons">
-    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">
-        ⛶ מסך מלא
-    </div>
+    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
 </div>
 
-<!-- כפתור תפריט – ימין -->
+<!-- תפריט – ימין -->
 <div class="top-right-button">
-    <div class="top-btn" onclick="toggleSidebar()">
-        ☰ תפריט
-    </div>
+    <div class="top-btn" onclick="toggleSidebar()">☰ תפריט</div>
 </div>
 
 <!-- תפריט צד -->
 <div id="sidebar" class="sidebar">
-    <h2>תפריט ניווט</h2>
+    <h2>פריט ניווט</h2>
 
     <div class="menu-btn">מרשם אוכלוסין עיר</div>
     <div class="menu-btn">מרשם אוכלוסין שכונה</div>
@@ -174,8 +173,6 @@ body {
 <!-- תוכן -->
 <div class="main">
     <div class="tiles-wrapper">
-
-        <!-- כל ריבוע: כאן לינק + לוגו -->
         <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין עיר</span></a>
         <a class="tile" href="#"><img src=""><span>מרשם אוכלוסין שכונה</span></a>
         <a class="tile" href="#"><img src=""><span>רכבים עירוניים</span></a>
@@ -195,9 +192,7 @@ body {
         <a class="tile" href="#"><img src=""><span>תעסוקה עירונית</span></a>
     </div>
 
-    <a class="main-dashboard" href="#">
-        לוח בקרה ראשי
-    </a>
+    <a class="main-dashboard" href="#">לוח בקרה ראשי</a>
 </div>
 
 <script>
