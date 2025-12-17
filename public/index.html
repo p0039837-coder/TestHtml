@@ -322,7 +322,7 @@ function loadReport(url) {
     const embedConfig = {
         type: 'report',
         tokenType: window.powerbi.models.TokenType.Embed,
-        accessToken: null,
+        accessToken: null, // לא צריך כי יש autoAuth
         embedUrl: url,
         settings: {
             background: window.powerbi.models.BackgroundType.Transparent
