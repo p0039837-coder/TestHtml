@@ -336,6 +336,7 @@ const URLS = {
 
 let loadingTimeout;
 let currentUrl = "";
+let authLoadCount = 0;
 
 // התחברות ראשונית
 window.addEventListener('load', function() {
@@ -347,18 +348,38 @@ window.addEventListener('load', function() {
     
     // האזן לטעינה - ברגע שה-iframe נטען (אחרי התחברות)
     authIframe.addEventListener('load', function() {
-        // המתן רגע ואז הסתר מסך התחברות
-        setTimeout(() => {
-            // הסתר מסך התחברות מיד
-            authScreen.style.display = "none";
-            
-            // כנס למסך מלא
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log('Fullscreen request failed:', err);
-                });
-            }
-        }, 500);
+        authLoadCount++;
+        
+        // לפעמים ה-iframe נטען פעמיים - פעם לדף התחברות ופעם לדוח
+        // נחכה שיטען לפחות פעמיים או 5 שניות אחרי הטעינה הראשונה
+        if (authLoadCount >= 2) {
+            // הדוח נטען! עכשיו אפשר להסתיר
+            setTimeout(() => {
+                authScreen.style.display = "none";
+                
+                // כנס למסך מלא
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log('Fullscreen request failed:', err);
+                    });
+                }
+            }, 1000);
+        } else {
+            // הטעינה הראשונה - אולי זה רק דף ההתחברות
+            // נמתין 5 שניות ואז נבדוק אם נטען שוב
+            setTimeout(() => {
+                if (authLoadCount < 2) {
+                    // אם עדיין לא נטען פעם שנייה, סביר שכבר מחובר
+                    authScreen.style.display = "none";
+                    
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen().catch(err => {
+                            console.log('Fullscreen request failed:', err);
+                        });
+                    }
+                }
+            }, 5000);
+        }
     });
 });
 
