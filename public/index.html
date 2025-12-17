@@ -323,16 +323,13 @@ function loadReport(url) {
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
-    const isTransport = currentUrl === URLS.transport;
-    
-    const waitTime = isTransport ? 3000 : 1500;
-    
+    // כולם 3 שניות!
     setTimeout(() => {
         loadingScreen.style.display = "none";
         if (loadingTimeout) {
             clearTimeout(loadingTimeout);
         }
-    }, waitTime);
+    }, 3000);
 });
 
 function toggleFullscreen() {
