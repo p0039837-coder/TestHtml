@@ -347,10 +347,10 @@ window.addEventListener('load', function() {
     
     // האזן לטעינה - ברגע שה-iframe נטען (אחרי התחברות)
     authIframe.addEventListener('load', function() {
-        // המתן 3 שניות כדי לוודא שההתחברות הושלמה
+        // המתן רגע ואז הסתר מסך התחברות
         setTimeout(() => {
-            // הסתר מסך התחברות
-            authScreen.classList.add('hidden');
+            // הסתר מסך התחברות מיד
+            authScreen.style.display = "none";
             
             // כנס למסך מלא
             if (!document.fullscreenElement) {
@@ -358,7 +358,7 @@ window.addEventListener('load', function() {
                     console.log('Fullscreen request failed:', err);
                 });
             }
-        }, 3000);
+        }, 500);
     });
 });
 
