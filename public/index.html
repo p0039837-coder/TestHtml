@@ -200,13 +200,13 @@ html, body {
     animation: dotAnimation 1.5s infinite;
 }
 
-/* מסך התחברות ראשונית */
-#initialAuthScreen {
+/* Overlay התחברות */
+#authOverlay {
     position: fixed;
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background: #030E1D;
+    background: rgba(3, 14, 29, 0.98);
     display: flex;
     z-index: 5000;
     justify-content: center;
@@ -215,15 +215,15 @@ html, body {
     gap: 20px;
 }
 
-#initialAuthScreen.hidden {
+#authOverlay.hidden {
     display: none;
 }
 
 .auth-message {
     color: white;
-    font-size: 20px;
+    font-size: 22px;
     text-align: center;
-    margin-bottom: 20px;
+    font-weight: 300;
 }
 
 #authIframe {
@@ -239,8 +239,8 @@ html, body {
 
 <body>
 
-<!-- מסך התחברות ראשונית -->
-<div id="initialAuthScreen">
+<!-- Overlay התחברות - מעל הכל -->
+<div id="authOverlay">
     <div class="auth-message">התחבר ל-Power BI</div>
     <iframe id="authIframe"></iframe>
 </div>
@@ -336,50 +336,22 @@ const URLS = {
 
 let loadingTimeout;
 let currentUrl = "";
-let authLoadCount = 0;
 
-// התחברות ראשונית
+// טוען את מסך ההתחברות מיד כשהדף נפתח
 window.addEventListener('load', function() {
     const authIframe = document.getElementById('authIframe');
-    const authScreen = document.getElementById('initialAuthScreen');
+    const authOverlay = document.getElementById('authOverlay');
     
-    // טען דוח ראשון לצורך התחברות
+    // טען דוח לצורך התחברות
     authIframe.src = URLS.main;
     
-    // האזן לטעינה - ברגע שה-iframe נטען (אחרי התחברות)
+    // האזן לטעינה - כשהדוח נטען (אחרי Sign In)
     authIframe.addEventListener('load', function() {
-        authLoadCount++;
-        
-        // לפעמים ה-iframe נטען פעמיים - פעם לדף התחברות ופעם לדוח
-        // נחכה שיטען לפחות פעמיים או 5 שניות אחרי הטעינה הראשונה
-        if (authLoadCount >= 2) {
-            // הדוח נטען! עכשיו אפשר להסתיר
-            setTimeout(() => {
-                authScreen.style.display = "none";
-                
-                // כנס למסך מלא
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log('Fullscreen request failed:', err);
-                    });
-                }
-            }, 1000);
-        } else {
-            // הטעינה הראשונה - אולי זה רק דף ההתחברות
-            // נמתין 5 שניות ואז נבדוק אם נטען שוב
-            setTimeout(() => {
-                if (authLoadCount < 2) {
-                    // אם עדיין לא נטען פעם שנייה, סביר שכבר מחובר
-                    authScreen.style.display = "none";
-                    
-                    if (!document.fullscreenElement) {
-                        document.documentElement.requestFullscreen().catch(err => {
-                            console.log('Fullscreen request failed:', err);
-                        });
-                    }
-                }
-            }, 5000);
-        }
+        // המתן 2 שניות אחרי הטעינה
+        setTimeout(() => {
+            // הסתר את ה-overlay
+            authOverlay.classList.add('hidden');
+        }, 2000);
     });
 });
 
