@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>Municipal BI Navigation</title>
 
+<!-- Power BI Client SDK -->
+<script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.23.1/dist/powerbi.min.js"></script>
+
 <style>
 html, body {
     margin: 0;
@@ -150,13 +153,12 @@ html, body {
     cursor: pointer;
 }
 
-/* iframe – מסך מלא */
-#reportFrame {
+/* Container לדוח */
+#reportContainer {
     position: fixed;
     inset: 0;
     width: 100vw;
     height: 100vh;
-    border: none;
     display: none;
     z-index: 3000;
     background: #030E1D;
@@ -270,7 +272,7 @@ html, body {
     </div>
 </div>
 
-<iframe id="reportFrame"></iframe>
+<div id="reportContainer"></div>
 
 <script>
 const URLS = {
@@ -294,46 +296,66 @@ const URLS = {
 };
 
 let loadingTimeout;
-let currentUrl = "";
+let currentReport = null;
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
 }
 
 function loadReport(url) {
-    const frame = document.getElementById("reportFrame");
+    const container = document.getElementById("reportContainer");
     const loadingScreen = document.getElementById("loadingScreen");
     
-    currentUrl = url;
-    
+    // נקה טיימר קודם
     if (loadingTimeout) {
         clearTimeout(loadingTimeout);
     }
     
+    // הצג מסך טעינה
     loadingScreen.style.display = "flex";
+    container.style.display = "block";
     
-    frame.src = url;
-    frame.style.display = "block";
+    // נקה דוח קודם
+    container.innerHTML = '';
     
+    // הגדרות Power BI
+    const embedConfig = {
+        type: 'report',
+        tokenType: window.powerbi.models.TokenType.Embed,
+        accessToken: null, // לא צריך כי יש autoAuth
+        embedUrl: url,
+        settings: {
+            background: window.powerbi.models.BackgroundType.Transparent
+        }
+    };
+    
+    // טען דוח
+    currentReport = window.powerbi.embed(container, embedConfig);
+    
+    // האזן לאירוע loaded
+    currentReport.on('loaded', function() {
+        console.log('Report loaded');
+        
+        // המתן רגע נוסף שהוויזואלים ייטענו
+        setTimeout(() => {
+            loadingScreen.style.display = "none";
+            if (loadingTimeout) {
+                clearTimeout(loadingTimeout);
+            }
+        }, 500);
+    });
+    
+    // האזן לשגיאות
+    currentReport.on('error', function(event) {
+        console.error('Report error:', event.detail);
+        loadingScreen.style.display = "none";
+    });
+    
+    // טיימר גיבוי - 20 שניות
     loadingTimeout = setTimeout(() => {
         loadingScreen.style.display = "none";
-    }, 15000);
+    }, 20000);
 }
-
-document.getElementById("reportFrame").addEventListener("load", function() {
-    const loadingScreen = document.getElementById("loadingScreen");
-    
-    const isTransport = currentUrl === URLS.transport;
-    
-    const waitTime = isTransport ? 3000 : 1500;
-    
-    setTimeout(() => {
-        loadingScreen.style.display = "none";
-        if (loadingTimeout) {
-            clearTimeout(loadingTimeout);
-        }
-    }, waitTime);
-});
 
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
