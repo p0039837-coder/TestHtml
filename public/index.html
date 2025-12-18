@@ -10,9 +10,37 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    background: #00253D;  /* ← כחול כהה! */
+    background: #00253D;
     font-family: Arial, sans-serif;
     overflow: hidden;
+}
+
+/* פס כחול בצד שמאל */
+.left-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 120px;  /* רוחב הפס */
+    height: 100vh;
+    background: #00253D;
+    z-index: 2500;
+}
+
+/* פס כחול בצד ימין */
+.right-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 120px;  /* רוחב הפס */
+    height: 100vh;
+    background: #00253D;
+    z-index: 2500;
+}
+
+/* הסתרה במסך מלא */
+.left-bar.hide-bars,
+.right-bar.hide-bars {
+    display: none;
 }
 
 /* כפתור מסך מלא – שמאל */
@@ -21,10 +49,6 @@ html, body {
     top: 12px;
     left: 12px;
     z-index: 4000;
-    background: #00253D;  /* ← כחול כהה! */
-    padding: 8px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .top-btn {
@@ -42,10 +66,6 @@ html, body {
     top: 12px;
     right: 12px;
     z-index: 4000;
-    background: #00253D;  /* ← כחול כהה! */
-    padding: 8px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 /* תפריט צד */
@@ -167,7 +187,7 @@ html, body {
     border: none;
     display: none;
     z-index: 3000;
-    background: #00253D;  /* ← כחול כהה! */
+    background: #00253D;
 }
 
 /* מסך טעינה */
@@ -176,7 +196,7 @@ html, body {
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background: #00253D;  /* ← כחול כהה! */
+    background: #00253D;
     display: none;
     z-index: 3100;
     justify-content: center;
@@ -211,6 +231,10 @@ html, body {
 </head>
 
 <body>
+
+<!-- פסים כחולים בצדדים -->
+<div id="leftBar" class="left-bar"></div>
+<div id="rightBar" class="right-bar"></div>
 
 <!-- כפתורים -->
 <div class="top-left-buttons">
@@ -340,16 +364,35 @@ document.getElementById("reportFrame").addEventListener("load", function() {
 });
 
 function toggleFullscreen() {
+    const leftBar = document.getElementById("leftBar");
+    const rightBar = document.getElementById("rightBar");
+    
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
+        // הסתר פסים במסך מלא
+        leftBar.classList.add("hide-bars");
+        rightBar.classList.add("hide-bars");
     } else {
         document.exitFullscreen();
+        // הצג פסים במסך רגיל
+        leftBar.classList.remove("hide-bars");
+        rightBar.classList.remove("hide-bars");
     }
 }
 
 document.addEventListener("fullscreenchange", () => {
-    document.getElementById("fullscreenBtn").textContent =
-        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
+    const leftBar = document.getElementById("leftBar");
+    const rightBar = document.getElementById("rightBar");
+    
+    if (document.fullscreenElement) {
+        document.getElementById("fullscreenBtn").textContent = "✖ יציאה ממסך מלא";
+        leftBar.classList.add("hide-bars");
+        rightBar.classList.add("hide-bars");
+    } else {
+        document.getElementById("fullscreenBtn").textContent = "⛶ מסך מלא";
+        leftBar.classList.remove("hide-bars");
+        rightBar.classList.remove("hide-bars");
+    }
 });
 </script>
 
