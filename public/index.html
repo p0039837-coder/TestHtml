@@ -159,7 +159,7 @@ html, body {
     border: none;
     display: none;
     z-index: 3000;
-    background: #030E1D;
+    background: #00253D;  /* ← הצבע הכחול של Power BI! */
 }
 
 /* מסך טעינה */
@@ -323,7 +323,6 @@ function loadReport(url) {
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
-    // כולם 3 שניות!
     setTimeout(() => {
         loadingScreen.style.display = "none";
         if (loadingTimeout) {
