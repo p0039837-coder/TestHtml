@@ -20,10 +20,11 @@ html, body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 120px;  /* רוחב הפס */
+    width: 120px;
     height: 100vh;
     background: #00253D;
     z-index: 2500;
+    display: none;  /* ← מוסתר בהתחלה! */
 }
 
 /* פס כחול בצד ימין */
@@ -31,16 +32,11 @@ html, body {
     position: fixed;
     top: 0;
     right: 0;
-    width: 120px;  /* רוחב הפס */
+    width: 120px;
     height: 100vh;
     background: #00253D;
     z-index: 2500;
-}
-
-/* הסתרה במסך מלא */
-.left-bar.hide-bars,
-.right-bar.hide-bars {
-    display: none;
+    display: none;  /* ← מוסתר בהתחלה! */
 }
 
 /* כפתור מסך מלא – שמאל */
@@ -232,7 +228,7 @@ html, body {
 
 <body>
 
-<!-- פסים כחולים בצדדים -->
+<!-- פסים כחולים בצדדים - מוסתרים בהתחלה -->
 <div id="leftBar" class="left-bar"></div>
 <div id="rightBar" class="right-bar"></div>
 
@@ -335,6 +331,8 @@ function toggleSidebar() {
 function loadReport(url) {
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
+    const leftBar = document.getElementById("leftBar");
+    const rightBar = document.getElementById("rightBar");
     
     currentUrl = url;
     
@@ -346,6 +344,10 @@ function loadReport(url) {
     
     frame.src = url;
     frame.style.display = "block";
+    
+    // הצג פסים כשנכנסים לדשבורד
+    leftBar.style.display = "block";
+    rightBar.style.display = "block";
     
     loadingTimeout = setTimeout(() => {
         loadingScreen.style.display = "none";
@@ -370,13 +372,15 @@ function toggleFullscreen() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
         // הסתר פסים במסך מלא
-        leftBar.classList.add("hide-bars");
-        rightBar.classList.add("hide-bars");
+        leftBar.style.display = "none";
+        rightBar.style.display = "none";
     } else {
         document.exitFullscreen();
-        // הצג פסים במסך רגיל
-        leftBar.classList.remove("hide-bars");
-        rightBar.classList.remove("hide-bars");
+        // הצג פסים במסך רגיל (אם יש דשבורד)
+        if (document.getElementById("reportFrame").style.display === "block") {
+            leftBar.style.display = "block";
+            rightBar.style.display = "block";
+        }
     }
 }
 
@@ -386,12 +390,15 @@ document.addEventListener("fullscreenchange", () => {
     
     if (document.fullscreenElement) {
         document.getElementById("fullscreenBtn").textContent = "✖ יציאה ממסך מלא";
-        leftBar.classList.add("hide-bars");
-        rightBar.classList.add("hide-bars");
+        leftBar.style.display = "none";
+        rightBar.style.display = "none";
     } else {
         document.getElementById("fullscreenBtn").textContent = "⛶ מסך מלא";
-        leftBar.classList.remove("hide-bars");
-        rightBar.classList.remove("hide-bars");
+        // הצג פסים רק אם יש דשבורד
+        if (document.getElementById("reportFrame").style.display === "block") {
+            leftBar.style.display = "block";
+            rightBar.style.display = "block";
+        }
     }
 });
 </script>
