@@ -15,30 +15,6 @@ html, body {
     overflow: hidden;
 }
 
-/* פס כחול בצד שמאל */
-.left-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 2.5vw;  /* ← פס קטן */
-    height: 100vh;
-    background: #00253D;
-    z-index: 2500;
-    display: none;
-}
-
-/* פס כחול בצד ימין */
-.right-bar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 2.5vw;  /* ← פס קטן */
-    height: 100vh;
-    background: #00253D;
-    z-index: 2500;
-    display: none;
-}
-
 /* כפתור מסך מלא – שמאל */
 .top-left-buttons {
     position: fixed;
@@ -174,23 +150,16 @@ html, body {
     cursor: pointer;
 }
 
-/* iframe – רחב במצב רגיל, מלא במסך מלא */
+/* iframe – תמיד 100% */
 #reportFrame {
     position: fixed;
-    top: 0;
-    left: 2.5vw;  /* ← ריווח קטן מהצד */
-    width: 95vw;  /* ← 95% מרוחב המסך */
+    inset: 0;
+    width: 100vw;
     height: 100vh;
     border: none;
     display: none;
     z-index: 3000;
     background: #00253D;
-}
-
-/* במסך מלא - תופס את כל המסך */
-#reportFrame.fullscreen {
-    left: 0;
-    width: 100vw;  /* ← מלא! */
 }
 
 /* מסך טעינה */
@@ -234,10 +203,6 @@ html, body {
 </head>
 
 <body>
-
-<!-- פסים כחולים בצדדים -->
-<div id="leftBar" class="left-bar"></div>
-<div id="rightBar" class="right-bar"></div>
 
 <!-- כפתורים -->
 <div class="top-left-buttons">
@@ -338,8 +303,6 @@ function toggleSidebar() {
 function loadReport(url) {
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
-    const leftBar = document.getElementById("leftBar");
-    const rightBar = document.getElementById("rightBar");
     
     currentUrl = url;
     
@@ -351,12 +314,6 @@ function loadReport(url) {
     
     frame.src = url;
     frame.style.display = "block";
-    
-    // הצג פסים רק במצב רגיל (לא מסך מלא)
-    if (!document.fullscreenElement) {
-        leftBar.style.display = "block";
-        rightBar.style.display = "block";
-    }
     
     loadingTimeout = setTimeout(() => {
         loadingScreen.style.display = "none";
@@ -375,45 +332,16 @@ document.getElementById("reportFrame").addEventListener("load", function() {
 });
 
 function toggleFullscreen() {
-    const frame = document.getElementById("reportFrame");
-    const leftBar = document.getElementById("leftBar");
-    const rightBar = document.getElementById("rightBar");
-    
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
-        // במסך מלא - הסתר פסים והרחב iframe
-        leftBar.style.display = "none";
-        rightBar.style.display = "none";
-        frame.classList.add("fullscreen");
     } else {
         document.exitFullscreen();
-        // במצב רגיל - הצג פסים והחזר iframe לגודל רגיל
-        if (frame.style.display === "block") {
-            leftBar.style.display = "block";
-            rightBar.style.display = "block";
-        }
-        frame.classList.remove("fullscreen");
     }
 }
 
 document.addEventListener("fullscreenchange", () => {
-    const frame = document.getElementById("reportFrame");
-    const leftBar = document.getElementById("leftBar");
-    const rightBar = document.getElementById("rightBar");
-    
-    if (document.fullscreenElement) {
-        document.getElementById("fullscreenBtn").textContent = "✖ יציאה ממסך מלא";
-        leftBar.style.display = "none";
-        rightBar.style.display = "none";
-        frame.classList.add("fullscreen");
-    } else {
-        document.getElementById("fullscreenBtn").textContent = "⛶ מסך מלא";
-        if (frame.style.display === "block") {
-            leftBar.style.display = "block";
-            rightBar.style.display = "block";
-        }
-        frame.classList.remove("fullscreen");
-    }
+    document.getElementById("fullscreenBtn").textContent =
+        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
 });
 </script>
 
