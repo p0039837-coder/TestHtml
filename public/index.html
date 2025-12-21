@@ -210,7 +210,7 @@ html, body {
 </div>
 
 <div class="top-right-button">
-    <div class="top-btn" onclick="toggleSidebar()">☰ תפריט</div>
+    <div class="top-btn" onclick="toggleSidebar()">☰</div>
 </div>
 
 <!-- תפריט צד -->
@@ -303,8 +303,12 @@ function toggleSidebar() {
 function loadReport(url) {
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
+    const sidebar = document.getElementById("sidebar");
     
     currentUrl = url;
+    
+    // סגירת התפריט אוטומטית
+    sidebar.classList.remove("open");
     
     if (loadingTimeout) {
         clearTimeout(loadingTimeout);
