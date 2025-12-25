@@ -32,12 +32,33 @@ html, body {
     font-size: 14px;
 }
 
-/* כפתור תפריט – ימין */
-.top-right-button {
+/* כפתור תפריט צד - מלבן עם חץ */
+.sidebar-toggle {
     position: fixed;
-    top: 12px;
-    right: 12px;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 100px;
+    background: #003d5c;
+    border-radius: 8px 0 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     z-index: 4000;
+    transition: background 0.3s;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+}
+
+.sidebar-toggle:hover {
+    background: #004d73;
+}
+
+.sidebar-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
 }
 
 /* תפריט צד */
@@ -174,7 +195,7 @@ html, body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 30px;
+    gap: 40px;
 }
 
 .hourglass-container {
@@ -296,13 +317,16 @@ html, body {
 
 <body>
 
-<!-- כפתורים -->
+<!-- כפתור מסך מלא -->
 <div class="top-left-buttons">
     <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
 </div>
 
-<div class="top-right-button">
-    <div class="top-btn" onclick="toggleSidebar()">☰</div>
+<!-- כפתור תפריט צד - מלבן עם חץ -->
+<div class="sidebar-toggle" onclick="toggleSidebar()">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    </svg>
 </div>
 
 <!-- תפריט צד -->
