@@ -2,26 +2,20 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Municipal BI Navigation</title>
 
 <style>
-* {
+html, body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background: #00253D;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    position: fixed;  /* מונע גלילה */
 }
 
-/* כפתור יציאה ממסך מלא – שמאל */
+/* כפתור מסך מלא – שמאל */
 .top-left-buttons {
     position: fixed;
     top: 12px;
@@ -79,7 +73,6 @@ html, body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
 
 .menu-btn {
@@ -93,7 +86,6 @@ html, body {
     text-align: center;
     font-size: 14px;
     transition: background 0.2s;
-    min-height: 50px;
 }
 
 .menu-btn:hover {
@@ -106,15 +98,12 @@ html, body {
 
 /* אזור ריבועים */
 .main {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
 }
 
 .tiles-wrapper {
@@ -138,12 +127,6 @@ html, body {
     color: white;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-.tile:hover {
-    border-color: rgba(255,255,255,0.5);
-    transform: scale(1.05);
 }
 
 .tile img {
@@ -165,19 +148,12 @@ html, body {
     color: white;
     font-size: 18px;
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-.main-dashboard:hover {
-    border-color: rgba(255,255,255,0.6);
-    transform: scale(1.02);
 }
 
 /* iframe – תמיד 100% */
 #reportFrame {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
     border: none;
@@ -189,8 +165,7 @@ html, body {
 /* מסך טעינה */
 #loadingScreen {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
     background: #00253D;
@@ -229,9 +204,9 @@ html, body {
 
 <body>
 
-<!-- כפתור יציאה ממסך מלא -->
+<!-- כפתורים -->
 <div class="top-left-buttons">
-    <div class="top-btn" id="exitBtn" onclick="exitApp()">✖ יציאה</div>
+    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
 </div>
 
 <div class="top-right-button">
@@ -332,6 +307,7 @@ function loadReport(url) {
     
     currentUrl = url;
     
+    // סגירת התפריט אוטומטית
     sidebar.classList.remove("open");
     
     if (loadingTimeout) {
@@ -359,14 +335,18 @@ document.getElementById("reportFrame").addEventListener("load", function() {
     }, 3000);
 });
 
-function exitApp() {
-    window.close();
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
 }
 
-// מונע גלילה ב-mobile
-document.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-}, { passive: false });
+document.addEventListener("fullscreenchange", () => {
+    document.getElementById("fullscreenBtn").textContent =
+        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
+});
 </script>
 
 </body>
