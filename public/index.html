@@ -2,17 +2,23 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Municipal BI Navigation</title>
 
 <style>
-html, body {
+* {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
     background: #00253D;
     font-family: Arial, sans-serif;
     overflow: hidden;
+    position: fixed;
 }
 
 /* כפתור מסך מלא – שמאל */
@@ -20,7 +26,7 @@ html, body {
     position: fixed;
     top: 12px;
     left: 12px;
-    z-index: 4000;
+    z-index: 5000;
 }
 
 .top-btn {
@@ -37,7 +43,7 @@ html, body {
     position: fixed;
     top: 12px;
     right: 12px;
-    z-index: 4000;
+    z-index: 5000;
 }
 
 /* תפריט צד */
@@ -51,7 +57,7 @@ html, body {
     color: white;
     transform: translateX(100%);
     transition: transform 0.3s ease;
-    z-index: 3500;
+    z-index: 5500;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -95,8 +101,8 @@ html, body {
 }
 
 .menu-btn.active {
-    background: #003366;  /* כחול כהה לכרטיסייה פעילה */
-    border-left: 4px solid #4fc3f7;  /* פס כחול בהיר */
+    background: #003366;
+    border-left: 4px solid #4fc3f7;
 }
 
 .menu-btn:last-child {
@@ -105,12 +111,15 @@ html, body {
 
 /* אזור ריבועים */
 .main {
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .tiles-wrapper {
@@ -172,7 +181,8 @@ html, body {
 /* iframe – תמיד 100% */
 #reportFrame {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     border: none;
@@ -184,7 +194,8 @@ html, body {
 /* מסך טעינה */
 #loadingScreen {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background: #00253D;
@@ -422,23 +433,14 @@ const URLS = {
 
 let loadingTimeout;
 let currentReportKey = "";
-let shouldEnterFullscreen = false;
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
 }
 
-// פונקציה חדשה שמטפלת בטעינת דו"ח + מסך מלא
 function loadReportWithFullscreen(reportKey) {
     currentReportKey = reportKey;
-    shouldEnterFullscreen = true;
-    
     loadReport(URLS[reportKey]);
-    
-    // כניסה למסך מלא
-    enterFullscreen();
-    
-    // סימון הכרטיסייה הפעילה
     markActiveReport(reportKey);
 }
 
@@ -447,7 +449,6 @@ function loadReport(url) {
     const loadingScreen = document.getElementById("loadingScreen");
     const sidebar = document.getElementById("sidebar");
     
-    // סגירת התפריט אוטומטית
     sidebar.classList.remove("open");
     
     if (loadingTimeout) {
@@ -464,30 +465,17 @@ function loadReport(url) {
     }, 15000);
 }
 
-// סימון כרטיסייה פעילה בתפריט
 function markActiveReport(reportKey) {
-    // הסרת הסימון מכל הכרטיסיות
     document.querySelectorAll('.menu-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // סימון הכרטיסייה הנוכחית
     const activeBtn = document.querySelector(`.menu-btn[data-report="${reportKey}"]`);
     if (activeBtn) {
         activeBtn.classList.add('active');
     }
 }
 
-// כניסה למסך מלא
-function enterFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log('Fullscreen request failed:', err);
-        });
-    }
-}
-
-// טיפול בטעינת iframe
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
@@ -496,46 +484,20 @@ document.getElementById("reportFrame").addEventListener("load", function() {
         if (loadingTimeout) {
             clearTimeout(loadingTimeout);
         }
-        
-        // אם צריך להיכנס למסך מלא, ננסה שוב
-        if (shouldEnterFullscreen) {
-            enterFullscreen();
-        }
     }, 3000);
 });
 
-// זיהוי חזרה לחלון אחרי פופאפ התחברות
-window.addEventListener('focus', function() {
-    // כשהחלון חוזר לפוקוס, ננסה להיכנס למסך מלא שוב
-    if (shouldEnterFullscreen && currentReportKey) {
-        setTimeout(() => {
-            enterFullscreen();
-        }, 500);
-    }
-});
-
-// כפתור מסך מלא ידני
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
-        shouldEnterFullscreen = true;
         document.documentElement.requestFullscreen();
     } else {
-        shouldEnterFullscreen = false;
         document.exitFullscreen();
     }
 }
 
 document.addEventListener("fullscreenchange", () => {
-    const btn = document.getElementById("fullscreenBtn");
-    if (document.fullscreenElement) {
-        btn.textContent = "✖ יציאה ממסך מלא";
-    } else {
-        btn.textContent = "⛶ מסך מלא";
-        // אם יצאנו ממסך מלא, נבטל את הדגל
-        if (!shouldEnterFullscreen) {
-            shouldEnterFullscreen = false;
-        }
-    }
+    document.getElementById("fullscreenBtn").textContent =
+        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
 });
 </script>
 
