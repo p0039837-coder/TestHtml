@@ -5,22 +5,33 @@
 <title>Municipal BI Navigation</title>
 
 <style>
-* {
+html, body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
     width: 100%;
     height: 100%;
-    background-color: #001f33 !important;  /* !important כדי לדרוס הכל */
+    background: #00253D;
     font-family: Arial, sans-serif;
     overflow: hidden;
 }
 
-body {
-    background: #001f33 !important;
+/* מלבנים כחולים בצדדים */
+.left-overlay,
+.right-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 120px;  /* רוחב השטח הלבן */
+    background: #001f33;  /* כחול כהה */
+    z-index: 4500;  /* מעל ה-iframe אבל מתחת לכפתורים */
+}
+
+.left-overlay {
+    left: 0;
+}
+
+.right-overlay {
+    right: 0;
 }
 
 /* כפתור מסך מלא – שמאל */
@@ -137,7 +148,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #00253D;
 }
 
 .tiles-wrapper {
@@ -196,7 +206,7 @@ body {
     border: none;
     display: none;
     z-index: 3000;
-    background: #001f33 !important;
+    background: #00253D;
 }
 
 /* מסך טעינה */
@@ -205,7 +215,7 @@ body {
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background: #001f33 !important;
+    background: #00253D;
     display: none;
     z-index: 3100;
     justify-content: center;
@@ -326,7 +336,11 @@ body {
 </style>
 </head>
 
-<body style="background: #001f33 !important;">
+<body>
+
+<!-- מלבנים כחולים בצדדים -->
+<div class="left-overlay"></div>
+<div class="right-overlay"></div>
 
 <!-- כפתור מסך מלא -->
 <div class="top-left-buttons">
@@ -421,10 +435,6 @@ body {
 <iframe id="reportFrame"></iframe>
 
 <script>
-// כוח את הרקע להיות כחול
-document.body.style.backgroundColor = '#001f33';
-document.documentElement.style.backgroundColor = '#001f33';
-
 const URLS = {
     cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
     neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
