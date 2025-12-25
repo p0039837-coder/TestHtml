@@ -36,30 +36,33 @@ html, body {
 .sidebar-toggle {
     position: fixed;
     top: 50%;
-    right: 0;
+    right: 2px;
     transform: translateY(-50%);
-    width: 40px;
-    height: 100px;
-    background: #003d5c;
-    border-radius: 8px 0 0 8px;
+    width: 32px;
+    height: 80px;
+    background: #1e3a52;
+    border: 1px solid #2d4a63;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 5000;
-    transition: background 0.3s;
-    box-shadow: -2px 0 10px rgba(0,0,0,0.3);
-    pointer-events: auto;
+    transition: all 0.2s;
+    opacity: 0.95;
 }
 
 .sidebar-toggle:hover {
-    background: #004d73;
+    background: #2a4d6b;
+    width: 36px;
+    opacity: 1;
 }
 
 .sidebar-toggle svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
+    width: 20px;
+    height: 20px;
+    fill: #e0e0e0;
 }
 
 /* תפריט צד */
@@ -172,17 +175,21 @@ html, body {
     cursor: pointer;
 }
 
-/* iframe – תמיד 100% */
+/* iframe – מסך מלא לגמרי */
 #reportFrame {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100vh;
     border: none;
     display: none;
     z-index: 3000;
     background: #00253D;
-    pointer-events: auto;
+    margin: 0;
+    padding: 0;
 }
 
 /* מסך טעינה */
@@ -213,7 +220,6 @@ html, body {
     transform-origin: center;
 }
 
-/* אנימציה של היפוך שעון החול */
 @keyframes flip {
     0%, 45% {
         transform: rotate(0deg);
@@ -226,7 +232,6 @@ html, body {
     }
 }
 
-/* אנימציה של החול הנופל */
 .sand-stream {
     animation: sandFlow 3s ease-in-out infinite;
 }
@@ -240,7 +245,6 @@ html, body {
     }
 }
 
-/* אנימציה של החול העליון */
 .sand-top {
     animation: sandTopEmpty 3s ease-in-out infinite;
     transform-origin: center;
@@ -261,7 +265,6 @@ html, body {
     }
 }
 
-/* אנימציה של החול התחתון */
 .sand-bottom {
     animation: sandBottomFill 3s ease-in-out infinite;
     transform-origin: center bottom;
@@ -286,7 +289,6 @@ html, body {
     }
 }
 
-/* זוהר סביב השעון */
 .hourglass-frame {
     filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
 }
@@ -324,7 +326,7 @@ html, body {
     <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
 </div>
 
-<!-- כפתור תפריט צד - מלבן עם חץ -->
+<!-- כפתור תפריט צד -->
 <div class="sidebar-toggle" onclick="toggleSidebar()">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
