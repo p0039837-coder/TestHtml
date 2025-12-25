@@ -26,7 +26,7 @@ html, body {
     position: fixed;
     top: 12px;
     left: 12px;
-    z-index: 5000;
+    z-index: 6000;
 }
 
 .top-btn {
@@ -43,7 +43,7 @@ html, body {
     position: fixed;
     top: 12px;
     right: 12px;
-    z-index: 5000;
+    z-index: 6000;  /* גבוה יותר מהתפריט הצד! */
 }
 
 /* תפריט צד */
@@ -176,6 +176,17 @@ html, body {
 .main-dashboard:hover {
     border-color: rgba(255,255,255,0.6);
     transform: scale(1.02);
+}
+
+/* iframe נסתר לאימות מוקדם */
+#preAuthFrame {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* iframe – תמיד 100% */
@@ -316,10 +327,52 @@ html, body {
     content: '';
     animation: dotAnimation 1.5s infinite;
 }
+
+/* הודעת כניסה למסך מלא */
+#fullscreenPrompt {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 37, 61, 0.95);
+    display: none;
+    z-index: 7000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.prompt-btn {
+    background: #4fc3f7;
+    color: #00253D;
+    padding: 20px 50px;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.prompt-btn:hover {
+    background: #81d4fa;
+    transform: scale(1.05);
+}
+
+.prompt-text {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
 </style>
 </head>
 
 <body>
+
+<!-- iframe נסתר לאימות מוקדם -->
+<iframe id="preAuthFrame"></iframe>
 
 <!-- כפתורים -->
 <div class="top-left-buttons">
@@ -408,6 +461,12 @@ html, body {
     </div>
 </div>
 
+<!-- הודעת כניסה למסך מלא -->
+<div id="fullscreenPrompt">
+    <div class="prompt-text">לחץ להמשך במסך מלא</div>
+    <button class="prompt-btn" onclick="enterFullscreenFromPrompt()">▶ המשך</button>
+</div>
+
 <iframe id="reportFrame"></iframe>
 
 <script>
@@ -434,6 +493,13 @@ const URLS = {
 let loadingTimeout;
 let currentReportKey = "";
 
+// טעינת iframe נסתר לאימות מוקדם
+window.addEventListener('load', function() {
+    const preAuthFrame = document.getElementById('preAuthFrame');
+    // טוען את הדשבורד הראשון ברקע כדי להפעיל את האימות
+    preAuthFrame.src = URLS.main;
+});
+
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
 }
@@ -442,6 +508,9 @@ function loadReportWithFullscreen(reportKey) {
     currentReportKey = reportKey;
     loadReport(URLS[reportKey]);
     markActiveReport(reportKey);
+    
+    // הצגת הודעת מסך מלא
+    document.getElementById('fullscreenPrompt').style.display = 'flex';
 }
 
 function loadReport(url) {
@@ -476,6 +545,16 @@ function markActiveReport(reportKey) {
     }
 }
 
+function enterFullscreenFromPrompt() {
+    document.getElementById('fullscreenPrompt').style.display = 'none';
+    
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log('Fullscreen failed:', err);
+        });
+    }
+}
+
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
@@ -498,6 +577,18 @@ function toggleFullscreen() {
 document.addEventListener("fullscreenchange", () => {
     document.getElementById("fullscreenBtn").textContent =
         document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
+});
+
+// זיהוי חזרה מפופאפ
+window.addEventListener('focus', function() {
+    if (currentReportKey && !document.fullscreenElement) {
+        // אם יצאנו ממסך מלא (בגלל פופאפ), נציג שוב את ההודעה
+        setTimeout(() => {
+            if (!document.fullscreenElement) {
+                document.getElementById('fullscreenPrompt').style.display = 'flex';
+            }
+        }, 1000);
+    }
 });
 </script>
 
