@@ -88,12 +88,12 @@ html, body {
     align-items: center;
     justify-content: center;
     padding: 0 14px;
-    min-height: 50px;
     border-bottom: 1px solid rgba(0, 51, 77, 0.5);
     cursor: pointer;
     text-align: center;
     font-size: 14px;
     transition: background 0.2s;
+    min-height: 50px;
 }
 
 .menu-btn:hover {
@@ -106,12 +106,15 @@ html, body {
 
 /* אזור ריבועים */
 .main {
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .tiles-wrapper {
@@ -139,8 +142,14 @@ html, body {
 }
 
 .tile:hover {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.4);
+    border-color: rgba(255,255,255,0.5);
+    transform: scale(1.05);
+}
+
+.tile img {
+    max-width: 64px;
+    max-height: 64px;
+    object-fit: contain;
 }
 
 /* כפתור תחתון */
@@ -160,14 +169,15 @@ html, body {
 }
 
 .main-dashboard:hover {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.5);
+    border-color: rgba(255,255,255,0.6);
+    transform: scale(1.02);
 }
 
 /* iframe – תמיד 100% */
 #reportFrame {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     border: none;
@@ -179,7 +189,8 @@ html, body {
 /* מסך טעינה */
 #loadingScreen {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background: #00253D;
@@ -188,93 +199,6 @@ html, body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 40px;
-}
-
-.hourglass-container {
-    width: 120px;
-    height: 168px;
-    position: relative;
-}
-
-.hourglass {
-    width: 100%;
-    height: 100%;
-    animation: flip 3s ease-in-out infinite;
-    transform-origin: center;
-}
-
-@keyframes flip {
-    0%, 45% {
-        transform: rotate(0deg);
-    }
-    50%, 95% {
-        transform: rotate(180deg);
-    }
-    100% {
-        transform: rotate(180deg);
-    }
-}
-
-.sand-stream {
-    animation: sandFlow 3s ease-in-out infinite;
-}
-
-@keyframes sandFlow {
-    0%, 45% {
-        opacity: 0.7;
-    }
-    48%, 100% {
-        opacity: 0;
-    }
-}
-
-.sand-top {
-    animation: sandTopEmpty 3s ease-in-out infinite;
-    transform-origin: center;
-}
-
-@keyframes sandTopEmpty {
-    0% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-    45% {
-        opacity: 0.3;
-        transform: scaleY(0.2);
-    }
-    50%, 100% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-}
-
-.sand-bottom {
-    animation: sandBottomFill 3s ease-in-out infinite;
-    transform-origin: center bottom;
-}
-
-@keyframes sandBottomFill {
-    0% {
-        opacity: 0.3;
-        transform: scaleY(0.2);
-    }
-    45% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-    50% {
-        opacity: 0.3;
-        transform: scaleY(0.2);
-    }
-    100% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-}
-
-.hourglass-frame {
-    filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
 }
 
 .loading-text {
@@ -305,9 +229,9 @@ html, body {
 
 <body>
 
-<!-- כפתור יציאה (רק אם רוצים לצאת מהמצב הזה) -->
+<!-- כפתור יציאה ממסך מלא -->
 <div class="top-left-buttons">
-    <div class="top-btn" onclick="window.close()">✖ סגור</div>
+    <div class="top-btn" id="exitBtn" onclick="exitApp()">✖ יציאה</div>
 </div>
 
 <div class="top-right-button">
@@ -366,27 +290,6 @@ html, body {
 
 <!-- מסך טעינה -->
 <div id="loadingScreen">
-    <div class="hourglass-container">
-        <svg class="hourglass" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg">
-            <g class="hourglass-frame">
-                <path d="M20 10 L100 10 L100 20 L95 25 L95 70 L60 85 L95 100 L95 145 L100 150 L100 160 L20 160 L20 150 L25 145 L25 100 L60 85 L25 70 L25 25 L20 20 Z" 
-                      fill="none" stroke="#4fc3f7" stroke-width="2"/>
-            </g>
-            <g class="sand-top">
-                <path d="M30 25 L90 25 L90 30 Q90 50 60 65 Q30 50 30 30 Z" 
-                      fill="#ffb74d" opacity="0.9"/>
-            </g>
-            <g class="sand-bottom">
-                <path d="M30 145 L90 145 L90 140 Q90 130 85 120 L35 120 Q30 130 30 140 Z" 
-                      fill="#ffb74d" opacity="0.9"/>
-            </g>
-            <g class="sand-stream">
-                <line x1="60" y1="70" x2="60" y2="100" 
-                      stroke="#ffb74d" stroke-width="2" opacity="0.7"/>
-            </g>
-        </svg>
-    </div>
-    
     <div class="loading-text">
         טעינה<span class="loading-dots"></span>
     </div>
@@ -455,6 +358,15 @@ document.getElementById("reportFrame").addEventListener("load", function() {
         }
     }, 3000);
 });
+
+function exitApp() {
+    window.close();
+}
+
+// מונע גלילה ב-mobile
+document.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, { passive: false });
 </script>
 
 </body>
