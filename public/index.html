@@ -36,6 +36,11 @@ html, body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+    transition: all 0.2s;
+}
+
+.top-btn:hover {
+    background: #0d4d6b;
 }
 
 /* כפתור תפריט – ימין */
@@ -43,7 +48,7 @@ html, body {
     position: fixed;
     top: 12px;
     right: 12px;
-    z-index: 6000;  /* גבוה יותר מהתפריט הצד! */
+    z-index: 6000;
 }
 
 /* תפריט צד */
@@ -183,10 +188,11 @@ html, body {
     position: fixed;
     width: 1px;
     height: 1px;
-    top: -1000px;
-    left: -1000px;
+    top: -10000px;
+    left: -10000px;
     opacity: 0;
     pointer-events: none;
+    border: none;
 }
 
 /* iframe – תמיד 100% */
@@ -327,51 +333,12 @@ html, body {
     content: '';
     animation: dotAnimation 1.5s infinite;
 }
-
-/* הודעת כניסה למסך מלא */
-#fullscreenPrompt {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 37, 61, 0.95);
-    display: none;
-    z-index: 7000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 30px;
-}
-
-.prompt-btn {
-    background: #4fc3f7;
-    color: #00253D;
-    padding: 20px 50px;
-    font-size: 24px;
-    font-weight: bold;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.prompt-btn:hover {
-    background: #81d4fa;
-    transform: scale(1.05);
-}
-
-.prompt-text {
-    color: white;
-    font-size: 20px;
-    text-align: center;
-}
 </style>
 </head>
 
 <body>
 
-<!-- iframe נסתר לאימות מוקדם -->
+<!-- iframe נסתר לאימות מוקדם (יפעיל פופאפ בהתחלה) -->
 <iframe id="preAuthFrame"></iframe>
 
 <!-- כפתורים -->
@@ -387,48 +354,48 @@ html, body {
 <div id="sidebar" class="sidebar">
     <h2>ניווט</h2>
     <div class="menu-container">
-        <div class="menu-btn" data-report="cityPopulation" onclick="loadReportWithFullscreen('cityPopulation')">מרשם אוכלוסין עיר</div>
-        <div class="menu-btn" data-report="neighborhoodPopulation" onclick="loadReportWithFullscreen('neighborhoodPopulation')">מרשם אוכלוסין שכונה</div>
-        <div class="menu-btn" data-report="vehicles" onclick="loadReportWithFullscreen('vehicles')">רכבים עירוניים</div>
-        <div class="menu-btn" data-report="garbage" onclick="loadReportWithFullscreen('garbage')">פינוי אשפה ומיחזור</div>
-        <div class="menu-btn" data-report="water" onclick="loadReportWithFullscreen('water')">צריכת מים והשקייה</div>
-        <div class="menu-btn" data-report="appointments" onclick="loadReportWithFullscreen('appointments')">זימון תורים</div>
-        <div class="menu-btn" data-report="arnona" onclick="loadReportWithFullscreen('arnona')">ארנונה</div>
-        <div class="menu-btn" data-report="transport" onclick="loadReportWithFullscreen('transport')">הסעות עירוניות</div>
-        <div class="menu-btn" data-report="businessLicensing" onclick="loadReportWithFullscreen('businessLicensing')">רישוי עסקים</div>
-        <div class="menu-btn" data-report="businessPromotion" onclick="loadReportWithFullscreen('businessPromotion')">קידום עסקים</div>
-        <div class="menu-btn" data-report="parking" onclick="loadReportWithFullscreen('parking')">תחבורה וחנייה</div>
-        <div class="menu-btn" data-report="emergency" onclick="loadReportWithFullscreen('emergency')">בקרת חירום</div>
-        <div class="menu-btn" data-report="crime" onclick="loadReportWithFullscreen('crime')">פשיעה ואכיפה</div>
-        <div class="menu-btn" data-report="center106" onclick="loadReportWithFullscreen('center106')">מוקד 106</div>
-        <div class="menu-btn" data-report="benchmark" onclick="loadReportWithFullscreen('benchmark')">מדרג רשויות</div>
-        <div class="menu-btn" data-report="employment" onclick="loadReportWithFullscreen('employment')">תעסוקה עירונית</div>
-        <div class="menu-btn" data-report="main" onclick="loadReportWithFullscreen('main')">לוח בקרה ראשי</div>
+        <div class="menu-btn" data-report="cityPopulation" onclick="loadReport('cityPopulation')">מרשם אוכלוסין עיר</div>
+        <div class="menu-btn" data-report="neighborhoodPopulation" onclick="loadReport('neighborhoodPopulation')">מרשם אוכלוסין שכונה</div>
+        <div class="menu-btn" data-report="vehicles" onclick="loadReport('vehicles')">רכבים עירוניים</div>
+        <div class="menu-btn" data-report="garbage" onclick="loadReport('garbage')">פינוי אשפה ומיחזור</div>
+        <div class="menu-btn" data-report="water" onclick="loadReport('water')">צריכת מים והשקייה</div>
+        <div class="menu-btn" data-report="appointments" onclick="loadReport('appointments')">זימון תורים</div>
+        <div class="menu-btn" data-report="arnona" onclick="loadReport('arnona')">ארנונה</div>
+        <div class="menu-btn" data-report="transport" onclick="loadReport('transport')">הסעות עירוניות</div>
+        <div class="menu-btn" data-report="businessLicensing" onclick="loadReport('businessLicensing')">רישוי עסקים</div>
+        <div class="menu-btn" data-report="businessPromotion" onclick="loadReport('businessPromotion')">קידום עסקים</div>
+        <div class="menu-btn" data-report="parking" onclick="loadReport('parking')">תחבורה וחנייה</div>
+        <div class="menu-btn" data-report="emergency" onclick="loadReport('emergency')">בקרת חירום</div>
+        <div class="menu-btn" data-report="crime" onclick="loadReport('crime')">פשיעה ואכיפה</div>
+        <div class="menu-btn" data-report="center106" onclick="loadReport('center106')">מוקד 106</div>
+        <div class="menu-btn" data-report="benchmark" onclick="loadReport('benchmark')">מדרג רשויות</div>
+        <div class="menu-btn" data-report="employment" onclick="loadReport('employment')">תעסוקה עירונית</div>
+        <div class="menu-btn" data-report="main" onclick="loadReport('main')">לוח בקרה ראשי</div>
     </div>
 </div>
 
 <!-- ריבועים -->
 <div class="main">
     <div class="tiles-wrapper">
-        <div class="tile" onclick="loadReportWithFullscreen('cityPopulation')"><span>מרשם אוכלוסין עיר</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('neighborhoodPopulation')"><span>מרשם אוכלוסין שכונה</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('vehicles')"><span>רכבים עירוניים</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('garbage')"><span>פינוי אשפה</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('water')"><span>צריכת מים</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('appointments')"><span>זימון תורים</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('arnona')"><span>ארנונה</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('transport')"><span>הסעות עירוניות</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('businessLicensing')"><span>רישוי עסקים</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('businessPromotion')"><span>קידום עסקים</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('parking')"><span>תחבורה וחנייה</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('emergency')"><span>בקרת חירום</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('crime')"><span>פשיעה ואכיפה</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('center106')"><span>מוקד 106</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('benchmark')"><span>מדרג רשויות</span></div>
-        <div class="tile" onclick="loadReportWithFullscreen('employment')"><span>תעסוקה עירונית</span></div>
+        <div class="tile" onclick="loadReport('cityPopulation')"><span>מרשם אוכלוסין עיר</span></div>
+        <div class="tile" onclick="loadReport('neighborhoodPopulation')"><span>מרשם אוכלוסין שכונה</span></div>
+        <div class="tile" onclick="loadReport('vehicles')"><span>רכבים עירוניים</span></div>
+        <div class="tile" onclick="loadReport('garbage')"><span>פינוי אשפה</span></div>
+        <div class="tile" onclick="loadReport('water')"><span>צריכת מים</span></div>
+        <div class="tile" onclick="loadReport('appointments')"><span>זימון תורים</span></div>
+        <div class="tile" onclick="loadReport('arnona')"><span>ארנונה</span></div>
+        <div class="tile" onclick="loadReport('transport')"><span>הסעות עירוניות</span></div>
+        <div class="tile" onclick="loadReport('businessLicensing')"><span>רישוי עסקים</span></div>
+        <div class="tile" onclick="loadReport('businessPromotion')"><span>קידום עסקים</span></div>
+        <div class="tile" onclick="loadReport('parking')"><span>תחבורה וחנייה</span></div>
+        <div class="tile" onclick="loadReport('emergency')"><span>בקרת חירום</span></div>
+        <div class="tile" onclick="loadReport('crime')"><span>פשיעה ואכיפה</span></div>
+        <div class="tile" onclick="loadReport('center106')"><span>מוקד 106</span></div>
+        <div class="tile" onclick="loadReport('benchmark')"><span>מדרג רשויות</span></div>
+        <div class="tile" onclick="loadReport('employment')"><span>תעסוקה עירונית</span></div>
     </div>
 
-    <div class="main-dashboard" onclick="loadReportWithFullscreen('main')">
+    <div class="main-dashboard" onclick="loadReport('main')">
         לוח בקרה ראשי
     </div>
 </div>
@@ -461,12 +428,6 @@ html, body {
     </div>
 </div>
 
-<!-- הודעת כניסה למסך מלא -->
-<div id="fullscreenPrompt">
-    <div class="prompt-text">לחץ להמשך במסך מלא</div>
-    <button class="prompt-btn" onclick="enterFullscreenFromPrompt()">▶ המשך</button>
-</div>
-
 <iframe id="reportFrame"></iframe>
 
 <script>
@@ -493,10 +454,10 @@ const URLS = {
 let loadingTimeout;
 let currentReportKey = "";
 
-// טעינת iframe נסתר לאימות מוקדם
+// טעינת iframe נסתר לאימות מוקדם - יפעיל את פופאפ ההתחברות בהתחלה
 window.addEventListener('load', function() {
     const preAuthFrame = document.getElementById('preAuthFrame');
-    // טוען את הדשבורד הראשון ברקע כדי להפעיל את האימות
+    // טוען דשבורד ברקע כדי להפעיל אימות
     preAuthFrame.src = URLS.main;
 });
 
@@ -504,21 +465,17 @@ function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
 }
 
-function loadReportWithFullscreen(reportKey) {
+function loadReport(reportKey) {
     currentReportKey = reportKey;
-    loadReport(URLS[reportKey]);
-    markActiveReport(reportKey);
-    
-    // הצגת הודעת מסך מלא
-    document.getElementById('fullscreenPrompt').style.display = 'flex';
-}
-
-function loadReport(url) {
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
     const sidebar = document.getElementById("sidebar");
     
+    // סגירת התפריט
     sidebar.classList.remove("open");
+    
+    // סימון כרטיסייה פעילה
+    markActiveReport(reportKey);
     
     if (loadingTimeout) {
         clearTimeout(loadingTimeout);
@@ -526,7 +483,7 @@ function loadReport(url) {
     
     loadingScreen.style.display = "flex";
     
-    frame.src = url;
+    frame.src = URLS[reportKey];
     frame.style.display = "block";
     
     loadingTimeout = setTimeout(() => {
@@ -545,16 +502,6 @@ function markActiveReport(reportKey) {
     }
 }
 
-function enterFullscreenFromPrompt() {
-    document.getElementById('fullscreenPrompt').style.display = 'none';
-    
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log('Fullscreen failed:', err);
-        });
-    }
-}
-
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
@@ -568,7 +515,9 @@ document.getElementById("reportFrame").addEventListener("load", function() {
 
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log('Fullscreen failed:', err);
+        });
     } else {
         document.exitFullscreen();
     }
@@ -577,18 +526,6 @@ function toggleFullscreen() {
 document.addEventListener("fullscreenchange", () => {
     document.getElementById("fullscreenBtn").textContent =
         document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
-});
-
-// זיהוי חזרה מפופאפ
-window.addEventListener('focus', function() {
-    if (currentReportKey && !document.fullscreenElement) {
-        // אם יצאנו ממסך מלא (בגלל פופאפ), נציג שוב את ההודעה
-        setTimeout(() => {
-            if (!document.fullscreenElement) {
-                document.getElementById('fullscreenPrompt').style.display = 'flex';
-            }
-        }, 1000);
-    }
 });
 </script>
 
