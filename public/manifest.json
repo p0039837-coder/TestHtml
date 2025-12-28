@@ -2,21 +2,9 @@
   "name": "Municipal BI Dashboard",
   "short_name": "Municipal BI",
   "description": "לוחות מחוונים עירוניים",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#00253D",
   "theme_color": "#00253D",
-  "orientation": "any",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "orientation": "any"
 }
