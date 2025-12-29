@@ -333,6 +333,26 @@ html, body {
     content: '';
     animation: dotAnimation 1.5s infinite;
 }
+
+/* הודעת מסך מלא */
+.fullscreen-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(79, 195, 247, 0.9);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    z-index: 7000;
+    display: none;
+    animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    10%, 90% { opacity: 1; }
+}
 </style>
 </head>
 
@@ -428,6 +448,8 @@ html, body {
     </div>
 </div>
 
+<div id="fullscreenMessage" class="fullscreen-message">חוזר למסך מלא...</div>
+
 <iframe id="reportFrame"></iframe>
 
 <script>
@@ -453,6 +475,8 @@ const URLS = {
 
 let loadingTimeout;
 let currentReportKey = "";
+let wasInFullscreen = false;
+let userExitedFullscreen = false;
 
 // טעינת iframe נסתר לאימות מוקדם - יפעיל את פופאפ ההתחברות בהתחלה
 window.addEventListener('load', function() {
@@ -460,6 +484,45 @@ window.addEventListener('load', function() {
     // טוען דשבורד ברקע כדי להפעיל אימות
     preAuthFrame.src = URLS.main;
 });
+
+// מעקב אחרי חזרת focus - כשסוגרים את הפופאפ
+let focusReturnTimeout;
+window.addEventListener('focus', function() {
+    // אם היינו במסך מלא ויצאנו ממנו (בגלל הפופאפ)
+    if (wasInFullscreen && !document.fullscreenElement && !userExitedFullscreen) {
+        clearTimeout(focusReturnTimeout);
+        focusReturnTimeout = setTimeout(() => {
+            showFullscreenMessage();
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log('החזרה למסך מלא נכשלה:', err);
+            });
+        }, 800);
+    }
+});
+
+// מעקב אחרי יציאה ממסך מלא
+document.addEventListener("fullscreenchange", () => {
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    
+    if (document.fullscreenElement) {
+        // נכנסנו למסך מלא
+        fullscreenBtn.textContent = "✖ יציאה ממסך מלא";
+        wasInFullscreen = true;
+        userExitedFullscreen = false;
+    } else {
+        // יצאנו ממסך מלא
+        fullscreenBtn.textContent = "⛶ מסך מלא";
+        wasInFullscreen = false;
+    }
+});
+
+function showFullscreenMessage() {
+    const msg = document.getElementById('fullscreenMessage');
+    msg.style.display = 'block';
+    setTimeout(() => {
+        msg.style.display = 'none';
+    }, 3000);
+}
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
@@ -515,18 +578,15 @@ document.getElementById("reportFrame").addEventListener("load", function() {
 
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
+        userExitedFullscreen = false;
         document.documentElement.requestFullscreen().catch(err => {
-            console.log('Fullscreen failed:', err);
+            console.log('מסך מלא נכשל:', err);
         });
     } else {
+        userExitedFullscreen = true;
         document.exitFullscreen();
     }
 }
-
-document.addEventListener("fullscreenchange", () => {
-    document.getElementById("fullscreenBtn").textContent =
-        document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
-});
 </script>
 
 </body>
