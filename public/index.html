@@ -21,7 +21,7 @@ html, body {
     position: fixed;
 }
 
-/* כפתור מסך מלא – שמאל */
+/* כפתור יציאה – שמאל */
 .top-left-buttons {
     position: fixed;
     top: 12px;
@@ -30,17 +30,23 @@ html, body {
 }
 
 .top-btn {
-    background: #0b3a53;
+    background: transparent;
     color: white;
     padding: 8px 14px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 24px;
     transition: all 0.2s;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .top-btn:hover {
-    background: #0d4d6b;
+    color: #ff6b6b;
+    transform: scale(1.2);
 }
 
 /* כפתור תפריט – ימין */
@@ -333,26 +339,6 @@ html, body {
     content: '';
     animation: dotAnimation 1.5s infinite;
 }
-
-/* הודעת מסך מלא */
-.fullscreen-message {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(79, 195, 247, 0.9);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    z-index: 7000;
-    display: none;
-    animation: fadeInOut 3s ease-in-out;
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0; }
-    10%, 90% { opacity: 1; }
-}
 </style>
 </head>
 
@@ -363,7 +349,7 @@ html, body {
 
 <!-- כפתורים -->
 <div class="top-left-buttons">
-    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
+    <div class="top-btn" id="exitBtn" onclick="exitKiosk()" title="יציאה">✖</div>
 </div>
 
 <div class="top-right-button">
@@ -448,8 +434,6 @@ html, body {
     </div>
 </div>
 
-<div id="fullscreenMessage" class="fullscreen-message">חוזר למסך מלא...</div>
-
 <iframe id="reportFrame"></iframe>
 
 <script>
@@ -475,8 +459,6 @@ const URLS = {
 
 let loadingTimeout;
 let currentReportKey = "";
-let wasInFullscreen = false;
-let userExitedFullscreen = false;
 
 // טעינת iframe נסתר לאימות מוקדם - יפעיל את פופאפ ההתחברות בהתחלה
 window.addEventListener('load', function() {
@@ -485,43 +467,8 @@ window.addEventListener('load', function() {
     preAuthFrame.src = URLS.main;
 });
 
-// מעקב אחרי חזרת focus - כשסוגרים את הפופאפ
-let focusReturnTimeout;
-window.addEventListener('focus', function() {
-    // אם היינו במסך מלא ויצאנו ממנו (בגלל הפופאפ)
-    if (wasInFullscreen && !document.fullscreenElement && !userExitedFullscreen) {
-        clearTimeout(focusReturnTimeout);
-        focusReturnTimeout = setTimeout(() => {
-            showFullscreenMessage();
-            document.documentElement.requestFullscreen().catch(err => {
-                console.log('החזרה למסך מלא נכשלה:', err);
-            });
-        }, 800);
-    }
-});
-
-// מעקב אחרי יציאה ממסך מלא
-document.addEventListener("fullscreenchange", () => {
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    
-    if (document.fullscreenElement) {
-        // נכנסנו למסך מלא
-        fullscreenBtn.textContent = "✖ יציאה ממסך מלא";
-        wasInFullscreen = true;
-        userExitedFullscreen = false;
-    } else {
-        // יצאנו ממסך מלא
-        fullscreenBtn.textContent = "⛶ מסך מלא";
-        wasInFullscreen = false;
-    }
-});
-
-function showFullscreenMessage() {
-    const msg = document.getElementById('fullscreenMessage');
-    msg.style.display = 'block';
-    setTimeout(() => {
-        msg.style.display = 'none';
-    }, 3000);
+function exitKiosk() {
+    window.close();
 }
 
 function toggleSidebar() {
@@ -575,18 +522,6 @@ document.getElementById("reportFrame").addEventListener("load", function() {
         }
     }, 3000);
 });
-
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        userExitedFullscreen = false;
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log('מסך מלא נכשל:', err);
-        });
-    } else {
-        userExitedFullscreen = true;
-        document.exitFullscreen();
-    }
-}
 </script>
 
 </body>
