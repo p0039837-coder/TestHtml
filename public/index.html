@@ -5,13 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Municipal BI Navigation</title>
 
-<!-- PWA Meta Tags -->
-<meta name="theme-color" content="#00253D">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Municipal BI">
-<link rel="manifest" href="manifest.json">
-
 <style>
 * {
     margin: 0;
@@ -34,8 +27,6 @@ html, body {
     top: 12px;
     left: 12px;
     z-index: 6000;
-    display: flex;
-    gap: 10px;
 }
 
 .top-btn {
@@ -192,6 +183,18 @@ html, body {
     transform: scale(1.02);
 }
 
+/* iframe נסתר לאימות מוקדם */
+#preAuthFrame {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    top: -10000px;
+    left: -10000px;
+    opacity: 0;
+    pointer-events: none;
+    border: none;
+}
+
 /* iframe – תמיד 100% */
 #reportFrame {
     position: fixed;
@@ -330,20 +333,17 @@ html, body {
     content: '';
     animation: dotAnimation 1.5s infinite;
 }
-
-/* כפתור התקנת PWA */
-#installBtn {
-    display: none;
-}
 </style>
 </head>
 
 <body>
 
+<!-- iframe נסתר לאימות מוקדם (יפעיל פופאפ בהתחלה) -->
+<iframe id="preAuthFrame"></iframe>
+
 <!-- כפתורים -->
 <div class="top-left-buttons">
     <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶ מסך מלא</div>
-    <div class="top-btn" id="installBtn" onclick="installPWA()">📥 התקן אפליקציה</div>
 </div>
 
 <div class="top-right-button">
@@ -453,34 +453,13 @@ const URLS = {
 
 let loadingTimeout;
 let currentReportKey = "";
-let deferredPrompt;
 
-// PWA Installation
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('installBtn').style.display = 'block';
+// טעינת iframe נסתר לאימות מוקדם - יפעיל את פופאפ ההתחברות בהתחלה
+window.addEventListener('load', function() {
+    const preAuthFrame = document.getElementById('preAuthFrame');
+    // טוען דשבורד ברקע כדי להפעיל אימות
+    preAuthFrame.src = URLS.main;
 });
-
-function installPWA() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('PWA installed');
-            }
-            deferredPrompt = null;
-            document.getElementById('installBtn').style.display = 'none';
-        });
-    }
-}
-
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(err => {
-        console.log('Service Worker registration failed:', err);
-    });
-}
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
@@ -492,7 +471,10 @@ function loadReport(reportKey) {
     const loadingScreen = document.getElementById("loadingScreen");
     const sidebar = document.getElementById("sidebar");
     
+    // סגירת התפריט
     sidebar.classList.remove("open");
+    
+    // סימון כרטיסייה פעילה
     markActiveReport(reportKey);
     
     if (loadingTimeout) {
@@ -503,9 +485,6 @@ function loadReport(reportKey) {
     
     frame.src = URLS[reportKey];
     frame.style.display = "block";
-    
-    // נסיון כניסה למסך מלא
-    enterFullscreen();
     
     loadingTimeout = setTimeout(() => {
         loadingScreen.style.display = "none";
@@ -523,14 +502,6 @@ function markActiveReport(reportKey) {
     }
 }
 
-function enterFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log('Fullscreen request failed:', err);
-        });
-    }
-}
-
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
     
@@ -544,7 +515,9 @@ document.getElementById("reportFrame").addEventListener("load", function() {
 
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log('Fullscreen failed:', err);
+        });
     } else {
         document.exitFullscreen();
     }
@@ -553,15 +526,6 @@ function toggleFullscreen() {
 document.addEventListener("fullscreenchange", () => {
     document.getElementById("fullscreenBtn").textContent =
         document.fullscreenElement ? "✖ יציאה ממסך מלא" : "⛶ מסך מלא";
-});
-
-// נסיון חזרה למסך מלא אחרי פופאפ
-window.addEventListener('focus', function() {
-    if (currentReportKey && !document.fullscreenElement) {
-        setTimeout(() => {
-            enterFullscreen();
-        }, 500);
-    }
 });
 </script>
 
