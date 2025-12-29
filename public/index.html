@@ -48,7 +48,7 @@ html, body {
 }
 
 .top-btn:hover {
-    color: #4fc3f7;
+    color: #9b59b6;
     transform: scale(1.3);
 }
 
@@ -497,91 +497,125 @@ window.addEventListener('load', function() {
 });
 
 function minimizeWindow() {
-    // לא ממש עובד ב-Kiosk, אבל ננסה
-    alert('למזעור: לחץ Windows + Down Arrow');
-}
-
-function goHome() {
-    // כל הטריקים לסגירת חלון
+    // מזעור אמיתי - יוצר קובץ זמני שה-BAT יכול לקרוא
+    // אבל מכיוון שאין לנו גישה לקבצים, ננסה דרכים אחרות
     
-    // ניסיון 1: סגירה בסיסית
-    if (window.close()) return;
-    
-    // ניסיון 2: דרך self
+    // ניסיון 1: שימוש ב-window.moveTo מחוץ למסך
     try {
-        window.self.close();
-        if (window.closed) return;
-    } catch(e) {}
-    
-    // ניסיון 3: דרך top
-    try {
-        window.top.close();
-        if (window.closed) return;
-    } catch(e) {}
-    
-    // ניסיון 4: פתיחה מחדש וסגירה
-    try {
-        window.opener = window;
-        window.open('', '_self', '');
-        window.close();
-        if (window.closed) return;
-    } catch(e) {}
-    
-    // ניסיון 5: about:blank ואז סגירה
-    try {
-        window.location.href = 'about:blank';
-        setTimeout(() => {
-            window.close();
-        }, 100);
+        window.moveTo(0, window.screen.availHeight);
         return;
     } catch(e) {}
     
-    // ניסיון 6: history back עד הסוף ואז סגירה
+    // ניסיון 2: resizeTo למינימום
     try {
-        window.history.go(-window.history.length);
-        setTimeout(() => {
-            window.close();
-        }, 100);
+        window.resizeTo(1, 1);
+        window.moveTo(0, window.screen.availHeight);
+        return;
     } catch(e) {}
     
-    // ניסיון 7: דימוי keyboard של Alt+F4
-    try {
-        const event = new KeyboardEvent('keydown', {
-            key: 'F4',
-            code: 'F4',
-            keyCode: 115,
-            which: 115,
-            altKey: true,
-            bubbles: true,
-            cancelable: true
-        });
-        document.dispatchEvent(event);
-        window.dispatchEvent(event);
-        document.body.dispatchEvent(event);
-    } catch(e) {}
+    // אם כלום לא עבד - לפחות לא נציג הודעה מעצבנת
+    console.log('Minimize not supported in kiosk mode');
+}
+
+function goHome() {
+    // כל הטריקים לסגירת חלון - אבל בלי להרוס את הדף!
     
-    // ניסיון 8: Ctrl+W
-    try {
-        const event = new KeyboardEvent('keydown', {
-            key: 'w',
-            code: 'KeyW',
-            keyCode: 87,
-            which: 87,
-            ctrlKey: true,
-            bubbles: true,
-            cancelable: true
-        });
-        document.dispatchEvent(event);
-        window.dispatchEvent(event);
-    } catch(e) {}
+    let closeAttempted = false;
     
-    // אם כלום לא עבד - נראה לפחות משהו
-    setTimeout(() => {
-        if (!window.closed) {
-            // כל הטריקים נכשלו - נעזור למשתמש
-            document.body.innerHTML = '<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#00253D;display:flex;align-items:center;justify-content:center;color:white;font-size:48px;font-weight:bold;">לחץ Alt+F4 לסגירה</div>';
+    // ניסיון 1: סגירה בסיסית
+    try {
+        const closed = window.close();
+        if (closed) {
+            closeAttempted = true;
+            return;
         }
-    }, 500);
+    } catch(e) {}
+    
+    // ניסיון 2: דרך self (רק אם 1 לא עבד)
+    if (!closeAttempted) {
+        try {
+            window.self.close();
+            if (window.closed) {
+                closeAttempted = true;
+                return;
+            }
+        } catch(e) {}
+    }
+    
+    // ניסיון 3: דרך opener (בזהירות!)
+    if (!closeAttempted) {
+        try {
+            const originalOpener = window.opener;
+            window.opener = window;
+            const w = window.open('', '_self');
+            if (w) {
+                w.close();
+            }
+            if (window.closed) {
+                closeAttempted = true;
+                return;
+            }
+            // אם לא עבד, נחזיר את ה-opener המקורי
+            window.opener = originalOpener;
+        } catch(e) {}
+    }
+    
+    // ניסיון 4: Ctrl+W keyboard event
+    if (!closeAttempted) {
+        try {
+            const event = new KeyboardEvent('keydown', {
+                key: 'w',
+                code: 'KeyW',
+                keyCode: 87,
+                which: 87,
+                ctrlKey: true,
+                bubbles: true,
+                cancelable: true
+            });
+            document.dispatchEvent(event);
+            
+            // נבדוק אם זה עבד
+            setTimeout(() => {
+                if (!window.closed && !closeAttempted) {
+                    // לא עבד - ננסה משהו אחר
+                    tryFinalClose();
+                }
+            }, 100);
+            return;
+        } catch(e) {}
+    }
+    
+    // אם הגענו לכאן - שום דבר לא עבד
+    if (!closeAttempted) {
+        tryFinalClose();
+    }
+}
+
+function tryFinalClose() {
+    // ניסיון אחרון - מסך שחור עם הודעה (לא about:blank!)
+    const overlay = document.createElement('div');
+    overlay.id = 'closeOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #00253D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+    `;
+    overlay.innerHTML = `
+        <div style="text-align:center;color:white;">
+            <div style="font-size:48px;font-weight:bold;margin-bottom:30px;">לסגירת המערכת</div>
+            <div style="font-size:64px;font-weight:bold;color:#9b59b6;">Alt + F4</div>
+        </div>
+    `;
+    
+    // מוסיפים בלי למחוק את כל ה-DOM
+    document.body.appendChild(overlay);
 }
 
 function toggleSidebar() {
