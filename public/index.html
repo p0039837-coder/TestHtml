@@ -32,21 +32,23 @@ html, body {
 .top-btn {
     background: transparent;
     color: white;
-    padding: 8px 14px;
+    padding: 8px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 32px;
+    font-weight: bold;
     transition: all 0.2s;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
 }
 
 .top-btn:hover {
     color: #ff6b6b;
-    transform: scale(1.2);
+    transform: scale(1.3);
 }
 
 /* כפתור תפריט – ימין */
@@ -349,7 +351,7 @@ html, body {
 
 <!-- כפתורים -->
 <div class="top-left-buttons">
-    <div class="top-btn" id="exitBtn" onclick="exitKiosk()" title="יציאה">✖</div>
+    <div class="top-btn" id="exitBtn" onclick="goHome()" title="סגירה (Alt+F4)">✕</div>
 </div>
 
 <div class="top-right-button">
@@ -467,26 +469,71 @@ window.addEventListener('load', function() {
     preAuthFrame.src = URLS.main;
 });
 
-function exitKiosk() {
-    const frame = document.getElementById('reportFrame');
+function goHome() {
+    // ניסיון לסגור את החלון - דימוי Alt+F4
     
-    // אם אנחנו בתוך דשבורד - חזרה למסך הבית
-    if (frame && frame.style.display === 'block') {
-        frame.style.display = 'none';
-        frame.src = '';
-        document.querySelectorAll('.menu-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        return;
-    }
-    
-    // אם אנחנו במסך הבית - ננסה לסגור את החלון
+    // ניסיון 1: סגירה רגילה
     if (window.close()) {
         return;
     }
     
-    // אם סגירה לא עבדה - הצג הודעה
-    alert('לסגירת החלון: לחץ Alt+F4 או Ctrl+W');
+    // ניסיון 2: דרך opener
+    try {
+        window.opener = null;
+        window.open('', '_self');
+        window.close();
+    } catch(e) {}
+    
+    // ניסיון 3: דימוי keyboard event של Alt+F4
+    try {
+        // שליחת אירוע של Alt+F4
+        const altF4Event = new KeyboardEvent('keydown', {
+            key: 'F4',
+            keyCode: 115,
+            which: 115,
+            altKey: true,
+            ctrlKey: false,
+            shiftKey: false,
+            metaKey: false,
+            bubbles: true,
+            cancelable: true
+        });
+        document.dispatchEvent(altF4Event);
+        window.dispatchEvent(altF4Event);
+    } catch(e) {}
+    
+    // ניסיון 4: Ctrl+W (סגירת tab)
+    try {
+        const ctrlWEvent = new KeyboardEvent('keydown', {
+            key: 'w',
+            keyCode: 87,
+            which: 87,
+            altKey: false,
+            ctrlKey: true,
+            shiftKey: false,
+            metaKey: false,
+            bubbles: true,
+            cancelable: true
+        });
+        document.dispatchEvent(ctrlWEvent);
+        window.dispatchEvent(ctrlWEvent);
+    } catch(e) {}
+    
+    // ניסיון 5: כל הטריקים ביחד
+    setTimeout(() => {
+        try {
+            window.top.close();
+        } catch(e) {}
+        
+        try {
+            window.self.close();
+        } catch(e) {}
+        
+        try {
+            const w = window.open('about:blank', '_self');
+            w.close();
+        } catch(e) {}
+    }, 50);
 }
 
 function toggleSidebar() {
