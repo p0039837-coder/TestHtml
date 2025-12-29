@@ -468,7 +468,25 @@ window.addEventListener('load', function() {
 });
 
 function exitKiosk() {
-    window.close();
+    const frame = document.getElementById('reportFrame');
+    
+    // אם אנחנו בתוך דשבורד - חזרה למסך הבית
+    if (frame && frame.style.display === 'block') {
+        frame.style.display = 'none';
+        frame.src = '';
+        document.querySelectorAll('.menu-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        return;
+    }
+    
+    // אם אנחנו במסך הבית - ננסה לסגור את החלון
+    if (window.close()) {
+        return;
+    }
+    
+    // אם סגירה לא עבדה - הצג הודעה
+    alert('לסגירת החלון: לחץ Alt+F4 או Ctrl+W');
 }
 
 function toggleSidebar() {
