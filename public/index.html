@@ -525,28 +525,17 @@ window.addEventListener('resize', ensureFullScreen);
 function ensureFullScreen() {
     const frame = document.getElementById('reportFrame');
     if (frame && frame.style.display === 'block') {
-        // חישוב zoom אוטומטי בהתאם לרזולוציה
-        // Full HD (1920x1080) הוא הבסיס
-        const baseWidth = 1920;
-        const baseHeight = 1080;
-        
-        const currentWidth = window.innerWidth;
-        const currentHeight = window.innerHeight;
-        
-        // חישוב יחס zoom
-        const scaleX = currentWidth / baseWidth;
-        const scaleY = currentHeight / baseHeight;
-        
-        // נשתמש ב-zoom במקום scale
-        const zoom = Math.min(scaleX, scaleY);
-        
-        console.log(`Resolution: ${currentWidth}x${currentHeight}, Zoom: ${zoom.toFixed(3)}`);
-        
-        // אכוף גדלים מלאים
+        // אכוף מסך מלא פשוט - ללא scale/zoom
         frame.style.width = '100vw';
         frame.style.height = '100vh';
-        frame.style.zoom = zoom;
-        frame.style.transform = 'none';
+        frame.style.position = 'fixed';
+        frame.style.top = '0';
+        frame.style.left = '0';
+        frame.style.border = 'none';
+        frame.style.margin = '0';
+        frame.style.padding = '0';
+        
+        console.log(`Resolution: ${window.innerWidth}x${window.innerHeight}`);
     }
 }
 
