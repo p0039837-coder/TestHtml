@@ -525,7 +525,7 @@ window.addEventListener('resize', ensureFullScreen);
 function ensureFullScreen() {
     const frame = document.getElementById('reportFrame');
     if (frame && frame.style.display === 'block') {
-        // חישוב scale אוטומטי בהתאם לרזולוציה
+        // חישוב zoom אוטומטי בהתאם לרזולוציה
         // Full HD (1920x1080) הוא הבסיס
         const baseWidth = 1920;
         const baseHeight = 1080;
@@ -533,27 +533,20 @@ function ensureFullScreen() {
         const currentWidth = window.innerWidth;
         const currentHeight = window.innerHeight;
         
-        // חישוב יחס scale
+        // חישוב יחס zoom
         const scaleX = currentWidth / baseWidth;
         const scaleY = currentHeight / baseHeight;
         
-        // נשתמש ב-scale אחיד כדי לשמור על פרופורציות
-        const scale = Math.min(scaleX, scaleY);
+        // נשתמש ב-zoom במקום scale
+        const zoom = Math.min(scaleX, scaleY);
         
-        console.log(`Resolution: ${currentWidth}x${currentHeight}, Scale: ${scale.toFixed(3)}`);
+        console.log(`Resolution: ${currentWidth}x${currentHeight}, Zoom: ${zoom.toFixed(3)}`);
         
-        if (scale < 0.99 || scale > 1.01) {
-            // צריך scaling
-            frame.style.width = (currentWidth / scale) + 'px';
-            frame.style.height = (currentHeight / scale) + 'px';
-            frame.style.transform = `scale(${scale})`;
-            frame.style.transformOrigin = '0 0';
-        } else {
-            // Full HD - ללא scaling
-            frame.style.width = currentWidth + 'px';
-            frame.style.height = currentHeight + 'px';
-            frame.style.transform = 'none';
-        }
+        // אכוף גדלים מלאים
+        frame.style.width = '100vw';
+        frame.style.height = '100vh';
+        frame.style.zoom = zoom;
+        frame.style.transform = 'none';
     }
 }
 
