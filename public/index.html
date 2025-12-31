@@ -61,7 +61,7 @@ html, body {
     pointer-events: auto;
 }
 
-/* Hover effects - כל כפתור בצבע שונה */
+/* Hover effects */
 #minimizeBtn:hover {
     color: #2ecc71;
     transform: scale(1.3);
@@ -140,7 +140,7 @@ html, body {
     border-bottom: none;
 }
 
-/* אזור ריבועים - RESPONSIVE */
+/* אזור ריבועים */
 .main {
     position: fixed;
     top: 0;
@@ -187,12 +187,6 @@ html, body {
     transform: scale(1.05);
 }
 
-.tile img {
-    max-width: 64px;
-    max-height: 64px;
-    object-fit: contain;
-}
-
 /* כפתור תחתון */
 .main-dashboard {
     margin-top: 30px;
@@ -228,7 +222,7 @@ html, body {
     border: none;
 }
 
-/* iframe – RESPONSIVE מלא! */
+/* iframe – מסך מלא פשוט! */
 #reportFrame {
     position: fixed;
     top: 0 !important;
@@ -370,7 +364,7 @@ html, body {
     animation: dotAnimation 1.5s infinite;
 }
 
-/* Responsive למסכים קטנים */
+/* Responsive */
 @media (max-width: 1600px) {
     .tile {
         width: 150px;
@@ -509,31 +503,18 @@ const URLS = {
 let loadingTimeout;
 let currentReportKey = "";
 
-// טעינת iframe נסתר לאימות מוקדם
 window.addEventListener('load', function() {
     const preAuthFrame = document.getElementById('preAuthFrame');
     preAuthFrame.src = URLS.main;
-    
-    // ודא שה-iframe תמיד מלא מסך
-    ensureFullScreen();
 });
 
-// ודא מסך מלא בכל שינוי גודל
-window.addEventListener('resize', ensureFullScreen);
-
-function ensureFullScreen() {
+window.addEventListener('resize', function() {
     const frame = document.getElementById('reportFrame');
     if (frame && frame.style.display === 'block') {
-        // אכוף מסך מלא פשוט
-        frame.style.width = '100vw';
-        frame.style.height = '100vh';
-        frame.style.position = 'fixed';
-        frame.style.top = '0';
-        frame.style.left = '0';
-        
-        console.log(`Resolution: ${window.innerWidth}x${window.innerHeight}`);
+        frame.style.width = window.innerWidth + 'px';
+        frame.style.height = window.innerHeight + 'px';
     }
-}
+});
 
 function minimizeWindow() {
     try {
@@ -551,92 +532,24 @@ function minimizeWindow() {
 }
 
 function goHome() {
-    let closeAttempted = false;
+    const frame = document.getElementById('reportFrame');
+    const main = document.querySelector('.main');
+    
+    if (frame && frame.style.display === 'block') {
+        frame.style.display = 'none';
+        frame.src = '';
+        if (main) {
+            main.style.display = 'flex';
+        }
+        document.querySelectorAll('.menu-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        return;
+    }
     
     try {
-        const closed = window.close();
-        if (closed) {
-            closeAttempted = true;
-            return;
-        }
+        window.close();
     } catch(e) {}
-    
-    if (!closeAttempted) {
-        try {
-            window.self.close();
-            if (window.closed) {
-                closeAttempted = true;
-                return;
-            }
-        } catch(e) {}
-    }
-    
-    if (!closeAttempted) {
-        try {
-            const originalOpener = window.opener;
-            window.opener = window;
-            const w = window.open('', '_self');
-            if (w) {
-                w.close();
-            }
-            if (window.closed) {
-                closeAttempted = true;
-                return;
-            }
-            window.opener = originalOpener;
-        } catch(e) {}
-    }
-    
-    if (!closeAttempted) {
-        try {
-            const event = new KeyboardEvent('keydown', {
-                key: 'w',
-                code: 'KeyW',
-                keyCode: 87,
-                which: 87,
-                ctrlKey: true,
-                bubbles: true,
-                cancelable: true
-            });
-            document.dispatchEvent(event);
-            
-            setTimeout(() => {
-                if (!window.closed && !closeAttempted) {
-                    tryFinalClose();
-                }
-            }, 100);
-            return;
-        } catch(e) {}
-    }
-    
-    if (!closeAttempted) {
-        tryFinalClose();
-    }
-}
-
-function tryFinalClose() {
-    const overlay = document.createElement('div');
-    overlay.id = 'closeOverlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #00253D;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-    `;
-    overlay.innerHTML = `
-        <div style="text-align:center;color:white;">
-            <div style="font-size:48px;font-weight:bold;margin-bottom:30px;">לסגירת המערכת</div>
-            <div style="font-size:64px;font-weight:bold;color:#e74c3c;">Alt + F4</div>
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
 }
 
 function toggleSidebar() {
@@ -648,28 +561,10 @@ function loadReport(reportKey) {
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
     const sidebar = document.getElementById("sidebar");
+    const main = document.querySelector('.main');
     
     sidebar.classList.remove("open");
-    markActiveReport(reportKey);
     
-    if (loadingTimeout) {
-        clearTimeout(loadingTimeout);
-    }
-    
-    loadingScreen.style.display = "flex";
-    
-    frame.src = URLS[reportKey];
-    frame.style.display = "block";
-    
-    // ודא מסך מלא
-    ensureFullScreen();
-    
-    loadingTimeout = setTimeout(() => {
-        loadingScreen.style.display = "none";
-    }, 15000);
-}
-
-function markActiveReport(reportKey) {
     document.querySelectorAll('.menu-btn').forEach(btn => {
         btn.classList.remove('active');
     });
@@ -678,13 +573,27 @@ function markActiveReport(reportKey) {
     if (activeBtn) {
         activeBtn.classList.add('active');
     }
+    
+    if (loadingTimeout) {
+        clearTimeout(loadingTimeout);
+    }
+    
+    if (main) {
+        main.style.display = 'none';
+    }
+    
+    loadingScreen.style.display = "flex";
+    
+    frame.src = URLS[reportKey];
+    frame.style.display = "block";
+    
+    loadingTimeout = setTimeout(() => {
+        loadingScreen.style.display = "none";
+    }, 15000);
 }
 
 document.getElementById("reportFrame").addEventListener("load", function() {
     const loadingScreen = document.getElementById("loadingScreen");
-    
-    // ודא מסך מלא אחרי טעינה
-    ensureFullScreen();
     
     setTimeout(() => {
         loadingScreen.style.display = "none";
