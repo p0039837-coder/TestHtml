@@ -228,21 +228,31 @@ html, body {
     border: none;
 }
 
-/* iframe – RESPONSIVE מלא עם AUTO-SCALE! */
-#reportFrame {
+/* iframe wrapper - responsive scaling */
+#frameWrapper {
     position: fixed;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    border: none !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     display: none;
     z-index: 3000;
     background: #00253D;
+    overflow: hidden;
+}
+
+/* iframe – קבוע ב-1920x1080 */
+#reportFrame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1920px;
+    height: 1080px;
+    border: none !important;
+    background: #00253D;
     margin: 0 !important;
     padding: 0 !important;
-    overflow: hidden !important;
-    transform-origin: top left;
+    transform-origin: center center;
 }
 
 /* מסך טעינה */
@@ -484,7 +494,9 @@ html, body {
     </div>
 </div>
 
-<iframe id="reportFrame"></iframe>
+<div id="frameWrapper">
+    <iframe id="reportFrame"></iframe>
+</div>
 
 <script>
 const URLS = {
@@ -523,19 +535,26 @@ window.addEventListener('load', function() {
 window.addEventListener('resize', ensureFullScreen);
 
 function ensureFullScreen() {
+    const wrapper = document.getElementById('frameWrapper');
     const frame = document.getElementById('reportFrame');
-    if (frame && frame.style.display === 'block') {
-        // אכוף מסך מלא פשוט - ללא scale/zoom
-        frame.style.width = '100vw';
-        frame.style.height = '100vh';
-        frame.style.position = 'fixed';
-        frame.style.top = '0';
-        frame.style.left = '0';
-        frame.style.border = 'none';
-        frame.style.margin = '0';
-        frame.style.padding = '0';
+    
+    if (wrapper && wrapper.style.display === 'block') {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
         
-        console.log(`Resolution: ${window.innerWidth}x${window.innerHeight}`);
+        // PowerBI נבנה ב-1920x1080
+        const targetWidth = 1920;
+        const targetHeight = 1080;
+        
+        // חישוב scale שממלא את המסך
+        const scaleX = screenWidth / targetWidth;
+        const scaleY = screenHeight / targetHeight;
+        const scale = Math.min(scaleX, scaleY);
+        
+        // הצמדה למרכז עם scaling
+        frame.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        
+        console.log(`Screen: ${screenWidth}x${screenHeight}, Scale: ${scale.toFixed(3)}`);
     }
 }
 
@@ -649,6 +668,7 @@ function toggleSidebar() {
 
 function loadReport(reportKey) {
     currentReportKey = reportKey;
+    const wrapper = document.getElementById("frameWrapper");
     const frame = document.getElementById("reportFrame");
     const loadingScreen = document.getElementById("loadingScreen");
     const sidebar = document.getElementById("sidebar");
@@ -663,7 +683,7 @@ function loadReport(reportKey) {
     loadingScreen.style.display = "flex";
     
     frame.src = URLS[reportKey];
-    frame.style.display = "block";
+    wrapper.style.display = "block";
     
     // ודא מסך מלא עם scaling
     ensureFullScreen();
