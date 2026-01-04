@@ -405,6 +405,26 @@ window.addEventListener('load', () => {
     }, 1000);
 });
 
+// מעקב אחרי חזרה מ-popup - חזרה למסך מלא
+let wasFullscreen = false;
+
+window.addEventListener('blur', () => {
+    // החלון איבד פוקוס (נפתח popup)
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        wasFullscreen = true;
+    }
+});
+
+window.addEventListener('focus', () => {
+    // החלון קיבל פוקוס בחזרה (popup נסגר)
+    if (wasFullscreen) {
+        setTimeout(() => {
+            enterFullscreen();
+            wasFullscreen = false;
+        }, 500);
+    }
+});
+
 // פונקציה להכנס למסך מלא
 function enterFullscreen() {
     const elem = document.documentElement;
@@ -436,6 +456,7 @@ function toggleFullscreen() {
         enterFullscreen();
     } else {
         exitFullscreen();
+        wasFullscreen = false; // משתמש יצא ידנית - לא לחזור אוטומטית
     }
 }
 
