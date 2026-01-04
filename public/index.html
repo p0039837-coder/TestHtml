@@ -119,20 +119,20 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px 20px;
+    padding: 2vh 2vw;
 }
 
 .tiles-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 18px;
-    max-width: 1600px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5vw;
+    width: 90%;
+    max-width: 1800px;
+    margin-bottom: 3vh;
 }
 
 .tile {
-    width: 170px;
-    height: 170px;
+    aspect-ratio: 1;
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 14px;
     display: flex;
@@ -143,6 +143,7 @@ html, body {
     cursor: pointer;
     transition: all 0.2s;
     padding: 10px;
+    font-size: clamp(12px, 1.2vw, 16px);
 }
 
 .tile:hover {
@@ -151,16 +152,17 @@ html, body {
 }
 
 .main-dashboard {
-    margin-top: 30px;
-    width: 360px;
-    height: 100px;
+    width: 90%;
+    max-width: 500px;
+    height: 10vh;
+    min-height: 80px;
     border: 1px solid rgba(255,255,255,0.35);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 18px;
+    font-size: clamp(16px, 2vw, 22px);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -179,15 +181,28 @@ html, body {
     border: none;
 }
 
-#reportFrame {
+/* 🔥 CRITICAL FIX - iframe wrapper */
+.iframe-container {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
     display: none;
     z-index: 3000;
+    background: #00253D;
+}
+
+/* 🔥 iframe עם ZOOM דינמי */
+#reportFrame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    border: none;
+    transform-origin: top left;
     background: #00253D;
 }
 
@@ -284,6 +299,28 @@ html, body {
     content: '';
     animation: dotAnimation 1.5s infinite;
 }
+
+/* Responsive adjustments */
+@media (max-width: 1600px) {
+    .tiles-wrapper {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+}
+
+@media (max-width: 1200px) {
+    .tiles-wrapper {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}
+
+@media (max-height: 800px) {
+    .main {
+        padding: 1vh 2vw;
+    }
+    .tiles-wrapper {
+        margin-bottom: 2vh;
+    }
+}
 </style>
 </head>
 
@@ -373,59 +410,95 @@ html, body {
     </div>
 </div>
 
-<iframe id="reportFrame"></iframe>
+<!-- 🔥 Wrapper חדש עם container -->
+<div class="iframe-container" id="iframeContainer">
+    <iframe id="reportFrame"></iframe>
+</div>
 
 <script>
 const URLS = {
-    cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    vehicles: "https://app.powerbi.com/reportEmbed?reportId=a4ec7683-19f1-45e9-8e1c-6e9aaeb55bc9&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    arnona: "https://app.powerbi.com/reportEmbed?reportId=99746334-ff4a-43a9-be32-0caf768e06b7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    businessLicensing: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    businessPromotion: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    parking: "https://app.powerbi.com/reportEmbed?reportId=593c46a6-2e79-44d2-9bab-8080d24fba96&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    emergency: "https://app.powerbi.com/reportEmbed?reportId=ad06f4e7-ede5-4661-8d25-58eccd4f6e75&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    crime: "https://app.powerbi.com/reportEmbed?reportId=56348d10-c389-43cd-bcb0-5ae3a3f81cc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true",
-    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&autofit=true"
+    cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    vehicles: "https://app.powerbi.com/reportEmbed?reportId=a4ec7683-19f1-45e9-8e1c-6e9aaeb55bc9&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    arnona: "https://app.powerbi.com/reportEmbed?reportId=99746334-ff4a-43a9-be32-0caf768e06b7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    businessLicensing: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    businessPromotion: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    parking: "https://app.powerbi.com/reportEmbed?reportId=593c46a6-2e79-44d2-9bab-8080d24fba96&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    emergency: "https://app.powerbi.com/reportEmbed?reportId=ad06f4e7-ede5-4661-8d25-58eccd4f6e75&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    crime: "https://app.powerbi.com/reportEmbed?reportId=56348d10-c389-43cd-bcb0-5ae3a3f81cc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false",
+    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false"
 };
+
+// 🔥 פונקציה קריטית - מחשבת ZOOM ומותחת את ה-iframe
+function scaleIframeToFit() {
+    const frame = document.getElementById("reportFrame");
+    const container = document.getElementById("iframeContainer");
+    
+    // גודל המסך האמיתי
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    
+    // גודל הדשבורד המקורי (Power BI)
+    const dashboardWidth = 1920;
+    const dashboardHeight = 1080;
+    
+    // חישוב יחס התאמה
+    const scaleX = screenWidth / dashboardWidth;
+    const scaleY = screenHeight / dashboardHeight;
+    
+    // 🔥 FIX: משתמשים ב-scaleY כדי למלא את הגובה בדיוק
+    const scale = scaleY;
+    
+    // מיישמים את ה-scale
+    frame.style.transform = `scale(${scale})`;
+    frame.style.transformOrigin = 'top left';
+    
+    // לא צריך מרכוז - פשוט ממלאים את הגובה
+    frame.style.left = '0px';
+    frame.style.top = '0px';
+    
+    console.log(`Screen: ${screenWidth}x${screenHeight}, Scale: ${scale.toFixed(2)}`);
+}
 
 window.addEventListener('load', () => {
     document.getElementById('preAuthFrame').src = URLS.main;
     
-    // כניסה אוטומטית למסך מלא בטעינה
-    setTimeout(() => {
-        enterFullscreen();
-    }, 1000);
+    // התאמת גובה בטעינה
+    scaleIframeToFit();
+    
+    // לא נכנסים אוטומטית למסך מלא - המשתמש יכול ללחוץ על הכפתור
 });
+
+// 🔥 התאמה מחדש כשמשנים גודל חלון
+window.addEventListener('resize', scaleIframeToFit);
+window.addEventListener('orientationchange', scaleIframeToFit);
 
 // מעקב אחרי חזרה מ-popup - חזרה למסך מלא
 let wasFullscreen = false;
 
 window.addEventListener('blur', () => {
-    // החלון איבד פוקוס (נפתח popup)
     if (document.fullscreenElement || document.webkitFullscreenElement) {
         wasFullscreen = true;
     }
 });
 
 window.addEventListener('focus', () => {
-    // החלון קיבל פוקוס בחזרה (popup נסגר)
     if (wasFullscreen) {
         setTimeout(() => {
             enterFullscreen();
+            scaleIframeToFit();
             wasFullscreen = false;
         }, 500);
     }
 });
 
-// פונקציה להכנס למסך מלא
 function enterFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
@@ -439,7 +512,6 @@ function enterFullscreen() {
     }
 }
 
-// פונקציה לצאת ממסך מלא
 function exitFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -450,28 +522,35 @@ function exitFullscreen() {
     }
 }
 
-// Toggle מסך מלא
 function toggleFullscreen() {
     if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
         enterFullscreen();
     } else {
         exitFullscreen();
-        wasFullscreen = false; // משתמש יצא ידנית - לא לחזור אוטומטית
+        wasFullscreen = false;
     }
 }
 
-// עדכון אייקון כשנכנסים/יוצאים ממסך מלא
-document.addEventListener('fullscreenchange', updateFullscreenIcon);
-document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
-document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+document.addEventListener('fullscreenchange', () => {
+    updateFullscreenIcon();
+    scaleIframeToFit();
+});
+document.addEventListener('webkitfullscreenchange', () => {
+    updateFullscreenIcon();
+    scaleIframeToFit();
+});
+document.addEventListener('msfullscreenchange', () => {
+    updateFullscreenIcon();
+    scaleIframeToFit();
+});
 
 function updateFullscreenIcon() {
     const btn = document.getElementById('fullscreenBtn');
     if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
-        btn.innerHTML = '⊡'; // יציאה ממסך מלא
+        btn.innerHTML = '⊡';
         btn.title = 'יציאה ממסך מלא';
     } else {
-        btn.innerHTML = '⛶'; // כניסה למסך מלא
+        btn.innerHTML = '⛶';
         btn.title = 'מסך מלא';
     }
 }
@@ -482,6 +561,7 @@ function toggleSidebar() {
 
 function loadReport(key) {
     const frame = document.getElementById("reportFrame");
+    const container = document.getElementById("iframeContainer");
     const loading = document.getElementById("loadingScreen");
     const main = document.querySelector('.main');
     
@@ -492,9 +572,12 @@ function loadReport(key) {
     main.style.display = 'none';
     loading.style.display = "flex";
     frame.src = URLS[key];
-    frame.style.display = "block";
+    container.style.display = "block";
     
-    setTimeout(() => loading.style.display = "none", 3000);
+    setTimeout(() => {
+        loading.style.display = "none";
+        scaleIframeToFit();
+    }, 3000);
 }
 </script>
 
