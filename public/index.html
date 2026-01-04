@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Municipal BI Navigation</title>
 
 <style>
@@ -13,17 +13,13 @@
 }
 
 html, body {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background: #00253D;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
 }
 
-/* כפתורים שמאל */
 .top-left-buttons {
     position: fixed;
     top: 12px;
@@ -31,7 +27,6 @@ html, body {
     z-index: 9999;
     display: flex;
     gap: 10px;
-    pointer-events: auto;
 }
 
 .top-btn {
@@ -48,36 +43,26 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
-    pointer-events: auto;
 }
 
-/* כפתור תפריט – ימין */
+.top-btn:hover {
+    transform: scale(1.3);
+}
+
+#minimizeBtn:hover { color: #2ecc71; }
+#homeBtn:hover { color: #e74c3c; }
+
 .top-right-button {
     position: fixed;
     top: 12px;
     right: 12px;
     z-index: 9999;
-    pointer-events: auto;
-}
-
-/* Hover effects */
-#minimizeBtn:hover {
-    color: #2ecc71;
-    transform: scale(1.3);
-}
-
-#homeBtn:hover {
-    color: #e74c3c;
-    transform: scale(1.3);
 }
 
 .top-right-button .top-btn:hover {
     color: #4fc3f7;
-    transform: scale(1.3);
 }
 
-/* תפריט צד */
 .sidebar {
     position: fixed;
     top: 0;
@@ -94,16 +79,13 @@ html, body {
     overflow: hidden;
 }
 
-.sidebar.open {
-    transform: translateX(0);
-}
+.sidebar.open { transform: translateX(0); }
 
 .sidebar h2 {
     margin: 0;
     padding: 15px;
     background: #00334d;
     text-align: center;
-    flex-shrink: 0;
 }
 
 .menu-container {
@@ -127,20 +109,12 @@ html, body {
     min-height: 50px;
 }
 
-.menu-btn:hover {
-    background: #004466;
-}
-
+.menu-btn:hover { background: #004466; }
 .menu-btn.active {
     background: #003366;
     border-left: 4px solid #4fc3f7;
 }
 
-.menu-btn:last-child {
-    border-bottom: none;
-}
-
-/* אזור ריבועים */
 .main {
     position: fixed;
     top: 0;
@@ -158,10 +132,8 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
     gap: 18px;
     max-width: 1600px;
-    width: 100%;
 }
 
 .tile {
@@ -170,16 +142,13 @@ html, body {
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 14px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     color: white;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s;
     padding: 10px;
-    flex-shrink: 0;
 }
 
 .tile:hover {
@@ -187,11 +156,9 @@ html, body {
     transform: scale(1.05);
 }
 
-/* כפתור תחתון */
 .main-dashboard {
     margin-top: 30px;
     width: 360px;
-    max-width: 90%;
     height: 100px;
     border: 1px solid rgba(255,255,255,0.35);
     border-radius: 16px;
@@ -202,7 +169,6 @@ html, body {
     font-size: 18px;
     cursor: pointer;
     transition: all 0.2s;
-    flex-shrink: 0;
 }
 
 .main-dashboard:hover {
@@ -210,35 +176,27 @@ html, body {
     transform: scale(1.02);
 }
 
-/* iframe נסתר לאימות מוקדם */
 #preAuthFrame {
     position: fixed;
     width: 1px;
     height: 1px;
     top: -10000px;
-    left: -10000px;
     opacity: 0;
-    pointer-events: none;
     border: none;
 }
 
-/* iframe – מסך מלא פשוט! */
 #reportFrame {
     position: fixed;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    border: none !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
     display: none;
     z-index: 3000;
     background: #00253D;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
 }
 
-/* מסך טעינה */
 #loadingScreen {
     position: fixed;
     top: 0;
@@ -254,160 +212,34 @@ html, body {
     gap: 30px;
 }
 
-.hourglass-container {
-    width: 120px;
-    height: 168px;
-    position: relative;
-}
-
-.hourglass {
-    width: 100%;
-    height: 100%;
-    animation: flip 3s ease-in-out infinite;
-    transform-origin: center;
-}
-
-@keyframes flip {
-    0%, 45% {
-        transform: rotate(0deg);
-    }
-    50%, 95% {
-        transform: rotate(180deg);
-    }
-    100% {
-        transform: rotate(180deg);
-    }
-}
-
-.sand-stream {
-    animation: sandFlow 3s ease-in-out infinite;
-}
-
-@keyframes sandFlow {
-    0%, 45% {
-        opacity: 0.7;
-    }
-    48%, 100% {
-        opacity: 0;
-    }
-}
-
-.sand-top {
-    animation: sandTopEmpty 3s ease-in-out infinite;
-    transform-origin: center;
-}
-
-@keyframes sandTopEmpty {
-    0% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-    45% {
-        opacity: 0.3;
-        transform: scaleY(0.2);
-    }
-    50%, 100% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-}
-
-.sand-bottom {
-    animation: sandBottomFill 3s ease-in-out infinite;
-    transform-origin: center bottom;
-}
-
-@keyframes sandBottomFill {
-    0% {
-        opacity: 0.3;
-        transform: scaleY(0.2);
-    }
-    45% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-    50% {
-        opacity: 0.3;
-        transform: scaleY(0.2);
-    }
-    100% {
-        opacity: 0.9;
-        transform: scaleY(1);
-    }
-}
-
-.hourglass-frame {
-    filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
-}
-
 .loading-text {
     color: white;
     font-size: 24px;
-    font-weight: 300;
-    letter-spacing: 2px;
-}
-
-.loading-dots {
-    display: inline-block;
-    width: 60px;
-    text-align: left;
-}
-
-@keyframes dotAnimation {
-    0%, 20% { content: '.'; }
-    40% { content: '..'; }
-    60%, 100% { content: '...'; }
-}
-
-.loading-dots::after {
-    content: '';
-    animation: dotAnimation 1.5s infinite;
-}
-
-/* Responsive */
-@media (max-width: 1600px) {
-    .tile {
-        width: 150px;
-        height: 150px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .tile {
-        width: 140px;
-        height: 140px;
-    }
-    .tiles-wrapper {
-        gap: 15px;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- iframe נסתר לאימות מוקדם -->
 <iframe id="preAuthFrame"></iframe>
 
-<!-- כפתורים -->
 <div class="top-left-buttons">
-    <div class="top-btn" id="minimizeBtn" onclick="minimizeWindow()" title="מזעור">―</div>
-    <div class="top-btn" id="homeBtn" onclick="goHome()" title="חזרה למסך הבית">✕</div>
+    <div class="top-btn" id="minimizeBtn" onclick="minimizeWindow()">―</div>
+    <div class="top-btn" id="homeBtn" onclick="goHome()">✕</div>
 </div>
 
 <div class="top-right-button">
     <div class="top-btn" onclick="toggleSidebar()">☰</div>
 </div>
 
-<!-- תפריט צד -->
 <div id="sidebar" class="sidebar">
     <h2>ניווט</h2>
     <div class="menu-container">
         <div class="menu-btn" data-report="cityPopulation" onclick="loadReport('cityPopulation')">מרשם אוכלוסין עיר</div>
         <div class="menu-btn" data-report="neighborhoodPopulation" onclick="loadReport('neighborhoodPopulation')">מרשם אוכלוסין שכונה</div>
         <div class="menu-btn" data-report="vehicles" onclick="loadReport('vehicles')">רכבים עירוניים</div>
-        <div class="menu-btn" data-report="garbage" onclick="loadReport('garbage')">פינוי אשפה ומיחזור</div>
-        <div class="menu-btn" data-report="water" onclick="loadReport('water')">צריכת מים והשקייה</div>
+        <div class="menu-btn" data-report="garbage" onclick="loadReport('garbage')">פינוי אשפה</div>
+        <div class="menu-btn" data-report="water" onclick="loadReport('water')">צריכת מים</div>
         <div class="menu-btn" data-report="appointments" onclick="loadReport('appointments')">זימון תורים</div>
         <div class="menu-btn" data-report="arnona" onclick="loadReport('arnona')">ארנונה</div>
         <div class="menu-btn" data-report="transport" onclick="loadReport('transport')">הסעות עירוניות</div>
@@ -423,7 +255,6 @@ html, body {
     </div>
 </div>
 
-<!-- ריבועים -->
 <div class="main">
     <div class="tiles-wrapper">
         <div class="tile" onclick="loadReport('cityPopulation')"><span>מרשם אוכלוסין עיר</span></div>
@@ -443,165 +274,75 @@ html, body {
         <div class="tile" onclick="loadReport('benchmark')"><span>מדרג רשויות</span></div>
         <div class="tile" onclick="loadReport('employment')"><span>תעסוקה עירונית</span></div>
     </div>
-
-    <div class="main-dashboard" onclick="loadReport('main')">
-        לוח בקרה ראשי
-    </div>
+    <div class="main-dashboard" onclick="loadReport('main')">לוח בקרה ראשי</div>
 </div>
 
-<!-- מסך טעינה -->
 <div id="loadingScreen">
-    <div class="hourglass-container">
-        <svg class="hourglass" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg">
-            <g class="hourglass-frame">
-                <path d="M20 10 L100 10 L100 20 L95 25 L95 70 L60 85 L95 100 L95 145 L100 150 L100 160 L20 160 L20 150 L25 145 L25 100 L60 85 L25 70 L25 25 L20 20 Z" 
-                      fill="none" stroke="#4fc3f7" stroke-width="2"/>
-            </g>
-            <g class="sand-top">
-                <path d="M30 25 L90 25 L90 30 Q90 50 60 65 Q30 50 30 30 Z" 
-                      fill="#ffb74d" opacity="0.9"/>
-            </g>
-            <g class="sand-bottom">
-                <path d="M30 145 L90 145 L90 140 Q90 130 85 120 L35 120 Q30 130 30 140 Z" 
-                      fill="#ffb74d" opacity="0.9"/>
-            </g>
-            <g class="sand-stream">
-                <line x1="60" y1="70" x2="60" y2="100" 
-                      stroke="#ffb74d" stroke-width="2" opacity="0.7"/>
-            </g>
-        </svg>
-    </div>
-    
-    <div class="loading-text">
-        טעינה<span class="loading-dots"></span>
-    </div>
+    <div class="loading-text">טעינה...</div>
 </div>
 
 <iframe id="reportFrame"></iframe>
 
 <script>
 const URLS = {
-    cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    vehicles: "https://app.powerbi.com/reportEmbed?reportId=a4ec7683-19f1-45e9-8e1c-6e9aaeb55bc9&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    arnona: "https://app.powerbi.com/reportEmbed?reportId=99746334-ff4a-43a9-be32-0caf768e06b7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    businessLicensing: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    businessPromotion: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    parking: "https://app.powerbi.com/reportEmbed?reportId=593c46a6-2e79-44d2-9bab-8080d24fba96&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    emergency: "https://app.powerbi.com/reportEmbed?reportId=ad06f4e7-ede5-4661-8d25-58eccd4f6e75&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    crime: "https://app.powerbi.com/reportEmbed?reportId=56348d10-c389-43cd-bcb0-5ae3a3f81cc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US",
-    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&language=en-US"
+    cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=7719ef70-1954-4d51-8c54-6da0501d9ae0&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=a2d09f47-b8f0-4aa1-b5f7-cf2b01001086&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    vehicles: "https://app.powerbi.com/reportEmbed?reportId=a4ec7683-19f1-45e9-8e1c-6e9aaeb55bc9&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    garbage: "https://app.powerbi.com/reportEmbed?reportId=d975dff7-b2e3-450e-9399-569719e6734d&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    water: "https://app.powerbi.com/reportEmbed?reportId=db1d38ec-8b52-4a44-865c-a5109c9f9d4c&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    appointments: "https://app.powerbi.com/reportEmbed?reportId=74ebfd2d-c849-4212-aa50-f76aedc0e9af&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    arnona: "https://app.powerbi.com/reportEmbed?reportId=99746334-ff4a-43a9-be32-0caf768e06b7&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    transport: "https://app.powerbi.com/reportEmbed?reportId=92eef28d-b435-4601-bc70-a26972596b45&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    businessLicensing: "https://app.powerbi.com/reportEmbed?reportId=96ef81a4-4e65-4d96-a41e-e017d56673e8&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    businessPromotion: "https://app.powerbi.com/reportEmbed?reportId=96209590-0917-4096-85cd-e4fe97acc6a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    parking: "https://app.powerbi.com/reportEmbed?reportId=593c46a6-2e79-44d2-9bab-8080d24fba96&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    emergency: "https://app.powerbi.com/reportEmbed?reportId=ad06f4e7-ede5-4661-8d25-58eccd4f6e75&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    crime: "https://app.powerbi.com/reportEmbed?reportId=56348d10-c389-43cd-bcb0-5ae3a3f81cc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    center106: "https://app.powerbi.com/reportEmbed?reportId=64931d9d-2edc-4f93-b57b-ddbd351674b5&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    benchmark: "https://app.powerbi.com/reportEmbed?reportId=5776724a-ef63-4a9c-9568-748a30bd1337&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    employment: "https://app.powerbi.com/reportEmbed?reportId=2490a2be-c6c6-47d0-9ea5-59274756f258&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false",
+    main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false"
 };
 
-let loadingTimeout;
-let currentReportKey = "";
-
-window.addEventListener('load', function() {
-    const preAuthFrame = document.getElementById('preAuthFrame');
-    preAuthFrame.src = URLS.main;
-});
-
-window.addEventListener('resize', function() {
-    const frame = document.getElementById('reportFrame');
-    if (frame && frame.style.display === 'block') {
-        frame.style.width = window.innerWidth + 'px';
-        frame.style.height = window.innerHeight + 'px';
-    }
+window.addEventListener('load', () => {
+    document.getElementById('preAuthFrame').src = URLS.main;
 });
 
 function minimizeWindow() {
-    try {
-        window.moveTo(0, window.screen.availHeight);
-        return;
-    } catch(e) {}
-    
-    try {
-        window.resizeTo(1, 1);
-        window.moveTo(0, window.screen.availHeight);
-        return;
-    } catch(e) {}
-    
-    console.log('Minimize not supported');
+    window.blur();
 }
 
 function goHome() {
     const frame = document.getElementById('reportFrame');
     const main = document.querySelector('.main');
-    
-    if (frame && frame.style.display === 'block') {
+    if (frame.style.display === 'block') {
         frame.style.display = 'none';
         frame.src = '';
-        if (main) {
-            main.style.display = 'flex';
-        }
-        document.querySelectorAll('.menu-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        return;
+        main.style.display = 'flex';
+        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
     }
-    
-    try {
-        window.close();
-    } catch(e) {}
 }
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
 }
 
-function loadReport(reportKey) {
-    currentReportKey = reportKey;
+function loadReport(key) {
     const frame = document.getElementById("reportFrame");
-    const loadingScreen = document.getElementById("loadingScreen");
-    const sidebar = document.getElementById("sidebar");
+    const loading = document.getElementById("loadingScreen");
     const main = document.querySelector('.main');
     
-    sidebar.classList.remove("open");
+    document.getElementById("sidebar").classList.remove("open");
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`[data-report="${key}"]`)?.classList.add('active');
     
-    document.querySelectorAll('.menu-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    const activeBtn = document.querySelector(`.menu-btn[data-report="${reportKey}"]`);
-    if (activeBtn) {
-        activeBtn.classList.add('active');
-    }
-    
-    if (loadingTimeout) {
-        clearTimeout(loadingTimeout);
-    }
-    
-    if (main) {
-        main.style.display = 'none';
-    }
-    
-    loadingScreen.style.display = "flex";
-    
-    frame.src = URLS[reportKey];
+    main.style.display = 'none';
+    loading.style.display = "flex";
+    frame.src = URLS[key];
     frame.style.display = "block";
     
-    loadingTimeout = setTimeout(() => {
-        loadingScreen.style.display = "none";
-    }, 15000);
+    setTimeout(() => loading.style.display = "none", 3000);
 }
-
-document.getElementById("reportFrame").addEventListener("load", function() {
-    const loadingScreen = document.getElementById("loadingScreen");
-    
-    setTimeout(() => {
-        loadingScreen.style.display = "none";
-        if (loadingTimeout) {
-            clearTimeout(loadingTimeout);
-        }
-    }, 3000);
-});
 </script>
 
 </body>
