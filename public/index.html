@@ -20,6 +20,14 @@ html, body {
     overflow: hidden;
 }
 
+/* כפתור מסך מלא - שמאל */
+.top-left-button {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 9999;
+}
+
 /* כפתור תפריט בלבד */
 .top-right-button {
     position: fixed;
@@ -283,6 +291,11 @@ html, body {
 
 <iframe id="preAuthFrame"></iframe>
 
+<!-- כפתור מסך מלא - שמאל -->
+<div class="top-left-button">
+    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="מסך מלא">⛶</div>
+</div>
+
 <!-- כפתור תפריט בלבד -->
 <div class="top-right-button">
     <div class="top-btn" onclick="toggleSidebar()">☰</div>
@@ -385,7 +398,62 @@ const URLS = {
 
 window.addEventListener('load', () => {
     document.getElementById('preAuthFrame').src = URLS.main;
+    
+    // כניסה אוטומטית למסך מלא בטעינה
+    setTimeout(() => {
+        enterFullscreen();
+    }, 1000);
 });
+
+// פונקציה להכנס למסך מלא
+function enterFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => {
+            console.log('Fullscreen request failed:', err);
+        });
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    }
+}
+
+// פונקציה לצאת ממסך מלא
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+// Toggle מסך מלא
+function toggleFullscreen() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        enterFullscreen();
+    } else {
+        exitFullscreen();
+    }
+}
+
+// עדכון אייקון כשנכנסים/יוצאים ממסך מלא
+document.addEventListener('fullscreenchange', updateFullscreenIcon);
+document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+
+function updateFullscreenIcon() {
+    const btn = document.getElementById('fullscreenBtn');
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+        btn.innerHTML = '⊡'; // יציאה ממסך מלא
+        btn.title = 'יציאה ממסך מלא';
+    } else {
+        btn.innerHTML = '⛶'; // כניסה למסך מלא
+        btn.title = 'מסך מלא';
+    }
+}
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
