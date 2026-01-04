@@ -458,9 +458,67 @@ function scaleIframeToFit() {
     frame.style.top = `${Math.max(0, topOffset)}px`;
 }
 
+// 🔥 דגל לפעם הראשונה
+let isInitialLoad = true;
+
 window.addEventListener('load', () => {
     document.getElementById('preAuthFrame').src = URLS.main;
     scaleIframeToFit();
+    updateFullscreenIcon();
+    
+    // 🔥 טעינה ראשונית - רק בפעם הראשונה!
+    if (isInitialLoad) {
+        const frame = document.getElementById("reportFrame");
+        const container = document.getElementById("iframeContainer");
+        const loading = document.getElementById("loadingScreen");
+        const main = document.querySelector('.main');
+        
+        // מסתיר מסך הבית, מראה דשבורד לצורך הזדהות
+        main.style.display = 'none';
+        frame.src = URLS.main;
+        container.style.display = "block";
+        
+        // 🔥 כניסה למסך מלא אחרי 2 שניות
+        setTimeout(() => {
+            if (!document.fullscreenElement) {
+                enterFullscreen();
+            }
+        }, 2000);
+        
+        console.log('🔥 ממתין לתזוזת עכבר...');
+        
+        // 🔥 מחכה לתזוזת עכבר ראשונה!
+        function onFirstMouseMove() {
+            console.log('🖱️ תזוזת עכבר - יש 4 שניות ללחוץ Sign In');
+            
+            // מסיר את ה-listener (רק פעם אחת)
+            document.removeEventListener('mousemove', onFirstMouseMove);
+            
+            // 🔥 שלב 1: 4 שניות לראות Sign In וללחוץ
+            setTimeout(() => {
+                console.log('⏱️ 4 שניות עברו - מראה מסך טעינה');
+                
+                // 🔥 שלב 2: מסך שחור מופיע!
+                loading.style.display = 'flex';
+                container.style.visibility = 'hidden';
+                
+                // 🔥 שלב 3: אחרי 6 שניות → מסך הבית
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    container.style.display = 'none';
+                    container.style.visibility = 'visible';
+                    main.style.display = 'flex';
+                    
+                    // 🔥 מסמן שסיימנו
+                    isInitialLoad = false;
+                    console.log('✅ עבר למסך הבית!');
+                }, 6000);  // 6 שניות מסך שחור
+            }, 4000);  // 4 שניות לפני מסך שחור
+        }
+        
+        // 🔥 מאזין לתזוזת עכבר
+        document.addEventListener('mousemove', onFirstMouseMove);
+    }
 });
 
 window.addEventListener('resize', scaleIframeToFit);
@@ -469,17 +527,33 @@ window.addEventListener('orientationchange', scaleIframeToFit);
 function enterFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(err => {
+        elem.requestFullscreen().then(() => {
+            updateFullscreenIcon(); // 🔥 עדכון מיד אחרי כניסה!
+        }).catch(err => {
             console.log('Fullscreen request failed:', err);
         });
     } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
+        setTimeout(updateFullscreenIcon, 100); // 🔥 עדכון
     } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
+        setTimeout(updateFullscreenIcon, 100); // 🔥 עדכון
     }
 }
 
 function exitFullscreen() {
+    // 🔥 שליחת ESC כדי לצאת ממסך מלא (עובד גם ב-kiosk!)
+    const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        code: 'Escape',
+        keyCode: 27,
+        which: 27,
+        bubbles: true,
+        cancelable: true
+    });
+    document.dispatchEvent(event);
+    
+    // גם API רגיל למקרה שזה לא kiosk
     if (document.exitFullscreen) {
         document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
@@ -490,10 +564,16 @@ function exitFullscreen() {
 }
 
 function toggleFullscreen() {
-    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        enterFullscreen();
-    } else {
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.msFullscreenElement);
+    
+    if (isFullscreen) {
+        // יוצאים ממסך מלא
         exitFullscreen();
+    } else {
+        // נכנסים למסך מלא
+        enterFullscreen();
     }
 }
 
@@ -510,6 +590,23 @@ document.addEventListener('msfullscreenchange', () => {
     scaleIframeToFit();
 });
 
+function updateFullscreenButton() {
+    const btn = document.querySelector('.top-left-button');
+    if (!btn) return;
+    
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.msFullscreenElement);
+    
+    if (isFullscreen) {
+        // 🔥 במסך מלא - מסתיר את הכפתור!
+        btn.classList.add('hide-in-fullscreen');
+    } else {
+        // 🔥 לא במסך מלא - מראה את הכפתור
+        btn.classList.remove('hide-in-fullscreen');
+    }
+}
+
 function updateFullscreenIcon() {
     const btn = document.getElementById('fullscreenBtn');
     if (!btn) return;
@@ -519,9 +616,11 @@ function updateFullscreenIcon() {
                             document.msFullscreenElement);
     
     if (isFullscreen) {
+        // במסך מלא - אייקון יציאה
         btn.innerHTML = '⊡';
         btn.title = 'יציאה ממסך מלא (F11)';
     } else {
+        // לא במסך מלא - אייקון כניסה
         btn.innerHTML = '⛶';
         btn.title = 'מסך מלא (F11)';
     }
