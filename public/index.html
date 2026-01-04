@@ -181,7 +181,6 @@ html, body {
     border: none;
 }
 
-/* 🔥 CRITICAL FIX - iframe wrapper */
 .iframe-container {
     position: fixed;
     top: 0;
@@ -194,7 +193,6 @@ html, body {
     background: #000000;
 }
 
-/* 🔥 iframe עם ZOOM דינמי */
 #reportFrame {
     position: absolute;
     top: 0;
@@ -300,7 +298,6 @@ html, body {
     animation: dotAnimation 1.5s infinite;
 }
 
-/* Responsive adjustments */
 @media (max-width: 1600px) {
     .tiles-wrapper {
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -328,12 +325,10 @@ html, body {
 
 <iframe id="preAuthFrame"></iframe>
 
-<!-- כפתור מסך מלא - שמאל -->
 <div class="top-left-button">
     <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="מסך מלא">⛶</div>
 </div>
 
-<!-- כפתור תפריט בלבד -->
 <div class="top-right-button">
     <div class="top-btn" onclick="toggleSidebar()">☰</div>
 </div>
@@ -410,7 +405,6 @@ html, body {
     </div>
 </div>
 
-<!-- 🔥 Wrapper חדש עם container -->
 <div class="iframe-container" id="iframeContainer">
     <iframe id="reportFrame"></iframe>
 </div>
@@ -436,73 +430,41 @@ const URLS = {
     main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false"
 };
 
-// 🔥 פונקציה קריטית - מחשבת ZOOM ומותחת את ה-iframe
 function scaleIframeToFit() {
     const frame = document.getElementById("reportFrame");
     const container = document.getElementById("iframeContainer");
     
-    // גודל המסך האמיתי
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     
-    // גודל הדשבורד המקורי (Power BI)
     const dashboardWidth = 1920;
     const dashboardHeight = 1080;
     
-    // חישוב יחס התאמה
     const scaleX = screenWidth / dashboardWidth;
     const scaleY = screenHeight / dashboardHeight;
     
-    // 🔥 FIX: משתמשים ב-Math.min כדי שהכל ייכנס בלי לחתוך!
     const scale = Math.min(scaleX, scaleY);
     
-    // מיישמים את ה-scale
     frame.style.transform = `scale(${scale})`;
     frame.style.transformOrigin = 'top left';
     
-    // 🔥 חישוב המימדים אחרי scale
     const scaledWidth = dashboardWidth * scale;
     const scaledHeight = dashboardHeight * scale;
     
-    // 🔥 מרכוז אם יש רווח
     const leftOffset = (screenWidth - scaledWidth) / 2;
     const topOffset = (screenHeight - scaledHeight) / 2;
     
     frame.style.left = `${Math.max(0, leftOffset)}px`;
     frame.style.top = `${Math.max(0, topOffset)}px`;
-    
-    console.log(`Screen: ${screenWidth}x${screenHeight}, Scale: ${scale.toFixed(3)}, Offset: ${leftOffset.toFixed(0)}x${topOffset.toFixed(0)}`);
 }
 
 window.addEventListener('load', () => {
     document.getElementById('preAuthFrame').src = URLS.main;
-    
-    // התאמת גובה בטעינה
     scaleIframeToFit();
 });
 
-// 🔥 התאמה מחדש כשמשנים גודל חלון
 window.addEventListener('resize', scaleIframeToFit);
 window.addEventListener('orientationchange', scaleIframeToFit);
-
-// מעקב אחרי חזרה מ-popup - חזרה למסך מלא
-let wasFullscreen = false;
-
-window.addEventListener('blur', () => {
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-        wasFullscreen = true;
-    }
-});
-
-window.addEventListener('focus', () => {
-    if (wasFullscreen) {
-        setTimeout(() => {
-            enterFullscreen();
-            scaleIframeToFit();
-            wasFullscreen = false;
-        }, 500);
-    }
-});
 
 function enterFullscreen() {
     const elem = document.documentElement;
@@ -532,81 +494,21 @@ function toggleFullscreen() {
         enterFullscreen();
     } else {
         exitFullscreen();
-        wasFullscreen = false;
     }
 }
 
-// 🔥 מערכת חכמה לחזרה אוטומטית למסך מלא
-let fullscreenRetryAllowed = true;  // האם מותר לחזור אוטומטית
-let lastActivityTime = Date.now();  // זמן הפעילות האחרונה
-let inactivityTimer = null;
-
-// 🔥 פונקציה שמזהה פעילות משתמש
-function resetActivityTimer() {
-    lastActivityTime = Date.now();
-    fullscreenRetryAllowed = true;  // מאפס את האפשרות לחזור אוטומטית
-    
-    // מבטל טיימר קודם
-    if (inactivityTimer) {
-        clearTimeout(inactivityTimer);
-    }
-    
-    // טיימר חדש - אחרי 10 דקות ללא פעילות
-    inactivityTimer = setTimeout(() => {
-        console.log('10 דקות ללא פעילות - מאפס מערכת מסך מלא');
-        fullscreenRetryAllowed = true;
-    }, 10 * 60 * 1000); // 10 דקות
-}
-
-// 🔥 האזנה לפעילות משתמש
-document.addEventListener('click', resetActivityTimer);
-document.addEventListener('keydown', resetActivityTimer);
-document.addEventListener('mousemove', resetActivityTimer);
-document.addEventListener('touchstart', resetActivityTimer);
-
-// 🔥 בדיקה רציפה - אם יצאו ממסך מלא וזה מותר, חוזרים מיד!
-setInterval(() => {
-    const isFullscreen = !!(document.fullscreenElement || 
-                            document.webkitFullscreenElement || 
-                            document.msFullscreenElement ||
-                            document.mozFullScreenElement);
-    
-    // אם לא במסך מלא, ומותר לחזור אוטומטית
-    if (!isFullscreen && fullscreenRetryAllowed) {
-        console.log('מזוהה יציאה ממסך מלא - חוזרים אוטומטית (פעם אחת)');
-        enterFullscreen();
-        fullscreenRetryAllowed = false;  // 🔥 רק פעם אחת!
-    }
-    
-    // עדכון האייקון
-    updateFullscreenIcon();
-}, 1000);
-
-// 🔥 כשנכנסים ידנית למסך מלא - מאפסים
 document.addEventListener('fullscreenchange', () => {
-    if (document.fullscreenElement) {
-        resetActivityTimer();
-    }
     updateFullscreenIcon();
     scaleIframeToFit();
 });
 document.addEventListener('webkitfullscreenchange', () => {
-    if (document.webkitFullscreenElement) {
-        resetActivityTimer();
-    }
     updateFullscreenIcon();
     scaleIframeToFit();
 });
 document.addEventListener('msfullscreenchange', () => {
-    if (document.msFullscreenElement) {
-        resetActivityTimer();
-    }
     updateFullscreenIcon();
     scaleIframeToFit();
 });
-
-// אתחול טיימר בהתחלה
-resetActivityTimer();
 
 function updateFullscreenIcon() {
     const btn = document.getElementById('fullscreenBtn');
@@ -614,9 +516,7 @@ function updateFullscreenIcon() {
     
     const isFullscreen = !!(document.fullscreenElement || 
                             document.webkitFullscreenElement || 
-                            document.msFullscreenElement ||
-                            document.mozFullScreenElement ||
-                            window.innerHeight === screen.height);
+                            document.msFullscreenElement);
     
     if (isFullscreen) {
         btn.innerHTML = '⊡';
@@ -629,57 +529,6 @@ function updateFullscreenIcon() {
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
-}
-
-// 🔥 פונקציה למזעור החלון
-function minimizeWindow() {
-    // JavaScript לא יכול למזער חלון - זה חסום מטעמי אבטחה
-    // הפתרון הכי פשוט: הסבר למשתמש להשתמש ב-ALT+TAB
-    
-    const overlay = document.createElement('div');
-    overlay.id = 'minimizeOverlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        z-index: 99999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-    `;
-    
-    overlay.innerHTML = `
-        <div style="background: #1a1a1a; padding: 50px; border-radius: 20px; text-align: center; color: white; max-width: 500px; border: 3px solid #4fc3f7;">
-            <div style="font-size: 80px; margin-bottom: 20px;">⌨️</div>
-            <div style="font-size: 32px; font-weight: bold; margin-bottom: 40px; color: #4fc3f7;">מעבר לחלון אחר</div>
-            
-            <div style="background: #2a2a2a; padding: 30px; margin: 20px 0; border-radius: 15px; border: 2px solid #4fc3f7;">
-                <div style="font-size: 50px; font-weight: bold; color: #4fc3f7; margin-bottom: 10px;">ALT + TAB</div>
-                <div style="font-size: 20px; color: #aaa;">החזק ALT ולחץ TAB</div>
-            </div>
-            
-            <div style="margin-top: 40px; font-size: 18px; color: #888;">
-                לחץ בכל מקום או ESC כדי לחזור
-            </div>
-        </div>
-    `;
-    
-    overlay.onclick = () => overlay.remove();
-    
-    // אפשר גם לסגור ב-ESC
-    const closeOnEsc = (e) => {
-        if (e.key === 'Escape') {
-            overlay.remove();
-            document.removeEventListener('keydown', closeOnEsc);
-        }
-    };
-    document.addEventListener('keydown', closeOnEsc);
-    
-    document.body.appendChild(overlay);
 }
 
 function loadReport(key) {
@@ -700,11 +549,6 @@ function loadReport(key) {
     setTimeout(() => {
         loading.style.display = "none";
         scaleIframeToFit();
-        
-        // 🔥 כניסה אוטומטית למסך מלא כשטוענים דשבורד
-        if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-            enterFullscreen();
-        }
     }, 3000);
 }
 </script>
