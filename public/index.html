@@ -536,23 +536,77 @@ function toggleFullscreen() {
     }
 }
 
+// 🔥 מערכת חכמה לחזרה אוטומטית למסך מלא
+let fullscreenRetryAllowed = true;  // האם מותר לחזור אוטומטית
+let lastActivityTime = Date.now();  // זמן הפעילות האחרונה
+let inactivityTimer = null;
+
+// 🔥 פונקציה שמזהה פעילות משתמש
+function resetActivityTimer() {
+    lastActivityTime = Date.now();
+    fullscreenRetryAllowed = true;  // מאפס את האפשרות לחזור אוטומטית
+    
+    // מבטל טיימר קודם
+    if (inactivityTimer) {
+        clearTimeout(inactivityTimer);
+    }
+    
+    // טיימר חדש - אחרי 10 דקות ללא פעילות
+    inactivityTimer = setTimeout(() => {
+        console.log('10 דקות ללא פעילות - מאפס מערכת מסך מלא');
+        fullscreenRetryAllowed = true;
+    }, 10 * 60 * 1000); // 10 דקות
+}
+
+// 🔥 האזנה לפעילות משתמש
+document.addEventListener('click', resetActivityTimer);
+document.addEventListener('keydown', resetActivityTimer);
+document.addEventListener('mousemove', resetActivityTimer);
+document.addEventListener('touchstart', resetActivityTimer);
+
+// 🔥 בדיקה רציפה - אם יצאו ממסך מלא וזה מותר, חוזרים מיד!
+setInterval(() => {
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.msFullscreenElement ||
+                            document.mozFullScreenElement);
+    
+    // אם לא במסך מלא, ומותר לחזור אוטומטית
+    if (!isFullscreen && fullscreenRetryAllowed) {
+        console.log('מזוהה יציאה ממסך מלא - חוזרים אוטומטית (פעם אחת)');
+        enterFullscreen();
+        fullscreenRetryAllowed = false;  // 🔥 רק פעם אחת!
+    }
+    
+    // עדכון האייקון
+    updateFullscreenIcon();
+}, 1000);
+
+// 🔥 כשנכנסים ידנית למסך מלא - מאפסים
 document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        resetActivityTimer();
+    }
     updateFullscreenIcon();
     scaleIframeToFit();
 });
 document.addEventListener('webkitfullscreenchange', () => {
+    if (document.webkitFullscreenElement) {
+        resetActivityTimer();
+    }
     updateFullscreenIcon();
     scaleIframeToFit();
 });
 document.addEventListener('msfullscreenchange', () => {
+    if (document.msFullscreenElement) {
+        resetActivityTimer();
+    }
     updateFullscreenIcon();
     scaleIframeToFit();
 });
 
-// 🔥 בדיקה רציפה של מצב מסך מלא (כל 500ms)
-setInterval(() => {
-    updateFullscreenIcon();
-}, 500);
+// אתחול טיימר בהתחלה
+resetActivityTimer();
 
 function updateFullscreenIcon() {
     const btn = document.getElementById('fullscreenBtn');
