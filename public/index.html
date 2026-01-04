@@ -530,12 +530,21 @@ function exitFullscreen() {
 }
 
 function toggleFullscreen() {
-    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-        enterFullscreen();
-    } else {
-        exitFullscreen();
-        wasFullscreen = false;
-    }
+    // 🔥 במקום fullscreen API, פשוט דמה F11
+    const event = new KeyboardEvent('keydown', {
+        key: 'F11',
+        code: 'F11',
+        keyCode: 122,
+        which: 122,
+        bubbles: true,
+        cancelable: true
+    });
+    document.dispatchEvent(event);
+    
+    // עדכון האייקון אחרי רגע
+    setTimeout(() => {
+        updateFullscreenIcon();
+    }, 100);
 }
 
 document.addEventListener('fullscreenchange', () => {
