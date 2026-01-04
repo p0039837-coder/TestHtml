@@ -20,13 +20,12 @@ html, body {
     overflow: hidden;
 }
 
-.top-left-buttons {
+/* כפתור תפריט בלבד */
+.top-right-button {
     position: fixed;
     top: 12px;
-    left: 12px;
+    right: 12px;
     z-index: 9999;
-    display: flex;
-    gap: 10px;
 }
 
 .top-btn {
@@ -46,21 +45,8 @@ html, body {
 }
 
 .top-btn:hover {
-    transform: scale(1.3);
-}
-
-#minimizeBtn:hover { color: #2ecc71; }
-#homeBtn:hover { color: #e74c3c; }
-
-.top-right-button {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 9999;
-}
-
-.top-right-button .top-btn:hover {
     color: #4fc3f7;
+    transform: scale(1.3);
 }
 
 .sidebar {
@@ -212,9 +198,83 @@ html, body {
     gap: 30px;
 }
 
+.hourglass-container {
+    width: 120px;
+    height: 168px;
+    position: relative;
+}
+
+.hourglass {
+    width: 100%;
+    height: 100%;
+    animation: flip 3s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes flip {
+    0%, 45% { transform: rotate(0deg); }
+    50%, 95% { transform: rotate(180deg); }
+    100% { transform: rotate(180deg); }
+}
+
+.sand-stream {
+    animation: sandFlow 3s ease-in-out infinite;
+}
+
+@keyframes sandFlow {
+    0%, 45% { opacity: 0.7; }
+    48%, 100% { opacity: 0; }
+}
+
+.sand-top {
+    animation: sandTopEmpty 3s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes sandTopEmpty {
+    0% { opacity: 0.9; transform: scaleY(1); }
+    45% { opacity: 0.3; transform: scaleY(0.2); }
+    50%, 100% { opacity: 0.9; transform: scaleY(1); }
+}
+
+.sand-bottom {
+    animation: sandBottomFill 3s ease-in-out infinite;
+    transform-origin: center bottom;
+}
+
+@keyframes sandBottomFill {
+    0% { opacity: 0.3; transform: scaleY(0.2); }
+    45% { opacity: 0.9; transform: scaleY(1); }
+    50% { opacity: 0.3; transform: scaleY(0.2); }
+    100% { opacity: 0.9; transform: scaleY(1); }
+}
+
+.hourglass-frame {
+    filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
+}
+
 .loading-text {
     color: white;
     font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.loading-dots {
+    display: inline-block;
+    width: 60px;
+    text-align: left;
+}
+
+@keyframes dotAnimation {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dotAnimation 1.5s infinite;
 }
 </style>
 </head>
@@ -223,11 +283,7 @@ html, body {
 
 <iframe id="preAuthFrame"></iframe>
 
-<div class="top-left-buttons">
-    <div class="top-btn" id="minimizeBtn" onclick="minimizeWindow()">―</div>
-    <div class="top-btn" id="homeBtn" onclick="goHome()">✕</div>
-</div>
-
+<!-- כפתור תפריט בלבד -->
 <div class="top-right-button">
     <div class="top-btn" onclick="toggleSidebar()">☰</div>
 </div>
@@ -278,7 +334,30 @@ html, body {
 </div>
 
 <div id="loadingScreen">
-    <div class="loading-text">טעינה...</div>
+    <div class="hourglass-container">
+        <svg class="hourglass" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg">
+            <g class="hourglass-frame">
+                <path d="M20 10 L100 10 L100 20 L95 25 L95 70 L60 85 L95 100 L95 145 L100 150 L100 160 L20 160 L20 150 L25 145 L25 100 L60 85 L25 70 L25 25 L20 20 Z" 
+                      fill="none" stroke="#4fc3f7" stroke-width="2"/>
+            </g>
+            <g class="sand-top">
+                <path d="M30 25 L90 25 L90 30 Q90 50 60 65 Q30 50 30 30 Z" 
+                      fill="#ffb74d" opacity="0.9"/>
+            </g>
+            <g class="sand-bottom">
+                <path d="M30 145 L90 145 L90 140 Q90 130 85 120 L35 120 Q30 130 30 140 Z" 
+                      fill="#ffb74d" opacity="0.9"/>
+            </g>
+            <g class="sand-stream">
+                <line x1="60" y1="70" x2="60" y2="100" 
+                      stroke="#ffb74d" stroke-width="2" opacity="0.7"/>
+            </g>
+        </svg>
+    </div>
+    
+    <div class="loading-text">
+        טעינה<span class="loading-dots"></span>
+    </div>
 </div>
 
 <iframe id="reportFrame"></iframe>
@@ -306,21 +385,41 @@ const URLS = {
 
 window.addEventListener('load', () => {
     document.getElementById('preAuthFrame').src = URLS.main;
+    adjustIframeScale();
 });
 
-function minimizeWindow() {
-    window.blur();
-}
+window.addEventListener('resize', adjustIframeScale);
 
-function goHome() {
+// התאמה אוטומטית לכל רזולוציה - אין סטריפים!
+function adjustIframeScale() {
     const frame = document.getElementById('reportFrame');
-    const main = document.querySelector('.main');
-    if (frame.style.display === 'block') {
-        frame.style.display = 'none';
-        frame.src = '';
-        main.style.display = 'flex';
-        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-    }
+    if (!frame || frame.style.display !== 'block') return;
+    
+    // PowerBI נבנה ב-1920x1080
+    const targetWidth = 1920;
+    const targetHeight = 1080;
+    
+    // גודל החלון הנוכחי
+    const currentWidth = window.innerWidth;
+    const currentHeight = window.innerHeight;
+    
+    // חישוב scale שממלא את כל המסך
+    const scaleX = currentWidth / targetWidth;
+    const scaleY = currentHeight / targetHeight;
+    const scale = Math.max(scaleX, scaleY); // max כדי למלא הכל!
+    
+    // הגדרת הגודל והמיקום
+    frame.style.width = targetWidth + 'px';
+    frame.style.height = targetHeight + 'px';
+    frame.style.transform = `scale(${scale})`;
+    frame.style.transformOrigin = 'center center';
+    frame.style.position = 'fixed';
+    frame.style.top = '50%';
+    frame.style.left = '50%';
+    frame.style.marginLeft = '-960px'; // חצי מ-1920
+    frame.style.marginTop = '-540px';  // חצי מ-1080
+    
+    console.log(`Screen: ${currentWidth}x${currentHeight}, Scale: ${scale.toFixed(3)}`);
 }
 
 function toggleSidebar() {
@@ -341,7 +440,11 @@ function loadReport(key) {
     frame.src = URLS[key];
     frame.style.display = "block";
     
-    setTimeout(() => loading.style.display = "none", 3000);
+    // התאמת גודל אוטומטית
+    setTimeout(() => {
+        adjustIframeScale();
+        loading.style.display = "none";
+    }, 3000);
 }
 </script>
 
