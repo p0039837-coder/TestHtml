@@ -479,8 +479,6 @@ window.addEventListener('load', () => {
     
     // התאמת גובה בטעינה
     scaleIframeToFit();
-    
-    // לא נכנסים אוטומטית למסך מלא - המשתמש יכול ללחוץ על הכפתור
 });
 
 // 🔥 התאמה מחדש כשמשנים גודל חלון
@@ -530,21 +528,12 @@ function exitFullscreen() {
 }
 
 function toggleFullscreen() {
-    // 🔥 במקום fullscreen API, פשוט דמה F11
-    const event = new KeyboardEvent('keydown', {
-        key: 'F11',
-        code: 'F11',
-        keyCode: 122,
-        which: 122,
-        bubbles: true,
-        cancelable: true
-    });
-    document.dispatchEvent(event);
-    
-    // עדכון האייקון אחרי רגע
-    setTimeout(() => {
-        updateFullscreenIcon();
-    }, 100);
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        enterFullscreen();
+    } else {
+        exitFullscreen();
+        wasFullscreen = false;
+    }
 }
 
 document.addEventListener('fullscreenchange', () => {
@@ -560,19 +549,83 @@ document.addEventListener('msfullscreenchange', () => {
     scaleIframeToFit();
 });
 
+// 🔥 בדיקה רציפה של מצב מסך מלא (כל 500ms)
+setInterval(() => {
+    updateFullscreenIcon();
+}, 500);
+
 function updateFullscreenIcon() {
     const btn = document.getElementById('fullscreenBtn');
-    if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+    if (!btn) return;
+    
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.msFullscreenElement ||
+                            document.mozFullScreenElement ||
+                            window.innerHeight === screen.height);
+    
+    if (isFullscreen) {
         btn.innerHTML = '⊡';
-        btn.title = 'יציאה ממסך מלא';
+        btn.title = 'יציאה ממסך מלא (F11)';
     } else {
         btn.innerHTML = '⛶';
-        btn.title = 'מסך מלא';
+        btn.title = 'מסך מלא (F11)';
     }
 }
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("open");
+}
+
+// 🔥 פונקציה למזעור החלון
+function minimizeWindow() {
+    // JavaScript לא יכול למזער חלון - זה חסום מטעמי אבטחה
+    // הפתרון הכי פשוט: הסבר למשתמש להשתמש ב-ALT+TAB
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'minimizeOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 99999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    `;
+    
+    overlay.innerHTML = `
+        <div style="background: #1a1a1a; padding: 50px; border-radius: 20px; text-align: center; color: white; max-width: 500px; border: 3px solid #4fc3f7;">
+            <div style="font-size: 80px; margin-bottom: 20px;">⌨️</div>
+            <div style="font-size: 32px; font-weight: bold; margin-bottom: 40px; color: #4fc3f7;">מעבר לחלון אחר</div>
+            
+            <div style="background: #2a2a2a; padding: 30px; margin: 20px 0; border-radius: 15px; border: 2px solid #4fc3f7;">
+                <div style="font-size: 50px; font-weight: bold; color: #4fc3f7; margin-bottom: 10px;">ALT + TAB</div>
+                <div style="font-size: 20px; color: #aaa;">החזק ALT ולחץ TAB</div>
+            </div>
+            
+            <div style="margin-top: 40px; font-size: 18px; color: #888;">
+                לחץ בכל מקום או ESC כדי לחזור
+            </div>
+        </div>
+    `;
+    
+    overlay.onclick = () => overlay.remove();
+    
+    // אפשר גם לסגור ב-ESC
+    const closeOnEsc = (e) => {
+        if (e.key === 'Escape') {
+            overlay.remove();
+            document.removeEventListener('keydown', closeOnEsc);
+        }
+    };
+    document.addEventListener('keydown', closeOnEsc);
+    
+    document.body.appendChild(overlay);
 }
 
 function loadReport(key) {
@@ -593,6 +646,11 @@ function loadReport(key) {
     setTimeout(() => {
         loading.style.display = "none";
         scaleIframeToFit();
+        
+        // 🔥 כניסה אוטומטית למסך מלא כשטוענים דשבורד
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            enterFullscreen();
+        }
     }, 3000);
 }
 </script>
