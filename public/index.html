@@ -124,10 +124,11 @@ html, body {
 
 .tiles-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 1.5vw;
     width: 90%;
-    max-width: 1800px;
+    max-width: 1600px;
     margin-bottom: 3vh;
 }
 
@@ -298,18 +299,6 @@ html, body {
     animation: dotAnimation 1.5s infinite;
 }
 
-@media (max-width: 1600px) {
-    .tiles-wrapper {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    }
-}
-
-@media (max-width: 1200px) {
-    .tiles-wrapper {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
-}
-
 @media (max-height: 800px) {
     .main {
         padding: 1vh 2vw;
@@ -478,13 +467,6 @@ window.addEventListener('load', () => {
         frame.src = URLS.main;
         container.style.display = "block";
         
-        // 🔥 כניסה למסך מלא אחרי 2 שניות
-        setTimeout(() => {
-            if (!document.fullscreenElement) {
-                enterFullscreen();
-            }
-        }, 2000);
-        
         console.log('🔥 ממתין לתזוזת עכבר...');
         
         // 🔥 מחכה לתזוזת עכבר ראשונה!
@@ -501,6 +483,10 @@ window.addEventListener('load', () => {
                 // 🔥 שלב 2: מסך שחור מופיע!
                 loading.style.display = 'flex';
                 container.style.visibility = 'hidden';
+                
+                // 🔥 כניסה למסך מלא מיד עם מסך הטעינה!
+                enterFullscreen();
+                console.log('📺 מסך מלא הופעל עם מסך הטעינה!');
                 
                 // 🔥 שלב 3: אחרי 6 שניות → מסך הבית
                 setTimeout(() => {
