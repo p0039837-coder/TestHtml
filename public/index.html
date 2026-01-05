@@ -607,22 +607,26 @@ function loadReport(key) {
         // 🔥 מחזיר כפתורים אחרי מסך טעינה
         document.body.classList.remove('loading-active');
         
-        // 🔥 לחיצה ראשונה = 9 שניות (סה"כ 12), אחר כך = 1 שניה (סה"כ 4)
-        const additionalHideTime = isFirstDashboardClick ? 9000 : 1000;
-        const totalTime = isFirstDashboardClick ? 12 : 4;
+        // 🔥 לחיצה ראשונה = 7 שניות (סה"כ 12), אחר כך = אפס (סה"כ 5 - רק מסך טעינה)
+        const additionalHideTime = isFirstDashboardClick ? 7000 : 0;
+        const totalTime = isFirstDashboardClick ? 12 : 5;
         
         // 🔥 מסתיר כפתורים שוב
-        document.body.classList.add('loading-active');
-        setTimeout(() => {
-            document.body.classList.remove('loading-active');
+        if (additionalHideTime > 0) {
+            document.body.classList.add('loading-active');
+            setTimeout(() => {
+                document.body.classList.remove('loading-active');
+                console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
+            }, additionalHideTime);
+        } else {
             console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
-        }, additionalHideTime);
+        }
         
         // 🔥 מסמן שזו כבר לא הלחיצה הראשונה
         if (isFirstDashboardClick) {
             isFirstDashboardClick = false;
         }
-    }, 3000);
+    }, 5000); // 🔥 5 שניות מסך טעינה
 }
 </script>
 
