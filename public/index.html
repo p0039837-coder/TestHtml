@@ -461,6 +461,7 @@ function scaleIframeToFit() {
 
 // 🔥 דגל לפעם הראשונה
 let isInitialLoad = true;
+let isFirstDashboardClick = true; // 🔥 דגל ללחיצה ראשונה על דשבורד
 
 window.addEventListener('load', () => {
     scaleIframeToFit();
@@ -606,12 +607,21 @@ function loadReport(key) {
         // 🔥 מחזיר כפתורים אחרי מסך טעינה
         document.body.classList.remove('loading-active');
         
-        // 🔥 מסתיר כפתורים שוב ל-5 שניות נוספות
+        // 🔥 לחיצה ראשונה = 9 שניות (סה"כ 12), אחר כך = 1 שניה (סה"כ 4)
+        const additionalHideTime = isFirstDashboardClick ? 9000 : 1000;
+        const totalTime = isFirstDashboardClick ? 12 : 4;
+        
+        // 🔥 מסתיר כפתורים שוב
         document.body.classList.add('loading-active');
         setTimeout(() => {
             document.body.classList.remove('loading-active');
-            console.log('✅ כפתורים חזרו אחרי 5 שניות');
-        }, 5000);
+            console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
+        }, additionalHideTime);
+        
+        // 🔥 מסמן שזו כבר לא הלחיצה הראשונה
+        if (isFirstDashboardClick) {
+            isFirstDashboardClick = false;
+        }
     }, 3000);
 }
 </script>
