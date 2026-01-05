@@ -221,6 +221,17 @@ html, body {
     gap: 30px;
 }
 
+/* הסתרת כפתורים כשמסך טעינה פעיל */
+#loadingScreen.active ~ .top-left-button,
+#loadingScreen.active ~ .top-right-button {
+    display: none;
+}
+
+body.loading-active .top-left-button,
+body.loading-active .top-right-button {
+    display: none;
+}
+
 .hourglass-container {
     width: 120px;
     height: 168px;
@@ -485,6 +496,9 @@ window.addEventListener('load', () => {
                 loading.style.display = 'flex';
                 container.style.visibility = 'hidden';
                 
+                // 🔥 מסתיר כפתורים
+                document.body.classList.add('loading-active');
+                
                 // 🔥 כניסה למסך מלא מיד עם מסך הטעינה!
                 enterFullscreen();
                 console.log('📺 מסך מלא הופעל עם מסך הטעינה!');
@@ -495,6 +509,9 @@ window.addEventListener('load', () => {
                     container.style.display = 'none';
                     container.style.visibility = 'visible';
                     main.style.display = 'flex';
+                    
+                    // 🔥 מחזיר כפתורים
+                    document.body.classList.remove('loading-active');
                     
                     // 🔥 מסמן שסיימנו
                     isInitialLoad = false;
@@ -632,9 +649,14 @@ function loadReport(key) {
     frame.src = URLS[key];
     container.style.display = "block";
     
+    // 🔥 מסתיר כפתורים
+    document.body.classList.add('loading-active');
+    
     setTimeout(() => {
         loading.style.display = "none";
         scaleIframeToFit();
+        // 🔥 מחזיר כפתורים
+        document.body.classList.remove('loading-active');
     }, 3000);
 }
 </script>
