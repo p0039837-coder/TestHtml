@@ -607,9 +607,9 @@ function loadReport(key) {
         // 🔥 מחזיר כפתורים אחרי מסך טעינה
         document.body.classList.remove('loading-active');
         
-        // 🔥 לחיצה ראשונה = 7 שניות (סה"כ 12), אחר כך = אפס (סה"כ 5 - רק מסך טעינה)
-        const additionalHideTime = isFirstDashboardClick ? 7000 : 0;
-        const totalTime = isFirstDashboardClick ? 12 : 5;
+        // 🔥 לחיצה ראשונה = 8 שניות (סה"כ 12), אחר כך = אפס (סה"כ 4 - רק מסך טעינה)
+        const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
+        const totalTime = isFirstDashboardClick ? 12 : 4;
         
         // 🔥 מסתיר כפתורים שוב
         if (additionalHideTime > 0) {
@@ -626,7 +626,7 @@ function loadReport(key) {
         if (isFirstDashboardClick) {
             isFirstDashboardClick = false;
         }
-    }, 5000); // 🔥 5 שניות מסך טעינה
+    }, 4000); // 🔥 4 שניות מסך טעינה
 }
 </script>
 
