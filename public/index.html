@@ -43,11 +43,11 @@ html, body {
     padding: 8px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: bold;
     transition: all 0.2s;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -331,7 +331,7 @@ body.loading-active .top-right-button {
 </div>
 
 <div class="top-right-button">
-    <div class="top-btn" onclick="toggleSidebar()" title="תפריט ניווט">◀</div>
+    <div class="top-btn" onclick="toggleSidebar()" title="תפריט ניווט">❯</div>
 </div>
 
 <div id="sidebar" class="sidebar">
@@ -463,66 +463,14 @@ function scaleIframeToFit() {
 let isInitialLoad = true;
 
 window.addEventListener('load', () => {
-    document.getElementById('preAuthFrame').src = URLS.main;
     scaleIframeToFit();
     updateFullscreenIcon();
     
-    // 🔥 טעינה ראשונית - רק בפעם הראשונה!
-    if (isInitialLoad) {
-        const frame = document.getElementById("reportFrame");
-        const container = document.getElementById("iframeContainer");
-        const loading = document.getElementById("loadingScreen");
-        const main = document.querySelector('.main');
-        
-        // מסתיר מסך הבית, מראה דשבורד לצורך הזדהות
-        main.style.display = 'none';
-        frame.src = URLS.main;
-        container.style.display = "block";
-        
-        console.log('🔥 ממתין לתזוזת עכבר...');
-        
-        // 🔥 מחכה לתזוזת עכבר ראשונה!
-        function onFirstMouseMove() {
-            console.log('🖱️ תזוזת עכבר - יש 4 שניות ללחוץ Sign In');
-            
-            // מסיר את ה-listener (רק פעם אחת)
-            document.removeEventListener('mousemove', onFirstMouseMove);
-            
-            // 🔥 שלב 1: 4 שניות לראות Sign In וללחוץ
-            setTimeout(() => {
-                console.log('⏱️ 4 שניות עברו - מראה מסך טעינה');
-                
-                // 🔥 שלב 2: מסך שחור מופיע!
-                loading.style.display = 'flex';
-                container.style.visibility = 'hidden';
-                
-                // 🔥 מסתיר כפתורים
-                document.body.classList.add('loading-active');
-                
-                // 🔥 כניסה למסך מלא מיד עם מסך הטעינה!
-                enterFullscreen();
-                console.log('📺 מסך מלא הופעל עם מסך הטעינה!');
-                
-                // 🔥 שלב 3: אחרי 6 שניות → מסך הבית
-                setTimeout(() => {
-                    loading.style.display = 'none';
-                    container.style.display = 'none';
-                    container.style.visibility = 'visible';
-                    main.style.display = 'flex';
-                    
-                    // 🔥 מחזיר כפתורים
-                    document.body.classList.remove('loading-active');
-                    
-                    // 🔥 מסמן שסיימנו
-                    isInitialLoad = false;
-                    console.log('✅ עבר למסך הבית!');
-                }, 6000);  // 6 שניות מסך שחור
-            }, 4000);  // 4 שניות לפני מסך שחור
-        }
-        
-        // 🔥 מאזין לתזוזת עכבר
-        document.addEventListener('mousemove', onFirstMouseMove);
-    }
+    // 🔥 כניסה ישירה למסך הבית - ללא הזדהות!
+    const main = document.querySelector('.main');
+    main.style.display = 'flex';
+    
+    console.log('✅ נכנס ישר למסך הבית!');
 });
 
 window.addEventListener('resize', scaleIframeToFit);
@@ -655,8 +603,15 @@ function loadReport(key) {
     setTimeout(() => {
         loading.style.display = "none";
         scaleIframeToFit();
-        // 🔥 מחזיר כפתורים
+        // 🔥 מחזיר כפתורים אחרי מסך טעינה
         document.body.classList.remove('loading-active');
+        
+        // 🔥 מסתיר כפתורים שוב ל-5 שניות נוספות
+        document.body.classList.add('loading-active');
+        setTimeout(() => {
+            document.body.classList.remove('loading-active');
+            console.log('✅ כפתורים חזרו אחרי 5 שניות');
+        }, 5000);
     }, 3000);
 }
 </script>
