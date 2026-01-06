@@ -29,7 +29,7 @@ html, body {
 
 .top-right-button {
     position: fixed;
-    top: 57%;
+    top: 50%;
     right: 0;
     transform: translateY(-50%);
     z-index: 9999;
@@ -209,7 +209,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000000;
+    background: #030E1D;
     display: none;
     z-index: 3100;
     justify-content: center;
@@ -459,6 +459,7 @@ function scaleIframeToFit() {
 
 let isInitialLoad = true;
 let isFirstDashboardClick = true;
+let hasAutoReturnedToFullscreen = false; // 🔥 דגל חדש!
 
 window.addEventListener('load', () => {
     scaleIframeToFit();
@@ -472,6 +473,47 @@ window.addEventListener('load', () => {
 
 window.addEventListener('resize', scaleIframeToFit);
 window.addEventListener('orientationchange', scaleIframeToFit);
+
+// 🔥 מאזין ליציאה ממסך מלא
+document.addEventListener('fullscreenchange', handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+function handleFullscreenChange() {
+    updateFullscreenIcon();
+    scaleIframeToFit();
+    
+    // 🔥 בדיקה: האם יצאנו ממסך מלא?
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.msFullscreenElement);
+    
+    const iframeVisible = document.getElementById('iframeContainer').style.display === 'block';
+    
+    // 🔥 DEBUG - הדפסה לקונסול
+    console.log('=== Fullscreen Change Detected ===');
+    console.log('Is Fullscreen:', isFullscreen);
+    console.log('Dashboard Visible:', iframeVisible);
+    console.log('Already returned?:', hasAutoReturnedToFullscreen);
+    console.log('===================================');
+    
+    // 🔥 אם יצאנו ממסך מלא, דשבורד פתוח, ועוד לא עשינו החזרה אוטומטית
+    if (!isFullscreen && iframeVisible && !hasAutoReturnedToFullscreen) {
+        console.log('⚠️ יצאת ממסך מלא! מחזיר אותך בעוד 2 שניות...');
+        
+        // 🔥 מסמן שעשינו את זה פעם אחת
+        hasAutoReturnedToFullscreen = true;
+        
+        // 🔥 המתנה של 2 שניות ואז חזרה למסך מלא
+        setTimeout(() => {
+            console.log('🔄 מנסה להחזיר למסך מלא...');
+            enterFullscreen();
+            console.log('✅ פקודה נשלחה!');
+        }, 2000);
+    } else {
+        console.log('ℹ️ לא מחזיר למסך מלא (אחד התנאים לא מתקיים)');
+    }
+}
 
 function enterFullscreen() {
     const elem = document.documentElement;
@@ -522,19 +564,6 @@ function toggleFullscreen() {
     }
 }
 
-document.addEventListener('fullscreenchange', () => {
-    updateFullscreenIcon();
-    scaleIframeToFit();
-});
-document.addEventListener('webkitfullscreenchange', () => {
-    updateFullscreenIcon();
-    scaleIframeToFit();
-});
-document.addEventListener('msfullscreenchange', () => {
-    updateFullscreenIcon();
-    scaleIframeToFit();
-});
-
 function updateFullscreenButton() {
     const btn = document.querySelector('.top-left-button');
     if (!btn) return;
@@ -577,6 +606,9 @@ function loadReport(key) {
     const loading = document.getElementById("loadingScreen");
     const main = document.querySelector('.main');
     
+    // 🔥 מאפס את הדגל לכל דשבורד חדש
+    hasAutoReturnedToFullscreen = false;
+    
     document.getElementById("sidebar").classList.remove("open");
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-report="${key}"]`)?.classList.add('active');
@@ -587,6 +619,15 @@ function loadReport(key) {
     container.style.display = "block";
     
     document.body.classList.add('loading-active');
+    
+    // 🔥 מעבר אוטומטי למסך מלא!
+    const isFullscreen = !!(document.fullscreenElement || 
+                            document.webkitFullscreenElement || 
+                            document.msFullscreenElement);
+    
+    if (!isFullscreen) {
+        enterFullscreen();
+    }
     
     setTimeout(() => {
         loading.style.display = "none";
