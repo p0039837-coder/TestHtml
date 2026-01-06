@@ -118,8 +118,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0 2vw;
-    gap: 3vh;
+    padding: 2vh 2vw;
 }
 
 .tiles-wrapper {
@@ -165,6 +164,7 @@ html, body {
     font-size: clamp(16px, 2vw, 22px);
     cursor: pointer;
     transition: all 0.2s;
+    margin-top: 3vh;
 }
 
 .main-dashboard:hover {
@@ -449,11 +449,12 @@ function scaleIframeToFit() {
     const scaledWidth = dashboardWidth * scale;
     const scaledHeight = dashboardHeight * scale;
     
+    // 🔥 מרכז רק אופקית, אנכית מתחיל מ-0
     const leftOffset = (screenWidth - scaledWidth) / 2;
-    const topOffset = (screenHeight - scaledHeight) / 2;
+    const topOffset = 0; // 🔥 תמיד 0 - מתחיל מלמעלה!
     
     frame.style.left = `${Math.max(0, leftOffset)}px`;
-    frame.style.top = `${Math.max(0, topOffset)}px`;
+    frame.style.top = `${topOffset}px`;
 }
 
 let isInitialLoad = true;
