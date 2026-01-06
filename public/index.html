@@ -465,7 +465,7 @@ window.addEventListener('load', () => {
     const main = document.querySelector('.main');
     main.style.display = 'flex';
     
-    console.log('✅ נכנס ישר למסך הבית!');
+    console.log('✅ מסך הבית מוכן!');
 });
 
 window.addEventListener('resize', scaleIframeToFit);
@@ -530,10 +530,10 @@ function updateFullscreenIcon() {
     
     if (isFullscreen) {
         btn.innerHTML = '⊡';
-        btn.title = 'יציאה ממסך מלא (F11)';
+        btn.title = 'יציאה ממסך מלא';
     } else {
         btn.innerHTML = '⛶';
-        btn.title = 'מסך מלא (F11)';
+        btn.title = 'מסך מלא';
     }
 }
 
@@ -558,9 +558,9 @@ function loadReport(key) {
     
     document.body.classList.add('loading-active');
     
-    // 🔥 משנה את הרקע ללבן בשלב ההזדהות
+    // 🔥 רקע לבן למסך ההזדהות
     container.style.background = '#ffffff';
-    console.log('🎨 רקע הוחלף ללבן להזדהות');
+    console.log('🎨 רקע לבן למסך הזדהות');
     
     const isFullscreen = !!(document.fullscreenElement || 
                             document.webkitFullscreenElement || 
@@ -575,7 +575,48 @@ function loadReport(key) {
         scaleIframeToFit();
         document.body.classList.remove('loading-active');
         
-        // 🔥 עדיין לא מחזירים לכהה! ההזדהות עדיין בתהליך
+        console.log('⏳ מסך טעינה ראשון נעלם - מחכה ללחיצה על התחבר...');
+        
+        // 🔥 בודק כל 200ms אם לחצו על משהו ב-iframe
+        let isFirstLoad = isFirstDashboardClick;
+        let hasDetectedClick = false;
+        
+        const checkInterval = setInterval(() => {
+            // בודק אם ה-iframe קיבל פוקוס (סימן שלחצו בתוכו)
+            if (document.activeElement === frame && !hasDetectedClick && isFirstLoad) {
+                hasDetectedClick = true;
+                clearInterval(checkInterval);
+                
+                console.log('✅ זיהוי לחיצה ב-iframe! מציג מסך טעינה...');
+                
+                // המתנה קצרה (300ms) ואז מסך טעינה
+                setTimeout(() => {
+                    // 🔥 מסך טעינה מופיע
+                    loading.style.display = "flex";
+                    document.body.classList.add('loading-active');
+                    
+                    // 🔥 משנה לצבע כהה ברקע
+                    container.style.background = '#030E1D';
+                    console.log('🎨 צבע שונה לכהה ברקע');
+                    
+                    // 🔥 אחרי 2 שניות - מסך טעינה נעלם
+                    setTimeout(() => {
+                        loading.style.display = "none";
+                        document.body.classList.remove('loading-active');
+                        console.log('🎉 מסך טעינה נעלם - דשבורד עם צבע כהה!');
+                    }, 2000);
+                }, 300);
+            }
+        }, 200);
+        
+        // 🔥 גיבוי - אם אין לחיצה תוך 15 שניות, מחזיר צבע
+        setTimeout(() => {
+            clearInterval(checkInterval);
+            if (!hasDetectedClick && isFirstLoad) {
+                container.style.background = '#030E1D';
+                console.log('🎨 גיבוי - החזרת צבע כהה (לא הייתה לחיצה)');
+            }
+        }, 15000);
         
         const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
         const totalTime = isFirstDashboardClick ? 12 : 4;
@@ -584,20 +625,28 @@ function loadReport(key) {
             document.body.classList.add('loading-active');
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
-                console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
+                console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות`);
                 
-                // 🔥 רק עכשיו מחזירים לכהה - אחרי שהכל באמת נטען
+                // 🔥 גיבוי: אם לא לחצו, מחזירים צבע
                 setTimeout(() => {
-                    container.style.background = '#030E1D';
-                    console.log('🎨 רקע חזר לכהה');
-                }, 1000); // עוד שנייה בטיחות
+                    const currentBg = container.style.background;
+                    if (currentBg === 'rgb(255, 255, 255)' || currentBg === '#ffffff') {
+                        container.style.background = '#030E1D';
+                        console.log('🎨 גיבוי - החזרת צבע כהה');
+                    }
+                }, 1000);
             }, additionalHideTime);
         } else {
-            console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
+            console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות`);
             
-            // 🔥 בדשבורדים שאחרי הראשון - מחזירים מהר יותר
-            container.style.background = '#030E1D';
-            console.log('🎨 רקע חזר לכהה');
+            // 🔥 דשבורדים הבאים - כבר כהה
+            setTimeout(() => {
+                const currentBg = container.style.background;
+                if (currentBg === 'rgb(255, 255, 255)' || currentBg === '#ffffff') {
+                    container.style.background = '#030E1D';
+                    console.log('🎨 צבע כהה');
+                }
+            }, 500);
         }
         
         if (isFirstDashboardClick) {
