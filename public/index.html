@@ -228,6 +228,58 @@ body.loading-active .top-right-button {
     display: none;
 }
 
+.start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #030E1D;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    gap: 50px;
+}
+
+.start-screen.hidden {
+    display: none;
+}
+
+.start-message {
+    color: white;
+    font-size: 36px;
+    font-weight: 300;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.keyboard-icon {
+    width: 877px;
+    height: 487px;
+    margin-bottom: 30px;
+}
+
+.start-instruction {
+    color: #4fc3f7;
+    font-size: 72px;
+    font-weight: bold;
+    animation: pulse 2s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+    font-family: 'Courier New', monospace;
+    border: 3px solid #4fc3f7;
+    padding: 20px 50px;
+    border-radius: 15px;
+    background: rgba(79, 195, 247, 0.1);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.08); }
+}
+
 .hourglass-container {
     width: 120px;
     height: 168px;
@@ -320,8 +372,212 @@ body.loading-active .top-right-button {
 
 <body>
 
-<iframe id="preAuthFrame"></iframe>
+<div class="start-screen" id="startScreen">
+    <svg class="keyboard-icon" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+        <!-- מסגרת חיצונית -->
+        <rect x="80" y="50" width="440" height="200" rx="12" fill="none" stroke="#ffffff" stroke-width="3"/>
+        
+        <!-- הערות למעלה עם חצים -->
+        <!-- ESC -->
+        <text x="150" y="75" font-family="Arial" font-size="13" fill="#ff5252" text-anchor="middle">ESC = יציאה</text>
+        <path d="M 150 80 L 140 95" stroke="#ff5252" stroke-width="2" fill="none"/>
+        
+        <!-- F9 -->
+        <text x="300" y="75" font-family="Arial" font-size="13" fill="#ffb74d" text-anchor="middle">F9 = מזעור</text>
+        <path d="M 300 80 L 381 95" stroke="#ffb74d" stroke-width="2" fill="none"/>
+        
+        <!-- F11 -->
+        <text x="430" y="75" font-family="Arial" font-size="13" fill="#4fc3f7" text-anchor="middle">F11 = כניסה למערכת</text>
+        <path d="M 430 80 L 431 95" stroke="#4fc3f7" stroke-width="2" fill="none"/>
+        
+        <!-- שורת ESC + F1-F12 -->
+        <!-- ESC - אדום -->
+        <rect x="120" y="100" width="28" height="24" rx="4" fill="none" stroke="#ff5252" stroke-width="2">
+            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        <text x="134" y="116" font-family="Arial" font-size="11" fill="#ff5252" font-weight="bold" text-anchor="middle">ESC</text>
+        
+        <!-- F1-F4 -->
+        <rect x="160" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="171" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F1</text>
+        
+        <rect x="185" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="196" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F2</text>
+        
+        <rect x="210" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="221" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F3</text>
+        
+        <rect x="235" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="246" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F4</text>
+        
+        <!-- F5-F8 -->
+        <rect x="265" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="276" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F5</text>
+        
+        <rect x="290" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="301" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F6</text>
+        
+        <rect x="315" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="326" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F7</text>
+        
+        <rect x="340" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="351" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F8</text>
+        
+        <!-- F9 - כתום -->
+        <rect x="370" y="100" width="22" height="24" rx="4" fill="none" stroke="#ffb74d" stroke-width="2">
+            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+        </rect>
+        <text x="381" y="116" font-family="Arial" font-size="10" fill="#ffb74d" font-weight="bold" text-anchor="middle">F9</text>
+        
+        <!-- F10 -->
+        <rect x="395" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="406" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F10</text>
+        
+        <!-- F11 - כחול -->
+        <rect x="420" y="100" width="22" height="24" rx="4" fill="none" stroke="#4fc3f7" stroke-width="3">
+            <animate attributeName="opacity" values="1;0.4;1" dur="1s" repeatCount="indefinite"/>
+        </rect>
+        <text x="431" y="116" font-family="Arial" font-size="11" fill="#4fc3f7" font-weight="bold" text-anchor="middle">F11</text>
+        
+        <!-- F12 -->
+        <rect x="445" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="456" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F12</text>
+        
+        <!-- שורה 1: מספרים -->
+        <g id="numbers-row">
+            <rect x="120" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="143" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="153" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">1</text>
+            <rect x="166" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="176" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">2</text>
+            <rect x="189" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="199" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">3</text>
+            <rect x="212" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="222" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">4</text>
+            <rect x="235" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="245" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">5</text>
+            <rect x="258" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="268" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">6</text>
+            <rect x="281" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="291" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">7</text>
+            <rect x="304" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="314" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">8</text>
+            <rect x="327" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="337" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">9</text>
+            <rect x="350" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="360" y="144" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">0</text>
+            <rect x="373" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="396" y="130" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="419" y="130" width="48" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="443" y="144" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Backspace</text>
+        </g>
+        
+        <!-- שורה 2: QWERTY -->
+        <g id="qwerty-row">
+            <rect x="120" y="153" width="28" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="134" y="167" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Tab</text>
+            <rect x="151" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="161" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">Q</text>
+            <rect x="174" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="184" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">W</text>
+            <rect x="197" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="207" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">E</text>
+            <rect x="220" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="230" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">R</text>
+            <rect x="243" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="253" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">T</text>
+            <rect x="266" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="276" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">Y</text>
+            <rect x="289" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="299" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">U</text>
+            <rect x="312" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="322" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">I</text>
+            <rect x="335" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="345" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">O</text>
+            <rect x="358" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="368" y="167" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">P</text>
+            <rect x="381" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="404" y="153" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="427" y="153" width="40" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+        </g>
+        
+        <!-- שורה 3: ASDF -->
+        <g id="asdf-row">
+            <rect x="120" y="176" width="32" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="136" y="190" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Caps</text>
+            <rect x="155" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="165" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">A</text>
+            <rect x="178" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="188" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">S</text>
+            <rect x="201" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="211" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">D</text>
+            <rect x="224" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="234" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">F</text>
+            <rect x="247" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="257" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">G</text>
+            <rect x="270" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="280" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">H</text>
+            <rect x="293" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="303" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">J</text>
+            <rect x="316" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="326" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">K</text>
+            <rect x="339" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="349" y="190" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">L</text>
+            <rect x="362" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="385" y="176" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="408" y="176" width="59" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="437" y="190" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Enter</text>
+        </g>
+        
+        <!-- שורה 4: ZXCV -->
+        <g id="zxcv-row">
+            <rect x="120" y="199" width="42" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="141" y="213" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Shift</text>
+            <rect x="165" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="175" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">Z</text>
+            <rect x="188" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="198" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">X</text>
+            <rect x="211" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="221" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">C</text>
+            <rect x="234" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="244" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">V</text>
+            <rect x="257" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="267" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">B</text>
+            <rect x="280" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="290" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">N</text>
+            <rect x="303" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="313" y="213" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">M</text>
+            <rect x="326" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="349" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="372" y="199" width="20" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <rect x="395" y="199" width="72" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="431" y="213" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Shift</text>
+        </g>
+        
+        <!-- שורה 5: Ctrl, Alt, Space -->
+        <g id="bottom-row">
+            <rect x="120" y="222" width="30" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="135" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Ctrl</text>
+            <rect x="153" y="222" width="24" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="165" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">⊞</text>
+            <rect x="180" y="222" width="26" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="193" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Alt</text>
+            <rect x="209" y="222" width="160" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="289" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Space</text>
+            <rect x="372" y="222" width="26" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="385" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Alt</text>
+            <rect x="401" y="222" width="24" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="413" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Fn</text>
+            <rect x="428" y="222" width="39" height="20" rx="3" fill="none" stroke="#555" stroke-width="1"/>
+            <text x="447" y="236" font-family="Arial" font-size="8" fill="#888" text-anchor="middle">Ctrl</text>
+        </g>
+    </svg>
+    
+    <div class="start-message">להפעלת המערכת יש להקיש במקלדת</div>
+    <div class="start-instruction">F11</div>
+</div>
 
+<iframe id="preAuthFrame"></iframe>
 <div class="top-left-button">
     <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="מסך מלא">⛶</div>
 </div>
@@ -463,9 +719,44 @@ window.addEventListener('load', () => {
     updateFullscreenIcon();
     
     const main = document.querySelector('.main');
-    main.style.display = 'flex';
+    const startScreen = document.getElementById('startScreen');
     
-    console.log('✅ מסך הבית מוכן!');
+    // 🔥 מסתיר את מסך הבית עד שלוחצים F11
+    main.style.display = 'none';
+    
+    console.log('⏳ מחכה ללחיצה על F11...');
+    
+    // 🔥 מאזין ללחיצה על F11, ESC, ו-F9
+    const f11Handler = (e) => {
+        // F11 - מסך מלא
+        if (e.key === 'F11' || e.keyCode === 122) {
+            console.log('✅ F11 נלחץ! מתחיל...');
+            
+            // מסתיר את מסך ההתחלה
+            startScreen.classList.add('hidden');
+            
+            // מציג את מסך הבית
+            main.style.display = 'flex';
+            
+            // מסיר את המאזין
+            document.removeEventListener('keydown', f11Handler);
+        }
+        
+        // ESC - סגירת חלון
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            console.log('🚪 ESC נלחץ! סוגר חלון...');
+            window.close();
+        }
+        
+        // F9 - מזעור חלון
+        if (e.key === 'F9' || e.keyCode === 120) {
+            console.log('📦 F9 נלחץ! ממזער חלון...');
+            // ניסיון למזער (עובד רק בחלונות שנפתחו ב-window.open)
+            window.blur();
+        }
+    };
+    
+    document.addEventListener('keydown', f11Handler);
 });
 
 window.addEventListener('resize', scaleIframeToFit);
@@ -558,9 +849,15 @@ function loadReport(key) {
     
     document.body.classList.add('loading-active');
     
-    // 🔥 רקע לבן למסך ההזדהות
-    container.style.background = '#ffffff';
-    console.log('🎨 רקע לבן למסך הזדהות');
+    // 🔥 רק בפעם הראשונה - רקע לבן למסך ההזדהות
+    // אחרי זה תמיד כהה!
+    if (isFirstDashboardClick) {
+        container.style.background = '#ffffff';
+        console.log('🎨 רקע לבן למסך הזדהות (פעם ראשונה)');
+    } else {
+        container.style.background = '#030E1D';
+        console.log('🎨 רקע כהה (דשבורד נוסף)');
+    }
     
     const isFullscreen = !!(document.fullscreenElement || 
                             document.webkitFullscreenElement || 
@@ -599,12 +896,12 @@ function loadReport(key) {
                     container.style.background = '#030E1D';
                     console.log('🎨 צבע שונה לכהה ברקע');
                     
-                    // 🔥 אחרי 2 שניות - מסך טעינה נעלם
+                    // 🔥 אחרי 3.5 שניות - מסך טעינה נעלם
                     setTimeout(() => {
                         loading.style.display = "none";
                         document.body.classList.remove('loading-active');
                         console.log('🎉 מסך טעינה נעלם - דשבורד עם צבע כהה!');
-                    }, 2000);
+                    }, 3500);  // ← 3.5 שניות!
                 }, 300);
             }
         }, 200);
