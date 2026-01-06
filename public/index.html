@@ -559,7 +559,7 @@ function loadReport(key) {
     document.body.classList.add('loading-active');
     
     // 🔥 משנה את הרקע ללבן בשלב ההזדהות
-    container.style.background = '#f5f5f5';
+    container.style.background = '#ffffff';
     console.log('🎨 רקע הוחלף ללבן להזדהות');
     
     const isFullscreen = !!(document.fullscreenElement || 
@@ -575,6 +575,8 @@ function loadReport(key) {
         scaleIframeToFit();
         document.body.classList.remove('loading-active');
         
+        // 🔥 עדיין לא מחזירים לכהה! ההזדהות עדיין בתהליך
+        
         const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
         const totalTime = isFirstDashboardClick ? 12 : 4;
         
@@ -584,20 +586,18 @@ function loadReport(key) {
                 document.body.classList.remove('loading-active');
                 console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
                 
-                // 🔥 חוזרים לצבע כהה אחרי שהדשבורד נטען
+                // 🔥 רק עכשיו מחזירים לכהה - אחרי שהכל באמת נטען
                 setTimeout(() => {
                     container.style.background = '#030E1D';
                     console.log('🎨 רקע חזר לכהה');
-                }, 2000);
+                }, 1000); // עוד שנייה בטיחות
             }, additionalHideTime);
         } else {
             console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
             
-            // 🔥 חוזרים לצבע כהה
-            setTimeout(() => {
-                container.style.background = '#030E1D';
-                console.log('🎨 רקע חזר לכהה');
-            }, 2000);
+            // 🔥 בדשבורדים שאחרי הראשון - מחזירים מהר יותר
+            container.style.background = '#030E1D';
+            console.log('🎨 רקע חזר לכהה');
         }
         
         if (isFirstDashboardClick) {
