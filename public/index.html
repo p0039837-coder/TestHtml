@@ -20,7 +20,6 @@ html, body {
     overflow: hidden;
 }
 
-/* כפתור מסך מלא - שמאל */
 .top-left-button {
     position: fixed;
     top: 12px;
@@ -28,7 +27,6 @@ html, body {
     z-index: 9999;
 }
 
-/* כפתור תפריט בלבד */
 .top-right-button {
     position: fixed;
     top: 57%;
@@ -120,7 +118,8 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2vh 2vw;
+    padding: 0 2vw;
+    gap: 3vh;
 }
 
 .tiles-wrapper {
@@ -130,7 +129,6 @@ html, body {
     gap: 1.5vw;
     width: 90%;
     max-width: 1600px;
-    margin-bottom: 3vh;
 }
 
 .tile {
@@ -192,18 +190,17 @@ html, body {
     overflow: hidden;
     display: none;
     z-index: 3000;
-    background: #000000;
+    background: #030E1D;
 }
 
+/* 🔥 פתרון 3: חזרה לקוד המקורי עם padding קטן */
 #reportFrame {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 1920px;
     height: 1080px;
     border: none;
     transform-origin: top left;
-    background: #000000;
+    background: #030E1D;
 }
 
 #loadingScreen {
@@ -221,7 +218,6 @@ html, body {
     gap: 30px;
 }
 
-/* הסתרת כפתורים כשמסך טעינה פעיל */
 #loadingScreen.active ~ .top-left-button,
 #loadingScreen.active ~ .top-right-button {
     display: none;
@@ -444,6 +440,7 @@ function scaleIframeToFit() {
     const scaleX = screenWidth / dashboardWidth;
     const scaleY = screenHeight / dashboardHeight;
     
+    // 🔥 חזרה ל-Math.min - פסים שחורים, אבל הכל נראה
     const scale = Math.min(scaleX, scaleY);
     
     frame.style.transform = `scale(${scale})`;
@@ -459,15 +456,13 @@ function scaleIframeToFit() {
     frame.style.top = `${Math.max(0, topOffset)}px`;
 }
 
-// 🔥 דגל לפעם הראשונה
 let isInitialLoad = true;
-let isFirstDashboardClick = true; // 🔥 דגל ללחיצה ראשונה על דשבורד
+let isFirstDashboardClick = true;
 
 window.addEventListener('load', () => {
     scaleIframeToFit();
     updateFullscreenIcon();
     
-    // 🔥 כניסה ישירה למסך הבית - ללא הזדהות!
     const main = document.querySelector('.main');
     main.style.display = 'flex';
     
@@ -481,21 +476,20 @@ function enterFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
         elem.requestFullscreen().then(() => {
-            updateFullscreenIcon(); // 🔥 עדכון מיד אחרי כניסה!
+            updateFullscreenIcon();
         }).catch(err => {
             console.log('Fullscreen request failed:', err);
         });
     } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
-        setTimeout(updateFullscreenIcon, 100); // 🔥 עדכון
+        setTimeout(updateFullscreenIcon, 100);
     } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
-        setTimeout(updateFullscreenIcon, 100); // 🔥 עדכון
+        setTimeout(updateFullscreenIcon, 100);
     }
 }
 
 function exitFullscreen() {
-    // 🔥 שליחת ESC כדי לצאת ממסך מלא (עובד גם ב-kiosk!)
     const event = new KeyboardEvent('keydown', {
         key: 'Escape',
         code: 'Escape',
@@ -506,7 +500,6 @@ function exitFullscreen() {
     });
     document.dispatchEvent(event);
     
-    // גם API רגיל למקרה שזה לא kiosk
     if (document.exitFullscreen) {
         document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
@@ -522,10 +515,8 @@ function toggleFullscreen() {
                             document.msFullscreenElement);
     
     if (isFullscreen) {
-        // יוצאים ממסך מלא
         exitFullscreen();
     } else {
-        // נכנסים למסך מלא
         enterFullscreen();
     }
 }
@@ -552,10 +543,8 @@ function updateFullscreenButton() {
                             document.msFullscreenElement);
     
     if (isFullscreen) {
-        // 🔥 במסך מלא - מסתיר את הכפתור!
         btn.classList.add('hide-in-fullscreen');
     } else {
-        // 🔥 לא במסך מלא - מראה את הכפתור
         btn.classList.remove('hide-in-fullscreen');
     }
 }
@@ -569,11 +558,9 @@ function updateFullscreenIcon() {
                             document.msFullscreenElement);
     
     if (isFullscreen) {
-        // במסך מלא - אייקון יציאה
         btn.innerHTML = '⊡';
         btn.title = 'יציאה ממסך מלא (F11)';
     } else {
-        // לא במסך מלא - אייקון כניסה
         btn.innerHTML = '⛶';
         btn.title = 'מסך מלא (F11)';
     }
@@ -598,20 +585,16 @@ function loadReport(key) {
     frame.src = URLS[key];
     container.style.display = "block";
     
-    // 🔥 מסתיר כפתורים
     document.body.classList.add('loading-active');
     
     setTimeout(() => {
         loading.style.display = "none";
         scaleIframeToFit();
-        // 🔥 מחזיר כפתורים אחרי מסך טעינה
         document.body.classList.remove('loading-active');
         
-        // 🔥 לחיצה ראשונה = 8 שניות (סה"כ 12), אחר כך = אפס (סה"כ 4 - רק מסך טעינה)
         const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
         const totalTime = isFirstDashboardClick ? 12 : 4;
         
-        // 🔥 מסתיר כפתורים שוב
         if (additionalHideTime > 0) {
             document.body.classList.add('loading-active');
             setTimeout(() => {
@@ -622,11 +605,10 @@ function loadReport(key) {
             console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
         }
         
-        // 🔥 מסמן שזו כבר לא הלחיצה הראשונה
         if (isFirstDashboardClick) {
             isFirstDashboardClick = false;
         }
-    }, 4000); // 🔥 4 שניות מסך טעינה
+    }, 4000);
 }
 </script>
 
