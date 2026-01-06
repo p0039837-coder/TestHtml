@@ -896,12 +896,12 @@ function loadReport(key) {
                     container.style.background = '#030E1D';
                     console.log('🎨 צבע שונה לכהה ברקע');
                     
-                    // 🔥 אחרי 3.5 שניות - מסך טעינה נעלם
+                    // 🔥 אחרי 4.5 שניות - מסך טעינה נעלם
                     setTimeout(() => {
                         loading.style.display = "none";
                         document.body.classList.remove('loading-active');
                         console.log('🎉 מסך טעינה נעלם - דשבורד עם צבע כהה!');
-                    }, 3500);  // ← 3.5 שניות!
+                    }, 4500);  // ← 4.5 שניות!
                 }, 300);
             }
         }, 200);
@@ -949,7 +949,7 @@ function loadReport(key) {
         if (isFirstDashboardClick) {
             isFirstDashboardClick = false;
         }
-    }, 4000);
+    }, 4500);  // 4.5 שניות
 }
 </script>
 
