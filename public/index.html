@@ -377,25 +377,14 @@ body.loading-active .top-right-button {
         <!-- מסגרת חיצונית -->
         <rect x="80" y="50" width="440" height="200" rx="12" fill="none" stroke="#ffffff" stroke-width="3"/>
         
-        <!-- הערות למעלה עם חצים -->
-        <!-- ESC -->
-        <text x="150" y="75" font-family="Arial" font-size="13" fill="#ff5252" text-anchor="middle">ESC = יציאה</text>
-        <path d="M 150 80 L 140 95" stroke="#ff5252" stroke-width="2" fill="none"/>
-        
-        <!-- F9 -->
-        <text x="300" y="75" font-family="Arial" font-size="13" fill="#ffb74d" text-anchor="middle">F9 = מזעור</text>
-        <path d="M 300 80 L 381 95" stroke="#ffb74d" stroke-width="2" fill="none"/>
-        
-        <!-- F11 -->
-        <text x="430" y="75" font-family="Arial" font-size="13" fill="#4fc3f7" text-anchor="middle">F11 = כניסה למערכת</text>
-        <path d="M 430 80 L 431 95" stroke="#4fc3f7" stroke-width="2" fill="none"/>
+        <!-- הערה רק ל-F11 -->
+        <text x="300" y="75" font-family="Arial" font-size="13" fill="#4fc3f7" text-anchor="middle">F11 = כניסה למערכת</text>
+        <path d="M 300 80 L 431 95" stroke="#4fc3f7" stroke-width="2" fill="none"/>
         
         <!-- שורת ESC + F1-F12 -->
-        <!-- ESC - אדום -->
-        <rect x="120" y="100" width="28" height="24" rx="4" fill="none" stroke="#ff5252" stroke-width="2">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
-        </rect>
-        <text x="134" y="116" font-family="Arial" font-size="11" fill="#ff5252" font-weight="bold" text-anchor="middle">ESC</text>
+        <!-- ESC - רגיל -->
+        <rect x="120" y="100" width="28" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="134" y="116" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">ESC</text>
         
         <!-- F1-F4 -->
         <rect x="160" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
@@ -423,11 +412,9 @@ body.loading-active .top-right-button {
         <rect x="340" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
         <text x="351" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F8</text>
         
-        <!-- F9 - כתום -->
-        <rect x="370" y="100" width="22" height="24" rx="4" fill="none" stroke="#ffb74d" stroke-width="2">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-        </rect>
-        <text x="381" y="116" font-family="Arial" font-size="10" fill="#ffb74d" font-weight="bold" text-anchor="middle">F9</text>
+        <!-- F9 - רגיל -->
+        <rect x="370" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="381" y="116" font-family="Arial" font-size="10" fill="#999" text-anchor="middle">F9</text>
         
         <!-- F10 -->
         <rect x="395" y="100" width="22" height="24" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
@@ -726,7 +713,7 @@ window.addEventListener('load', () => {
     
     console.log('⏳ מחכה ללחיצה על F11...');
     
-    // 🔥 מאזין ללחיצה על F11, ESC, ו-F9
+    // 🔥 מאזין ללחיצה על F11
     const f11Handler = (e) => {
         // F11 - מסך מלא
         if (e.key === 'F11' || e.keyCode === 122) {
@@ -740,19 +727,6 @@ window.addEventListener('load', () => {
             
             // מסיר את המאזין
             document.removeEventListener('keydown', f11Handler);
-        }
-        
-        // ESC - סגירת חלון
-        if (e.key === 'Escape' || e.keyCode === 27) {
-            console.log('🚪 ESC נלחץ! סוגר חלון...');
-            window.close();
-        }
-        
-        // F9 - מזעור חלון
-        if (e.key === 'F9' || e.keyCode === 120) {
-            console.log('📦 F9 נלחץ! ממזער חלון...');
-            // ניסיון למזער (עובד רק בחלונות שנפתחו ב-window.open)
-            window.blur();
         }
     };
     
