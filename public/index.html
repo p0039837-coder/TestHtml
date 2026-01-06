@@ -191,16 +191,16 @@ html, body {
     display: none;
     z-index: 3000;
     background: #030E1D;
+    transition: background 0.3s ease;
 }
 
-/* 🔥 פתרון 3: חזרה לקוד המקורי עם padding קטן */
 #reportFrame {
     position: absolute;
     width: 1920px;
     height: 1080px;
     border: none;
     transform-origin: top left;
-    background: #030E1D;
+    background: transparent;
 }
 
 #loadingScreen {
@@ -440,7 +440,6 @@ function scaleIframeToFit() {
     const scaleX = screenWidth / dashboardWidth;
     const scaleY = screenHeight / dashboardHeight;
     
-    // 🔥 חזרה ל-Math.min - פסים שחורים, אבל הכל נראה
     const scale = Math.min(scaleX, scaleY);
     
     frame.style.transform = `scale(${scale})`;
@@ -449,9 +448,8 @@ function scaleIframeToFit() {
     const scaledWidth = dashboardWidth * scale;
     const scaledHeight = dashboardHeight * scale;
     
-    // 🔥 מרכז רק אופקית, אנכית מתחיל מ-0
     const leftOffset = (screenWidth - scaledWidth) / 2;
-    const topOffset = 0; // 🔥 תמיד 0 - מתחיל מלמעלה!
+    const topOffset = 0;
     
     frame.style.left = `${Math.max(0, leftOffset)}px`;
     frame.style.top = `${topOffset}px`;
@@ -459,7 +457,6 @@ function scaleIframeToFit() {
 
 let isInitialLoad = true;
 let isFirstDashboardClick = true;
-let hasAutoReturnedToFullscreen = false; // 🔥 דגל חדש!
 
 window.addEventListener('load', () => {
     scaleIframeToFit();
@@ -473,47 +470,6 @@ window.addEventListener('load', () => {
 
 window.addEventListener('resize', scaleIframeToFit);
 window.addEventListener('orientationchange', scaleIframeToFit);
-
-// 🔥 מאזין ליציאה ממסך מלא
-document.addEventListener('fullscreenchange', handleFullscreenChange);
-document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-document.addEventListener('msfullscreenchange', handleFullscreenChange);
-
-function handleFullscreenChange() {
-    updateFullscreenIcon();
-    scaleIframeToFit();
-    
-    // 🔥 בדיקה: האם יצאנו ממסך מלא?
-    const isFullscreen = !!(document.fullscreenElement || 
-                            document.webkitFullscreenElement || 
-                            document.msFullscreenElement);
-    
-    const iframeVisible = document.getElementById('iframeContainer').style.display === 'block';
-    
-    // 🔥 DEBUG - הדפסה לקונסול
-    console.log('=== Fullscreen Change Detected ===');
-    console.log('Is Fullscreen:', isFullscreen);
-    console.log('Dashboard Visible:', iframeVisible);
-    console.log('Already returned?:', hasAutoReturnedToFullscreen);
-    console.log('===================================');
-    
-    // 🔥 אם יצאנו ממסך מלא, דשבורד פתוח, ועוד לא עשינו החזרה אוטומטית
-    if (!isFullscreen && iframeVisible && !hasAutoReturnedToFullscreen) {
-        console.log('⚠️ יצאת ממסך מלא! מחזיר אותך בעוד 2 שניות...');
-        
-        // 🔥 מסמן שעשינו את זה פעם אחת
-        hasAutoReturnedToFullscreen = true;
-        
-        // 🔥 המתנה של 2 שניות ואז חזרה למסך מלא
-        setTimeout(() => {
-            console.log('🔄 מנסה להחזיר למסך מלא...');
-            enterFullscreen();
-            console.log('✅ פקודה נשלחה!');
-        }, 2000);
-    } else {
-        console.log('ℹ️ לא מחזיר למסך מלא (אחד התנאים לא מתקיים)');
-    }
-}
 
 function enterFullscreen() {
     const elem = document.documentElement;
@@ -564,21 +520,6 @@ function toggleFullscreen() {
     }
 }
 
-function updateFullscreenButton() {
-    const btn = document.querySelector('.top-left-button');
-    if (!btn) return;
-    
-    const isFullscreen = !!(document.fullscreenElement || 
-                            document.webkitFullscreenElement || 
-                            document.msFullscreenElement);
-    
-    if (isFullscreen) {
-        btn.classList.add('hide-in-fullscreen');
-    } else {
-        btn.classList.remove('hide-in-fullscreen');
-    }
-}
-
 function updateFullscreenIcon() {
     const btn = document.getElementById('fullscreenBtn');
     if (!btn) return;
@@ -606,9 +547,6 @@ function loadReport(key) {
     const loading = document.getElementById("loadingScreen");
     const main = document.querySelector('.main');
     
-    // 🔥 מאפס את הדגל לכל דשבורד חדש
-    hasAutoReturnedToFullscreen = false;
-    
     document.getElementById("sidebar").classList.remove("open");
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-report="${key}"]`)?.classList.add('active');
@@ -620,7 +558,10 @@ function loadReport(key) {
     
     document.body.classList.add('loading-active');
     
-    // 🔥 מעבר אוטומטי למסך מלא!
+    // 🔥 משנה את הרקע ללבן בשלב ההזדהות
+    container.style.background = '#f5f5f5';
+    console.log('🎨 רקע הוחלף ללבן להזדהות');
+    
     const isFullscreen = !!(document.fullscreenElement || 
                             document.webkitFullscreenElement || 
                             document.msFullscreenElement);
@@ -642,9 +583,21 @@ function loadReport(key) {
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
+                
+                // 🔥 חוזרים לצבע כהה אחרי שהדשבורד נטען
+                setTimeout(() => {
+                    container.style.background = '#030E1D';
+                    console.log('🎨 רקע חזר לכהה');
+                }, 2000);
             }, additionalHideTime);
         } else {
             console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות סה"כ`);
+            
+            // 🔥 חוזרים לצבע כהה
+            setTimeout(() => {
+                container.style.background = '#030E1D';
+                console.log('🎨 רקע חזר לכהה');
+            }, 2000);
         }
         
         if (isFirstDashboardClick) {
