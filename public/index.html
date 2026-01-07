@@ -880,15 +880,6 @@ function loadReport(key) {
             }
         }, 200);
         
-        // 🔥 גיבוי - אם אין לחיצה תוך 15 שניות, מחזיר צבע
-        setTimeout(() => {
-            clearInterval(checkInterval);
-            if (!hasDetectedClick && isFirstLoad) {
-                container.style.background = '#030E1D';
-                console.log('🎨 גיבוי - החזרת צבע כהה (לא הייתה לחיצה)');
-            }
-        }, 15000);
-        
         const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
         const totalTime = isFirstDashboardClick ? 12 : 4;
         
@@ -897,27 +888,9 @@ function loadReport(key) {
             setTimeout(() => {
                 document.body.classList.remove('loading-active');
                 console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות`);
-                
-                // 🔥 גיבוי: אם לא לחצו, מחזירים צבע
-                setTimeout(() => {
-                    const currentBg = container.style.background;
-                    if (currentBg === 'rgb(255, 255, 255)' || currentBg === '#ffffff') {
-                        container.style.background = '#030E1D';
-                        console.log('🎨 גיבוי - החזרת צבע כהה');
-                    }
-                }, 1000);
             }, additionalHideTime);
         } else {
             console.log(`✅ כפתורים חזרו אחרי ${totalTime} שניות`);
-            
-            // 🔥 דשבורדים הבאים - כבר כהה
-            setTimeout(() => {
-                const currentBg = container.style.background;
-                if (currentBg === 'rgb(255, 255, 255)' || currentBg === '#ffffff') {
-                    container.style.background = '#030E1D';
-                    console.log('🎨 צבע כהה');
-                }
-            }, 500);
         }
         
         if (isFirstDashboardClick) {
