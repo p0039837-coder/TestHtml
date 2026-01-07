@@ -200,7 +200,7 @@ html, body {
     height: 1080px;
     border: none;
     transform-origin: top left;
-    background: transparent;
+    background: #030E1D;
 }
 
 #loadingScreen {
@@ -257,8 +257,8 @@ body.loading-active .top-right-button {
 }
 
 .keyboard-icon {
-    width: 1052px;
-    height: 584px;
+    width: 894px;
+    height: 496px;
     margin-bottom: 30px;
 }
 
@@ -379,11 +379,11 @@ body.loading-active .top-right-button {
         
         <!-- הערות למעלה עם חצים -->
         <!-- ESC -->
-        <text x="120" y="55" font-family="Arial" font-size="14" fill="#ff5252" text-anchor="middle">ESC לחיצה ארוכה = מזעור</text>
+        <text x="120" y="55" font-family="Arial" font-size="12" fill="#ff5252" text-anchor="middle">ESC לחיצה ארוכה = מזעור</text>
         <path d="M 120 60 L 110 78" stroke="#ff5252" stroke-width="2" fill="none"/>
         
         <!-- F11 -->
-        <text x="440" y="55" font-family="Arial" font-size="14" fill="#4fc3f7" text-anchor="middle">F11 = כניסה למערכת / מסך מלא</text>
+        <text x="440" y="55" font-family="Arial" font-size="12" fill="#4fc3f7" text-anchor="middle">F11 = כניסה למערכת / מסך מלא</text>
         <path d="M 440 60 L 460 78" stroke="#4fc3f7" stroke-width="2" fill="none"/>
         
         <!-- שורת ESC + F1-F12 -->
@@ -921,12 +921,12 @@ function loadReport(key) {
                     container.style.background = '#030E1D';
                     console.log('🎨 צבע שונה לכהה ברקע');
                     
-                    // 🔥 אחרי 4.5 שניות - מסך טעינה נעלם
+                    // 🔥 אחרי 5 שניות - מסך טעינה נעלם
                     setTimeout(() => {
                         loading.style.display = "none";
                         document.body.classList.remove('loading-active');
                         console.log('🎉 מסך טעינה נעלם - דשבורד עם צבע כהה!');
-                    }, 4500);  // ← 4.5 שניות!
+                    }, 5000);  // ← 5 שניות!
                 }, 300);
             }
         }, 200);
