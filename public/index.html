@@ -33,6 +33,7 @@ html, body {
     right: 0;
     transform: translateY(-50%);
     z-index: 9999;
+    transition: right 0.3s ease;
 }
 
 .top-btn {
@@ -85,18 +86,18 @@ html, body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .menu-btn {
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0 14px;
+    justify-content: flex-start;
+    padding: 0 20px 0 14px;
     border-bottom: 1px solid rgba(0, 51, 77, 0.5);
     cursor: pointer;
-    text-align: center;
+    text-align: right;
     font-size: 14px;
     transition: background 0.2s;
     min-height: 50px;
@@ -228,58 +229,6 @@ body.loading-active .top-right-button {
     display: none;
 }
 
-.start-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #030E1D;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    gap: 50px;
-}
-
-.start-screen.hidden {
-    display: none;
-}
-
-.start-message {
-    color: white;
-    font-size: 36px;
-    font-weight: 300;
-    text-align: center;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-}
-
-.keyboard-icon {
-    width: 894px;
-    height: 496px;
-    margin-bottom: 30px;
-}
-
-.start-instruction {
-    color: #4fc3f7;
-    font-size: 72px;
-    font-weight: bold;
-    animation: pulse 2s ease-in-out infinite;
-    text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
-    font-family: 'Courier New', monospace;
-    border: 3px solid #4fc3f7;
-    padding: 20px 50px;
-    border-radius: 15px;
-    background: rgba(79, 195, 247, 0.1);
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.08); }
-}
-
 .hourglass-container {
     width: 120px;
     height: 168px;
@@ -372,216 +321,13 @@ body.loading-active .top-right-button {
 
 <body>
 
-<div class="start-screen" id="startScreen">
-    <svg class="keyboard-icon" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
-        <!-- מסגרת חיצונית - מאוזנת משני הצדדים -->
-        <rect x="30" y="30" width="498" height="240" rx="12" fill="none" stroke="#ffffff" stroke-width="3"/>
-        
-        <!-- הערות למעלה עם חצים -->
-        <!-- ESC -->
-        <text x="120" y="55" font-family="Arial" font-size="12" fill="#ff5252" text-anchor="middle">ESC לחיצה ארוכה = מזעור</text>
-        <path d="M 120 60 L 110 78" stroke="#ff5252" stroke-width="2" fill="none"/>
-        
-        <!-- F11 -->
-        <text x="440" y="55" font-family="Arial" font-size="12" fill="#4fc3f7" text-anchor="middle">F11 = כניסה למערכת / מסך מלא</text>
-        <path d="M 440 60 L 429 78" stroke="#4fc3f7" stroke-width="2" fill="none"/>
-        
-        <!-- שורת ESC + F1-F12 -->
-        <!-- ESC - אדום מהבהב -->
-        <rect x="90" y="85" width="30" height="28" rx="4" fill="none" stroke="#ff5252" stroke-width="2">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
-        </rect>
-        <text x="105" y="104" font-family="Arial" font-size="12" fill="#ff5252" font-weight="bold" text-anchor="middle">ESC</text>
-        
-        <!-- F1-F4 -->
-        <rect x="133" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="145" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F1</text>
-        
-        <rect x="160" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="172" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F2</text>
-        
-        <rect x="187" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="199" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F3</text>
-        
-        <rect x="214" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="226" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F4</text>
-        
-        <!-- F5-F8 -->
-        <rect x="248" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="260" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F5</text>
-        
-        <rect x="275" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="287" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F6</text>
-        
-        <rect x="302" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="314" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F7</text>
-        
-        <rect x="329" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="341" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F8</text>
-        
-        <!-- F9 - רגיל -->
-        <rect x="363" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="375" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F9</text>
-        
-        <!-- F10 -->
-        <rect x="390" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="402" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F10</text>
-        
-        <!-- F11 - כחול -->
-        <rect x="417" y="85" width="24" height="28" rx="4" fill="none" stroke="#4fc3f7" stroke-width="3">
-            <animate attributeName="opacity" values="1;0.4;1" dur="1s" repeatCount="indefinite"/>
-        </rect>
-        <text x="429" y="104" font-family="Arial" font-size="12" fill="#4fc3f7" font-weight="bold" text-anchor="middle">F11</text>
-        
-        <!-- F12 - מורחב להסתיים עם Backspace -->
-        <rect x="444" y="85" width="24" height="28" rx="4" fill="none" stroke="#666" stroke-width="1.5"/>
-        <text x="456" y="104" font-family="Arial" font-size="11" fill="#999" text-anchor="middle">F12</text>
-        
-        <!-- שורה 1: מספרים -->
-        <g id="numbers-row">
-            <rect x="90" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="115" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="126" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">1</text>
-            <rect x="140" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="151" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">2</text>
-            <rect x="165" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="176" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">3</text>
-            <rect x="190" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="201" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">4</text>
-            <rect x="215" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="226" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">5</text>
-            <rect x="240" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="251" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">6</text>
-            <rect x="265" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="276" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">7</text>
-            <rect x="290" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="301" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">8</text>
-            <rect x="315" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="326" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">9</text>
-            <rect x="340" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="351" y="135" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">0</text>
-            <rect x="365" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="390" y="120" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="415" y="120" width="53" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="441" y="135" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Backspace</text>
-        </g>
-        
-        <!-- שורה 2: QWERTY -->
-        <g id="qwerty-row">
-            <rect x="90" y="147" width="32" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="106" y="162" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Tab</text>
-            <rect x="125" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="136" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">Q</text>
-            <rect x="150" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="161" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">W</text>
-            <rect x="175" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="186" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">E</text>
-            <rect x="200" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="211" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">R</text>
-            <rect x="225" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="236" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">T</text>
-            <rect x="250" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="261" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">Y</text>
-            <rect x="275" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="286" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">U</text>
-            <rect x="300" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="311" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">I</text>
-            <rect x="325" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="336" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">O</text>
-            <rect x="350" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="361" y="162" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">P</text>
-            <rect x="375" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="400" y="147" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="425" y="147" width="43" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-        </g>
-        
-        <!-- שורה 3: ASDF -->
-        <g id="asdf-row">
-            <rect x="90" y="174" width="36" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="108" y="189" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Caps</text>
-            <rect x="129" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="140" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">A</text>
-            <rect x="154" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="165" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">S</text>
-            <rect x="179" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="190" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">D</text>
-            <rect x="204" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="215" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">F</text>
-            <rect x="229" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="240" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">G</text>
-            <rect x="254" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="265" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">H</text>
-            <rect x="279" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="290" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">J</text>
-            <rect x="304" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="315" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">K</text>
-            <rect x="329" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="340" y="189" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">L</text>
-            <rect x="354" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="379" y="174" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="404" y="174" width="64" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="436" y="189" font-family="Arial" font-size="10" fill="#888" text-anchor="middle">Enter</text>
-        </g>
-        
-        <!-- שורה 4: ZXCV -->
-        <g id="zxcv-row">
-            <rect x="90" y="201" width="44" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="112" y="216" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Shift</text>
-            <rect x="137" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="148" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">Z</text>
-            <rect x="162" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="173" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">X</text>
-            <rect x="187" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="198" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">C</text>
-            <rect x="212" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="223" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">V</text>
-            <rect x="237" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="248" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">B</text>
-            <rect x="262" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="273" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">N</text>
-            <rect x="287" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="298" y="216" font-family="Arial" font-size="11" fill="#888" text-anchor="middle">M</text>
-            <rect x="312" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="337" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="362" y="201" width="22" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <rect x="387" y="201" width="81" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="427" y="216" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Shift</text>
-        </g>
-        
-        <!-- שורה 5: Ctrl, Alt, Space -->
-        <g id="bottom-row">
-            <rect x="90" y="228" width="32" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="106" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Ctrl</text>
-            <rect x="125" y="228" width="26" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="138" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">⊞</text>
-            <rect x="154" y="228" width="28" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="168" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Alt</text>
-            <rect x="185" y="228" width="170" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="270" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Space</text>
-            <rect x="358" y="228" width="28" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="372" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Alt</text>
-            <rect x="389" y="228" width="26" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="402" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Fn</text>
-            <rect x="418" y="228" width="50" height="22" rx="3" fill="none" stroke="#555" stroke-width="1"/>
-            <text x="443" y="243" font-family="Arial" font-size="9" fill="#888" text-anchor="middle">Ctrl</text>
-        </g>
-    </svg>
-    
-    <div class="start-message">להפעלת המערכת יש להקיש במקלדת</div>
-    <div class="start-instruction">F11</div>
-</div>
-
 <iframe id="preAuthFrame"></iframe>
-<div class="top-left-button">
-    <div class="top-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="מסך מלא">⛶</div>
-</div>
 
 <div class="top-right-button">
     <div class="top-btn" onclick="toggleSidebar()" title="תפריט ניווט">❯</div>
 </div>
 
 <div id="sidebar" class="sidebar">
-    <h2>ניווט</h2>
     <div class="menu-container">
         <div class="menu-btn" data-report="cityPopulation" onclick="loadReport('cityPopulation')">מרשם אוכלוסין עיר</div>
         <div class="menu-btn" data-report="neighborhoodPopulation" onclick="loadReport('neighborhoodPopulation')">מרשם אוכלוסין שכונה</div>
@@ -710,78 +456,13 @@ let isFirstDashboardClick = true;
 
 window.addEventListener('load', () => {
     scaleIframeToFit();
-    updateFullscreenIcon();
     
     const main = document.querySelector('.main');
-    const startScreen = document.getElementById('startScreen');
     
-    // 🔥 מסתיר את מסך הבית עד שלוחצים F11
-    main.style.display = 'none';
+    // 🔥 מציג ישר את מסך הבית - בלי מסך התחלה!
+    main.style.display = 'flex';
     
-    console.log('⏳ מחכה ללחיצה על F11...');
-    
-    // 🔥 מאזין ללחיצה על F11
-    const f11Handler = (e) => {
-        // F11 - מסך מלא
-        if (e.key === 'F11' || e.keyCode === 122) {
-            console.log('✅ F11 נלחץ! מתחיל...');
-            
-            // מסתיר את מסך ההתחלה
-            startScreen.classList.add('hidden');
-            
-            // מציג את מסך הבית
-            main.style.display = 'flex';
-            
-            // מסיר את המאזין
-            document.removeEventListener('keydown', f11Handler);
-        }
-    };
-    
-    // 🔥 לחיצה ארוכה על ESC = מזעור
-    let escPressTimer = null;
-    let escPressStartTime = 0;
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' || e.keyCode === 27) {
-            if (!escPressTimer) {
-                console.log('⏱️ ESC נלחץ - מתחיל ספירה לאחור...');
-                escPressStartTime = Date.now();
-                
-                // מתחיל טיימר של 3 שניות
-                escPressTimer = setTimeout(() => {
-                    console.log('📦 ESC לחיצה ארוכה! ממזער חלון...');
-                    
-                    // ניסיון למזער (window.blur הוא הטוב ביותר שאפשר בדפדפן)
-                    window.blur();
-                    
-                    // אם זה חלון של window.open - אפשר לנסות לסגור
-                    if (window.opener) {
-                        window.close();
-                    }
-                    
-                    escPressTimer = null;
-                }, 3000); // 3 שניות
-            }
-        }
-    });
-    
-    document.addEventListener('keyup', (e) => {
-        if (e.key === 'Escape' || e.keyCode === 27) {
-            if (escPressTimer) {
-                const pressDuration = Date.now() - escPressStartTime;
-                console.log(`⏹️ ESC שוחרר אחרי ${pressDuration}ms (צריך 3000ms)`);
-                
-                clearTimeout(escPressTimer);
-                escPressTimer = null;
-                
-                if (pressDuration < 3000) {
-                    console.log('❌ לחיצה קצרה מדי - לא קורה כלום');
-                }
-            }
-        }
-    });
-    
-    document.addEventListener('keydown', f11Handler);
+    console.log('✅ מסך הבית מוצג ישירות');
 });
 
 window.addEventListener('resize', scaleIframeToFit);
@@ -854,7 +535,20 @@ function updateFullscreenIcon() {
 }
 
 function toggleSidebar() {
-    document.getElementById("sidebar").classList.toggle("open");
+    const sidebar = document.getElementById("sidebar");
+    const btn = document.querySelector('.top-right-button .top-btn');
+    const btnContainer = document.querySelector('.top-right-button');
+    
+    sidebar.classList.toggle("open");
+    
+    // משנה כיוון החץ
+    if (sidebar.classList.contains("open")) {
+        btn.innerHTML = '❮'; // תפריט פתוח - חץ שמאלה (לסגור)
+        btnContainer.style.right = '228px'; // זזז שמאלה!
+    } else {
+        btn.innerHTML = '❯'; // תפריט סגור - חץ ימינה (לפתוח)
+        btnContainer.style.right = '0'; // חוזר לימין
+    }
 }
 
 function loadReport(key) {
@@ -864,6 +558,15 @@ function loadReport(key) {
     const main = document.querySelector('.main');
     
     document.getElementById("sidebar").classList.remove("open");
+    
+    // מחזיר את החץ למצב סגור
+    const btn = document.querySelector('.top-right-button .top-btn');
+    const btnContainer = document.querySelector('.top-right-button');
+    if (btn) {
+        btn.innerHTML = '❯';
+        btnContainer.style.right = '0'; // חוזר לימין
+    }
+    
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-report="${key}"]`)?.classList.add('active');
     
@@ -882,14 +585,6 @@ function loadReport(key) {
     } else {
         container.style.background = '#030E1D';
         console.log('🎨 רקע כהה (דשבורד נוסף)');
-    }
-    
-    const isFullscreen = !!(document.fullscreenElement || 
-                            document.webkitFullscreenElement || 
-                            document.msFullscreenElement);
-    
-    if (!isFullscreen) {
-        enterFullscreen();
     }
     
     setTimeout(() => {
