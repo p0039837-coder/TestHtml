@@ -921,12 +921,12 @@ function loadReport(key) {
                     container.style.background = '#030E1D';
                     console.log('🎨 צבע שונה לכהה ברקע');
                     
-                    // 🔥 אחרי 5 שניות - מסך טעינה נעלם
+                    // 🔥 אחרי 6.5 שניות - מסך טעינה נעלם (רק בפעם ראשונה!)
                     setTimeout(() => {
                         loading.style.display = "none";
                         document.body.classList.remove('loading-active');
                         console.log('🎉 מסך טעינה נעלם - דשבורד עם צבע כהה!');
-                    }, 5000);  // ← 5 שניות!
+                    }, 6500);  // ← 6.5 שניות!
                 }, 300);
             }
         }, 200);
