@@ -75,11 +75,94 @@ html, body {
 
 .sidebar.open { transform: translateX(0); }
 
-.sidebar h2 {
-    margin: 0;
-    padding: 15px;
+.top-menu-buttons {
+    display: flex;
+    flex-direction: row;
     background: #00334d;
+    border-bottom: 2px solid #4fc3f7;
+}
+
+.home-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0 15px 0;
+    background: #00334d;
+}
+
+.home-icon-large {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.top-menu-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    cursor: pointer;
     text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background 0.2s;
+    border-left: 1px solid rgba(79, 195, 247, 0.3);
+    gap: 8px;
+}
+
+.top-menu-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.top-menu-btn:first-child {
+    border-left: none;
+}
+
+.top-menu-btn:hover {
+    background: #004466;
+}
+
+.top-menu-btn.active {
+    background: #003366;
+    border-bottom: 4px solid #4fc3f7;
+}
+
+.decorative-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #00334d;
+    border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+}
+
+.decorative-icon {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #00334d;
+    border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+}
+
+.logo-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
 }
 
 .menu-container {
@@ -93,14 +176,22 @@ html, body {
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 0 20px 0 14px;
+    justify-content: space-between;
+    padding: 0 14px 0 14px;
     border-bottom: 1px solid rgba(0, 51, 77, 0.5);
     cursor: pointer;
     text-align: right;
     font-size: 14px;
     transition: background 0.2s;
     min-height: 50px;
+}
+
+.menu-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-left: 8px;
 }
 
 .menu-btn:hover { background: #004466; }
@@ -117,8 +208,72 @@ html, body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+}
+
+.top-banner {
+    width: 100%;
+    height: auto;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.top-banner > img:first-child {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.banner-logo {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: auto;
+    height: auto;
+    max-width: 241px;
+    max-height: 160px;
+    z-index: 2;
+}
+
+.date-time-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    color: white;
+    text-align: left;
+    z-index: 2;
+    font-family: Arial, sans-serif;
+}
+
+.greeting {
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: normal;
+    color: white;
+    z-index: 2;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+.date-time {
+    font-size: 16px;
+    direction: ltr;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
     padding: 2vh 2vw;
 }
 
@@ -136,8 +291,10 @@ html, body {
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 14px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     color: white;
     text-align: center;
     cursor: pointer;
@@ -146,26 +303,58 @@ html, body {
     font-size: clamp(12px, 1.2vw, 16px);
 }
 
+.tile-icon {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    transition: all 0.2s;
+}
+
 .tile:hover {
     border-color: rgba(255,255,255,0.5);
     transform: scale(1.05);
 }
 
+.tile:hover .tile-icon {
+    filter: drop-shadow(0 0 8px rgba(79, 195, 247, 0.6));
+    transform: scale(1.1);
+}
+
 .main-dashboard {
     width: 90%;
-    max-width: 500px;
-    height: 10vh;
-    min-height: 80px;
+    max-width: 300px;
+    height: 12vh;
+    min-height: 100px;
     border: 1px solid rgba(255,255,255,0.35);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 12px;
     color: white;
-    font-size: clamp(16px, 2vw, 22px);
+    font-size: clamp(12px, 1.2vw, 16px);
     cursor: pointer;
     transition: all 0.2s;
-    margin-top: 3vh;
+    margin-top: 5vh;
+}
+
+.main-dashboard:hover {
+    border-color: rgba(255,255,255,0.5);
+    transform: scale(1.05);
+}
+
+.main-dashboard:hover .main-dashboard-icon {
+    filter: drop-shadow(0 0 8px rgba(79, 195, 247, 0.6));
+    transform: scale(1.1);
+}
+
+.main-dashboard-icon {
+    width: 60%;
+    height: 60%;
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: contain;
+    transition: all 0.2s;
 }
 
 .main-dashboard:hover {
@@ -328,47 +517,280 @@ body.loading-active .top-right-button {
 </div>
 
 <div id="sidebar" class="sidebar">
+    <!-- כפתורים עליונים עם אייקונים -->
+    <div class="top-menu-buttons">
+        <div class="top-menu-btn" data-report="main" onclick="loadReport('main')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%91%D7%A7%D7%A8%D7%94%20%D7%A8%D7%90%D7%A9%D7%99.svg" 
+                 alt="בקרה ראשי" 
+                 class="top-menu-icon">
+            <span>בקרה ראשי</span>
+        </div>
+        <div class="top-menu-btn" onclick="returnToHome()">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=Variant2.svg" 
+                 alt="מסך הבית" 
+                 class="top-menu-icon">
+            <span>מסך הבית</span>
+        </div>
+    </div>
+    
+    <!-- תפריט רגיל -->
     <div class="menu-container">
-        <div class="menu-btn" data-report="cityPopulation" onclick="loadReport('cityPopulation')">מרשם אוכלוסין עיר</div>
-        <div class="menu-btn" data-report="neighborhoodPopulation" onclick="loadReport('neighborhoodPopulation')">מרשם אוכלוסין שכונה</div>
-        <div class="menu-btn" data-report="vehicles" onclick="loadReport('vehicles')">רכבים עירוניים</div>
-        <div class="menu-btn" data-report="garbage" onclick="loadReport('garbage')">פינוי אשפה</div>
-        <div class="menu-btn" data-report="water" onclick="loadReport('water')">צריכת מים</div>
-        <div class="menu-btn" data-report="appointments" onclick="loadReport('appointments')">זימון תורים</div>
-        <div class="menu-btn" data-report="arnona" onclick="loadReport('arnona')">ארנונה</div>
-        <div class="menu-btn" data-report="transport" onclick="loadReport('transport')">הסעות עירוניות</div>
-        <div class="menu-btn" data-report="businessLicensing" onclick="loadReport('businessLicensing')">רישוי עסקים</div>
-        <div class="menu-btn" data-report="businessPromotion" onclick="loadReport('businessPromotion')">קידום עסקים</div>
-        <div class="menu-btn" data-report="parking" onclick="loadReport('parking')">תחבורה וחנייה</div>
-        <div class="menu-btn" data-report="emergency" onclick="loadReport('emergency')">בקרת חירום</div>
-        <div class="menu-btn" data-report="crime" onclick="loadReport('crime')">פשיעה ואכיפה</div>
-        <div class="menu-btn" data-report="center106" onclick="loadReport('center106')">מוקד 106</div>
-        <div class="menu-btn" data-report="benchmark" onclick="loadReport('benchmark')">מדרג רשויות</div>
-        <div class="menu-btn" data-report="employment" onclick="loadReport('employment')">תעסוקה עירונית</div>
-        <div class="menu-btn" data-report="main" onclick="loadReport('main')">לוח בקרה ראשי</div>
+        <div class="menu-btn" data-report="cityPopulation" onclick="loadReport('cityPopulation')">
+            <span>מרשם אוכלוסין עיר</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%9E%D7%A8%D7%A9%D7%9D%20%D7%90%D7%95%D7%9B%D7%9C%D7%95%D7%A1%D7%99%D7%9F%20-%20%D7%A2%D7%99%D7%A8.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="neighborhoodPopulation" onclick="loadReport('neighborhoodPopulation')">
+            <span>מרשם אוכלוסין שכונה</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%9E%D7%A8%D7%A9%D7%9D%20%D7%90%D7%95%D7%9B%D7%9C%D7%95%D7%A1%D7%99%D7%9F%20-%20%D7%A9%D7%9B%D7%95%D7%A0%D7%94.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="vehicles" onclick="loadReport('vehicles')">
+            <span>רכבים עירוניים</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A8%D7%9B%D7%91%D7%99%D7%9D%20%D7%A2%D7%99%D7%A8%D7%95%D7%A0%D7%99%D7%99%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="garbage" onclick="loadReport('garbage')">
+            <span>פינוי אשפה</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%AA%D7%91%D7%A8%D7%95%D7%90%D7%94.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="water" onclick="loadReport('water')">
+            <span>צריכת מים</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A6%D7%A8%D7%99%D7%9B%D7%AA%20%D7%9E%D7%99%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="appointments" onclick="loadReport('appointments')">
+            <span>זימון תורים</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%96%D7%99%D7%9E%D7%95%D7%9F%20%D7%AA%D7%95%D7%A8%D7%99%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="arnona" onclick="loadReport('arnona')">
+            <span>ארנונה</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/watermarked-c39434f3-00f8-4bc5-a817-2fd6c563388d1111111-removebg-preview.png" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="transport" onclick="loadReport('transport')">
+            <span>הסעות עירוניות</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/transfer.png" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="businessLicensing" onclick="loadReport('businessLicensing')">
+            <span>רישוי עסקים</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A8%D7%99%D7%A9%D7%95%D7%99%20%D7%A2%D7%A1%D7%A7%D7%99%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="businessPromotion" onclick="loadReport('businessPromotion')">
+            <span>קידום עסקים</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A7%D7%99%D7%93%D7%95%D7%9D%20%D7%95%D7%A8%D7%99%D7%A9%D7%95%D7%99%20%D7%A2%D7%A1%D7%A7%D7%99%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="parking" onclick="loadReport('parking')">
+            <span>תחבורה וחנייה</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%AA%D7%97%D7%91%D7%95%D7%A8%D7%94%20%D7%A2%D7%99%D7%A8%D7%95%D7%A0%D7%99%D7%AA.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="emergency" onclick="loadReport('emergency')">
+            <span>בקרת חירום</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%91%D7%A7%D7%A8%D7%94%20%D7%95%D7%97%D7%99%D7%A8%D7%95%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="crime" onclick="loadReport('crime')">
+            <span>פשיעה ואכיפה</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%91%D7%99%D7%98%D7%97%D7%95%D7%9F%20%D7%95%D7%97%D7%99%D7%A8%D7%95%D7%9D.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="center106" onclick="loadReport('center106')">
+            <span>מוקד 106</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%9E%D7%95%D7%A7%D7%93%20106.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="benchmark" onclick="loadReport('benchmark')">
+            <span>מדרג רשויות</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A1%D7%A7%D7%A8%20%D7%97%D7%91%D7%A8%D7%AA%D7%99.svg" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
+        <div class="menu-btn" data-report="employment" onclick="loadReport('employment')">
+            <span>תעסוקה עירונית</span>
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/employment.png" 
+                 alt="" 
+                 class="menu-icon">
+        </div>
     </div>
 </div>
 
 <div class="main">
-    <div class="tiles-wrapper">
-        <div class="tile" onclick="loadReport('cityPopulation')"><span>מרשם אוכלוסין עיר</span></div>
-        <div class="tile" onclick="loadReport('neighborhoodPopulation')"><span>מרשם אוכלוסין שכונה</span></div>
-        <div class="tile" onclick="loadReport('vehicles')"><span>רכבים עירוניים</span></div>
-        <div class="tile" onclick="loadReport('garbage')"><span>פינוי אשפה</span></div>
-        <div class="tile" onclick="loadReport('water')"><span>צריכת מים</span></div>
-        <div class="tile" onclick="loadReport('appointments')"><span>זימון תורים</span></div>
-        <div class="tile" onclick="loadReport('arnona')"><span>ארנונה</span></div>
-        <div class="tile" onclick="loadReport('transport')"><span>הסעות עירוניות</span></div>
-        <div class="tile" onclick="loadReport('businessLicensing')"><span>רישוי עסקים</span></div>
-        <div class="tile" onclick="loadReport('businessPromotion')"><span>קידום עסקים</span></div>
-        <div class="tile" onclick="loadReport('parking')"><span>תחבורה וחנייה</span></div>
-        <div class="tile" onclick="loadReport('emergency')"><span>בקרת חירום</span></div>
-        <div class="tile" onclick="loadReport('crime')"><span>פשיעה ואכיפה</span></div>
-        <div class="tile" onclick="loadReport('center106')"><span>מוקד 106</span></div>
-        <div class="tile" onclick="loadReport('benchmark')"><span>מדרג רשויות</span></div>
-        <div class="tile" onclick="loadReport('employment')"><span>תעסוקה עירונית</span></div>
+    <!-- באנר עליון -->
+    <div class="top-banner">
+        <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Mask%20group.png" alt="באנר">
+        
+        <!-- שעון ותאריך -->
+        <div class="date-time-container">
+            <div class="date-time" id="dateTime"></div>
+        </div>
+        
+        <!-- ברכה -->
+        <div class="greeting" id="greeting"></div>
+        
+        <!-- לוגו -->
+        <img src="https://municipaldatalake.blob.core.windows.net/imagefix/%D7%9E%D7%A9%D7%9B%D7%9C.png" 
+             alt="לוגו" 
+             class="banner-logo">
     </div>
-    <div class="main-dashboard" onclick="loadReport('main')">לוח בקרה ראשי</div>
+    
+    <!-- אזור תוכן ממורכז -->
+    <div class="content-area">
+        <div class="tiles-wrapper">
+        <!-- 🎨 מרשם אוכלוסין עיר -->
+        <div class="tile" onclick="loadReport('cityPopulation')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%9E%D7%A8%D7%A9%D7%9D%20%D7%90%D7%95%D7%9B%D7%9C%D7%95%D7%A1%D7%99%D7%9F%20-%20%D7%A2%D7%99%D7%A8.svg" 
+                 alt="מרשם אוכלוסין עיר" 
+                 class="tile-icon">
+            <span>מרשם אוכלוסין עיר</span>
+        </div>
+        
+        <!-- 🎨 מרשם אוכלוסין שכונה -->
+        <div class="tile" onclick="loadReport('neighborhoodPopulation')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%9E%D7%A8%D7%A9%D7%9D%20%D7%90%D7%95%D7%9B%D7%9C%D7%95%D7%A1%D7%99%D7%9F%20-%20%D7%A9%D7%9B%D7%95%D7%A0%D7%94.svg" 
+                 alt="מרשם אוכלוסין שכונה" 
+                 class="tile-icon">
+            <span>מרשם אוכלוסין שכונה</span>
+        </div>
+        
+        <!-- 🎨 רכבים עירוניים -->
+        <div class="tile" onclick="loadReport('vehicles')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A8%D7%9B%D7%91%D7%99%D7%9D%20%D7%A2%D7%99%D7%A8%D7%95%D7%A0%D7%99%D7%99%D7%9D.svg" 
+                 alt="רכבים עירוניים" 
+                 class="tile-icon">
+            <span>רכבים עירוניים</span>
+        </div>
+        
+        <!-- 🎨 תברואה / פינוי אשפה -->
+        <div class="tile" onclick="loadReport('garbage')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%AA%D7%91%D7%A8%D7%95%D7%90%D7%94.svg" 
+                 alt="תברואה" 
+                 class="tile-icon">
+            <span>פינוי אשפה</span>
+        </div>
+        
+        <!-- 🎨 צריכת מים -->
+        <div class="tile" onclick="loadReport('water')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A6%D7%A8%D7%99%D7%9B%D7%AA%20%D7%9E%D7%99%D7%9D.svg" 
+                 alt="צריכת מים" 
+                 class="tile-icon">
+            <span>צריכת מים</span>
+        </div>
+        
+        <!-- 🎨 זימון תורים -->
+        <div class="tile" onclick="loadReport('appointments')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%96%D7%99%D7%9E%D7%95%D7%9F%20%D7%AA%D7%95%D7%A8%D7%99%D7%9D.svg" 
+                 alt="זימון תורים" 
+                 class="tile-icon">
+            <span>זימון תורים</span>
+        </div>
+        
+        <!-- 🎨 ארנונה -->
+        <div class="tile" onclick="loadReport('arnona')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/watermarked-c39434f3-00f8-4bc5-a817-2fd6c563388d1111111-removebg-preview.png" 
+                 alt="ארנונה" 
+                 class="tile-icon">
+            <span>ארנונה</span>
+        </div>
+        
+        <!-- 🎨 הסעות עירוניות -->
+        <div class="tile" onclick="loadReport('transport')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/transfer.png" 
+                 alt="הסעות עירוניות" 
+                 class="tile-icon">
+            <span>הסעות עירוניות</span>
+        </div>
+        
+        <!-- 🎨 רישוי עסקים -->
+        <div class="tile" onclick="loadReport('businessLicensing')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A8%D7%99%D7%A9%D7%95%D7%99%20%D7%A2%D7%A1%D7%A7%D7%99%D7%9D.svg" 
+                 alt="רישוי עסקים" 
+                 class="tile-icon">
+            <span>רישוי עסקים</span>
+        </div>
+        
+        <!-- 🎨 קידום עסקים -->
+        <div class="tile" onclick="loadReport('businessPromotion')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A7%D7%99%D7%93%D7%95%D7%9D%20%D7%95%D7%A8%D7%99%D7%A9%D7%95%D7%99%20%D7%A2%D7%A1%D7%A7%D7%99%D7%9D.svg" 
+                 alt="קידום עסקים" 
+                 class="tile-icon">
+            <span>קידום עסקים</span>
+        </div>
+        
+        <!-- 🎨 תחבורה וחנייה -->
+        <div class="tile" onclick="loadReport('parking')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%AA%D7%97%D7%91%D7%95%D7%A8%D7%94%20%D7%A2%D7%99%D7%A8%D7%95%D7%A0%D7%99%D7%AA.svg" 
+                 alt="תחבורה וחנייה" 
+                 class="tile-icon">
+            <span>תחבורה וחנייה</span>
+        </div>
+        
+        <!-- 🎨 בקרת חירום -->
+        <div class="tile" onclick="loadReport('emergency')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%91%D7%A7%D7%A8%D7%94%20%D7%95%D7%97%D7%99%D7%A8%D7%95%D7%9D.svg" 
+                 alt="בקרת חירום" 
+                 class="tile-icon">
+            <span>בקרת חירום</span>
+        </div>
+        
+        <!-- 🎨 פשיעה ואכיפה -->
+        <div class="tile" onclick="loadReport('crime')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%91%D7%99%D7%98%D7%97%D7%95%D7%9F%20%D7%95%D7%97%D7%99%D7%A8%D7%95%D7%9D.svg" 
+                 alt="פשיעה ואכיפה" 
+                 class="tile-icon">
+            <span>פשיעה ואכיפה</span>
+        </div>
+        
+        <!-- 🎨 מוקד 106 -->
+        <div class="tile" onclick="loadReport('center106')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%9E%D7%95%D7%A7%D7%93%20106.svg" 
+                 alt="מוקד 106" 
+                 class="tile-icon">
+            <span>מוקד 106</span>
+        </div>
+        
+        <!-- 🎨 מדרג רשויות -->
+        <div class="tile" onclick="loadReport('benchmark')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%A1%D7%A7%D7%A8%20%D7%97%D7%91%D7%A8%D7%AA%D7%99.svg" 
+                 alt="מדרג רשויות" 
+                 class="tile-icon">
+            <span>מדרג רשויות</span>
+        </div>
+        
+        <!-- 🎨 תעסוקה עירונית -->
+        <div class="tile" onclick="loadReport('employment')">
+            <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/employment.png" 
+                 alt="תעסוקה עירונית" 
+                 class="tile-icon">
+            <span>תעסוקה עירונית</span>
+        </div>
+    </div>
+    <div class="main-dashboard" onclick="loadReport('main')">
+        <img src="https://municipaldatalake.blob.core.windows.net/dashboard-icons/Property%201=%D7%91%D7%A7%D7%A8%D7%94%20%D7%A8%D7%90%D7%A9%D7%99.svg" 
+             alt="בקרה ראשי" 
+             class="main-dashboard-icon">
+        <span>לוח בקרה ראשי</span>
+    </div>
+    </div>
 </div>
 
 <div id="loadingScreen">
@@ -458,8 +880,6 @@ window.addEventListener('load', () => {
     scaleIframeToFit();
     
     const main = document.querySelector('.main');
-    
-    // 🔥 מציג ישר את מסך הבית - בלי מסך התחלה!
     main.style.display = 'flex';
     
     console.log('✅ מסך הבית מוצג ישירות');
@@ -541,14 +961,36 @@ function toggleSidebar() {
     
     sidebar.classList.toggle("open");
     
-    // משנה כיוון החץ
     if (sidebar.classList.contains("open")) {
-        btn.innerHTML = '❮'; // תפריט פתוח - חץ שמאלה (לסגור)
-        btnContainer.style.right = '228px'; // זזז שמאלה!
+        btn.innerHTML = '❮';
+        btnContainer.style.right = '228px';
     } else {
-        btn.innerHTML = '❯'; // תפריט סגור - חץ ימינה (לפתוח)
-        btnContainer.style.right = '0'; // חוזר לימין
+        btn.innerHTML = '❯';
+        btnContainer.style.right = '0';
     }
+}
+
+function returnToHome() {
+    const main = document.querySelector('.main');
+    const container = document.getElementById("iframeContainer");
+    const sidebar = document.getElementById("sidebar");
+    const btn = document.querySelector('.top-right-button .top-btn');
+    const btnContainer = document.querySelector('.top-right-button');
+    
+    // סגירת התפריט
+    sidebar.classList.remove("open");
+    btn.innerHTML = '❯';
+    btnContainer.style.right = '0';
+    
+    // הסתרת iframe והצגת מסך הבית
+    container.style.display = "none";
+    main.style.display = "flex";
+    
+    // ניקוי active מכל התפריטים
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.top-menu-btn').forEach(b => b.classList.remove('active'));
+    
+    console.log('🏠 חזרה למסך הבית');
 }
 
 function loadReport(key) {
@@ -559,12 +1001,11 @@ function loadReport(key) {
     
     document.getElementById("sidebar").classList.remove("open");
     
-    // מחזיר את החץ למצב סגור
     const btn = document.querySelector('.top-right-button .top-btn');
     const btnContainer = document.querySelector('.top-right-button');
     if (btn) {
         btn.innerHTML = '❯';
-        btnContainer.style.right = '0'; // חוזר לימין
+        btnContainer.style.right = '0';
     }
     
     document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
@@ -577,8 +1018,6 @@ function loadReport(key) {
     
     document.body.classList.add('loading-active');
     
-    // 🔥 רק בפעם הראשונה - רקע לבן למסך ההזדהות
-    // אחרי זה תמיד כהה!
     if (isFirstDashboardClick) {
         container.style.background = '#ffffff';
         console.log('🎨 רקע לבן למסך הזדהות (פעם ראשונה)');
@@ -594,34 +1033,28 @@ function loadReport(key) {
         
         console.log('⏳ מסך טעינה ראשון נעלם - מחכה ללחיצה על התחבר...');
         
-        // 🔥 בודק כל 200ms אם לחצו על משהו ב-iframe
         let isFirstLoad = isFirstDashboardClick;
         let hasDetectedClick = false;
         
         const checkInterval = setInterval(() => {
-            // בודק אם ה-iframe קיבל פוקוס (סימן שלחצו בתוכו)
             if (document.activeElement === frame && !hasDetectedClick && isFirstLoad) {
                 hasDetectedClick = true;
                 clearInterval(checkInterval);
                 
                 console.log('✅ זיהוי לחיצה ב-iframe! מציג מסך טעינה...');
                 
-                // המתנה קצרה (300ms) ואז מסך טעינה
                 setTimeout(() => {
-                    // 🔥 מסך טעינה מופיע
                     loading.style.display = "flex";
                     document.body.classList.add('loading-active');
                     
-                    // 🔥 משנה לצבע כהה ברקע
                     container.style.background = '#030E1D';
                     console.log('🎨 צבע שונה לכהה ברקע');
                     
-                    // 🔥 אחרי 7.3 שניות - מסך טעינה נעלם (רק בפעם ראשונה!)
                     setTimeout(() => {
                         loading.style.display = "none";
                         document.body.classList.remove('loading-active');
                         console.log('🎉 מסך טעינה נעלם - דשבורד עם צבע כהה!');
-                    }, 7300);  // ← 7.3 שניות!
+                    }, 7300);
                 }, 300);
             }
         }, 200);
@@ -642,8 +1075,42 @@ function loadReport(key) {
         if (isFirstDashboardClick) {
             isFirstDashboardClick = false;
         }
-    }, 4500);  // 4.5 שניות
+    }, 4500);
 }
+
+// עדכון שעון ותאריך
+function updateDateTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    
+    // ברכה לפי שעה
+    let greeting = '';
+    if (hours >= 5 && hours < 12) {
+        greeting = 'בוקר טוב,';
+    } else if (hours >= 12 && hours < 17) {
+        greeting = 'אחר צהריים טובים,';
+    } else {
+        greeting = 'ערב טוב,';
+    }
+    
+    // פורמט תאריך DD-MM-YYYY
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    
+    // פורמט שעה HH:MM
+    const hoursStr = String(hours).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    const dateTimeStr = `${day}-${month}-${year} ${hoursStr}:${minutes}`;
+    
+    document.getElementById('greeting').textContent = greeting;
+    document.getElementById('dateTime').textContent = dateTimeStr;
+}
+
+// עדכון כל דקה
+updateDateTime();
+setInterval(updateDateTime, 60000);
 </script>
 
 </body>
