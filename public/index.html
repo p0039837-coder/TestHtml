@@ -931,16 +931,17 @@ const URLS = {
 
 // פונקציה שבודקת אם אנחנו במסך מלא - עובדת גם בדפדפן וגם באפליקציה מותקנת
 function isFullscreen() {
-    // בדיקה אם זה אפליקציה מותקנת (PWA)
+    // בדיקה אם זה אפליקציה מותקנת (PWA) - מספר שיטות לזיהוי
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                         window.navigator.standalone || 
-                         document.referrer.includes('android-app://');
+                         window.navigator.standalone === true ||
+                         document.referrer.includes('android-app://') ||
+                         window.matchMedia('(display-mode: fullscreen)').matches ||
+                         window.matchMedia('(display-mode: minimal-ui)').matches;
     
     if (isStandalone) {
-        // באפליקציה מותקנת - בדוק רק Fullscreen API (F11)
-        return !!(document.fullscreenElement || 
-                  document.webkitFullscreenElement || 
-                  document.msFullscreenElement);
+        // באפליקציה מותקנת - תמיד להתנהג כמו מסך מלא
+        // (הפס יעלם, הכפתור יהיה ב-right: 0)
+        return true;
     } else {
         // בדפדפן רגיל - בדוק גודל חלון (הבדיקה המקורית שעבדה)
         return (window.innerHeight === screen.height) && (window.innerWidth === screen.width);
