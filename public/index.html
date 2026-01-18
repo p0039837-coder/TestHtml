@@ -929,24 +929,46 @@ const URLS = {
     main: "https://app.powerbi.com/reportEmbed?reportId=cff48281-a598-4bab-96d7-b4ddc8e69e66&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection"
 };
 
-// פונקציה שבודקת אם אנחנו במסך מלא - עובדת גם בדפדפן וגם באפליקציה מותקנת
+// ספירת לחיצות F11/ESC באפליקציה
+let fullscreenToggleCount = 0;
+
+// פונקציה שבודקת אם אנחנו במסך מלא
 function isFullscreen() {
-    // בדיקה אם זה אפליקציה מותקנת (PWA) - מספר שיטות לזיהוי
+    // בדיקה אם זה אפליקציה מותקנת
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
                          window.navigator.standalone === true ||
-                         document.referrer.includes('android-app://') ||
-                         window.matchMedia('(display-mode: fullscreen)').matches ||
-                         window.matchMedia('(display-mode: minimal-ui)').matches;
+                         document.referrer.includes('android-app://');
     
     if (isStandalone) {
-        // באפליקציה מותקנת - תמיד להתנהג כמו מסך מלא
-        // (הפס יעלם, הכפתור יהיה ב-right: 0)
-        return true;
+        // באפליקציה - משתמשים בספירה: אי-זוגי = מסך מלא
+        return fullscreenToggleCount % 2 === 1;
     } else {
-        // בדפדפן רגיל - בדוק גודל חלון (הבדיקה המקורית שעבדה)
+        // בדפדפן רגיל - בדיקת גודל חלון (עובד מעולה!)
         return (window.innerHeight === screen.height) && (window.innerWidth === screen.width);
     }
 }
+
+// האזנה ללחיצות F11 ו-ESC
+document.addEventListener('keydown', (e) => {
+    // F11 (keyCode 122) או ESC (keyCode 27)
+    if (e.key === 'F11' || e.keyCode === 122 || e.key === 'Escape' || e.keyCode === 27) {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                             window.navigator.standalone === true ||
+                             document.referrer.includes('android-app://');
+        
+        if (isStandalone) {
+            // רק באפליקציה - ספירה
+            fullscreenToggleCount++;
+            console.log(`🔢 ספירת מסך מלא: ${fullscreenToggleCount} (${fullscreenToggleCount % 2 === 1 ? 'מסך מלא' : 'מסך רגיל'})`);
+            
+            // עדכון מיד
+            setTimeout(() => {
+                handleScrollbarCoverInFullscreen();
+                updateButtonPosition();
+            }, 100);
+        }
+    }
+});
 
 // פונקציה חדשה שמעדכנת את מיקום הכפתור לפי מצב המסך
 function updateButtonPosition() {
@@ -1009,58 +1031,44 @@ window.addEventListener('load', () => {
     
     console.log('✅ מסך הבית מוצג ישירות');
     
-    // בדיקה אם זה אפליקציה מותקנת
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                         window.navigator.standalone === true ||
-                         document.referrer.includes('android-app://') ||
-                         window.matchMedia('(display-mode: fullscreen)').matches ||
-                         window.matchMedia('(display-mode: minimal-ui)').matches;
+    // ⭐ הצגת גדלים למעקב
+    const debugDiv = document.createElement('div');
+    debugDiv.id = 'debugSizes';
+    debugDiv.style.position = 'fixed';
+    debugDiv.style.top = '10px';
+    debugDiv.style.left = '10px';
+    debugDiv.style.background = 'rgba(0,0,0,0.8)';
+    debugDiv.style.color = 'white';
+    debugDiv.style.padding = '10px';
+    debugDiv.style.fontSize = '14px';
+    debugDiv.style.zIndex = '99999';
+    debugDiv.style.fontFamily = 'monospace';
     
-    // רק באפליקציה - הצג בדיקת מסך מלא
-    if (isStandalone) {
-        const checkFullscreen = () => {
-            const fullscreenAPI = !!(document.fullscreenElement || 
-                                     document.webkitFullscreenElement || 
-                                     document.msFullscreenElement);
-            
-            // יצירת הודעה גדולה באמצע המסך
-            const testDiv = document.createElement('div');
-            testDiv.id = 'fullscreenTest';
-            testDiv.style.position = 'fixed';
-            testDiv.style.top = '50%';
-            testDiv.style.left = '50%';
-            testDiv.style.transform = 'translate(-50%, -50%)';
-            testDiv.style.fontSize = '200px';
-            testDiv.style.fontWeight = 'bold';
-            testDiv.style.color = fullscreenAPI ? '#00ff00' : '#ff0000';
-            testDiv.style.zIndex = '99999';
-            testDiv.style.textShadow = '0 0 20px rgba(0,0,0,0.8)';
-            testDiv.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            testDiv.style.padding = '50px';
-            testDiv.style.borderRadius = '20px';
-            testDiv.textContent = fullscreenAPI ? '1' : '0';
-            
-            // הסרת הודעה קודמת אם קיימת
-            const oldTest = document.getElementById('fullscreenTest');
-            if (oldTest) oldTest.remove();
-            
-            document.body.appendChild(testDiv);
-            
-            // הסרת ההודעה אחרי 2 שניות
-            setTimeout(() => {
-                testDiv.remove();
-            }, 2000);
-        };
+    const updateSizes = () => {
+        const winH = window.innerHeight;
+        const winW = window.innerWidth;
+        const scrH = screen.height;
+        const scrW = screen.width;
+        const diff = scrH - winH;
         
-        // בדיקה ראשונית
-        setTimeout(checkFullscreen, 500);
-        
-        // בדיקה כל פעם שמשנים מצב מסך מלא
-        document.addEventListener('fullscreenchange', checkFullscreen);
-        document.addEventListener('webkitfullscreenchange', checkFullscreen);
-        document.addEventListener('mozfullscreenchange', checkFullscreen);
-        document.addEventListener('msfullscreenchange', checkFullscreen);
-    }
+        debugDiv.innerHTML = `
+            Window: ${winW} x ${winH}<br>
+            Screen: ${scrW} x ${scrH}<br>
+            Diff: ${diff}px<br>
+            isFullscreen: ${isFullscreen() ? 'YES' : 'NO'}
+        `;
+    };
+    
+    document.body.appendChild(debugDiv);
+    updateSizes();
+    
+    window.addEventListener('resize', updateSizes);
+    
+    // ⭐ הוספה: קריאה ראשונית לעדכון מיקום כפתורים והפס
+    setTimeout(() => {
+        handleScrollbarCoverInFullscreen();
+        updateButtonPosition();
+    }, 100);
 });
 
 window.addEventListener('resize', scaleIframeToFit);
