@@ -997,12 +997,12 @@ function updateButtonPosition() {
     } else {
         // מסך רגיל
         if (isStandalone) {
-            // באפליקציה - חצי מהמרחק (78px)
+            // באפליקציה - 78px
             btnContainer.style.setProperty('right', '78px', 'important');
             console.log('🔄 updateButtonPosition: 78px (אפליקציה)');
         } else {
-            // בדפדפן - מרחק מלא (157px)
-            btnContainer.style.right = '157px';
+            // בדפדפן - 157px
+            btnContainer.style.setProperty('right', '157px', 'important');
         }
     }
 }
@@ -1078,7 +1078,7 @@ window.addEventListener('load', () => {
     if (isStandalone) {
         console.log('📱 זוהתה אפליקציה מותקנת - מזיז אלמנטים ימינה...');
         
-        // הזזת הכפתור והמלבן ימינה (חצי מ-157px = 78px)
+        // הזזת הכפתור והמלבן ימינה (78px)
         const btnContainer = document.querySelector('.top-right-button');
         if (btnContainer) {
             btnContainer.style.setProperty('right', '78px', 'important');
@@ -1092,43 +1092,10 @@ window.addEventListener('load', () => {
             console.log('✅ פס: 58px');
         }
         
-        console.log('📱 אלמנטים הוזזו ימינה (חצי מהמרחק)');
+        console.log('📱 אלמנטים הוזזו ימינה');
     } else {
         console.log('🌐 דפדפן רגיל - לא נוגעים בכלום');
     }
-    
-    // ⭐ הצגת גדלים למעקב
-    const debugDiv = document.createElement('div');
-    debugDiv.id = 'debugSizes';
-    debugDiv.style.position = 'fixed';
-    debugDiv.style.top = '10px';
-    debugDiv.style.left = '10px';
-    debugDiv.style.background = 'rgba(0,0,0,0.8)';
-    debugDiv.style.color = 'white';
-    debugDiv.style.padding = '10px';
-    debugDiv.style.fontSize = '14px';
-    debugDiv.style.zIndex = '99999';
-    debugDiv.style.fontFamily = 'monospace';
-    
-    const updateSizes = () => {
-        const winH = window.innerHeight;
-        const winW = window.innerWidth;
-        const scrH = screen.height;
-        const scrW = screen.width;
-        const diff = scrH - winH;
-        
-        debugDiv.innerHTML = `
-            Window: ${winW} x ${winH}<br>
-            Screen: ${scrW} x ${scrH}<br>
-            Diff: ${diff}px<br>
-            isFullscreen: ${isFullscreen() ? 'YES' : 'NO'}
-        `;
-    };
-    
-    document.body.appendChild(debugDiv);
-    updateSizes();
-    
-    window.addEventListener('resize', updateSizes);
     
     // ⭐ הוספה: קריאה ראשונית לעדכון מיקום כפתורים והפס
     setTimeout(() => {
@@ -1430,8 +1397,8 @@ function handleScrollbarCoverInFullscreen() {
                 scrollbarCover.style.setProperty('right', '58px', 'important');
                 console.log('🔄 handleScrollbar: 58px (אפליקציה)');
             } else {
-                // בדפדפן - מיקום מקורי (135px)
-                scrollbarCover.style.right = '135px';
+                // בדפדפן - 135px
+                scrollbarCover.style.setProperty('right', '135px', 'important');
             }
         }
     }
