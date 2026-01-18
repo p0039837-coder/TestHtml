@@ -1246,6 +1246,10 @@ function loadReport(key) {
         scaleIframeToFit();
         document.body.classList.remove('loading-active');
         
+        // ⭐ עדכון מיקומים מיד אחרי טעינת הדשבורד
+        handleScrollbarCoverInFullscreen();
+        updateButtonPosition();
+        
         console.log('⏳ מסך טעינה ראשון נעלם - מחכה ללחיצה על התחבר...');
         
         let isFirstLoad = isFirstDashboardClick;
