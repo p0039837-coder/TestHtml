@@ -985,8 +985,9 @@ function updateButtonPosition() {
     const btnContainer = document.querySelector('.top-right-button');
     if (!btnContainer) return;
     
-    // בדיקה אם זה אפליקציה מותקנת
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+    // בדיקה אם זה אפליקציה מותקנת (כולל minimal-ui!)
+    const isStandalone = window.matchMedia('(display-mode: minimal-ui)').matches ||
+                         window.matchMedia('(display-mode: standalone)').matches || 
                          window.navigator.standalone === true ||
                          document.referrer.includes('android-app://');
     
@@ -998,6 +999,7 @@ function updateButtonPosition() {
         if (isStandalone) {
             // באפליקציה - חצי מהמרחק (78px)
             btnContainer.style.setProperty('right', '78px', 'important');
+            console.log('🔄 updateButtonPosition: 78px (אפליקציה)');
         } else {
             // בדפדפן - מרחק מלא (157px)
             btnContainer.style.right = '157px';
@@ -1409,8 +1411,9 @@ setInterval(updateDateTime, 60000);
 function handleScrollbarCoverInFullscreen() {
     const scrollbarCover = document.getElementById('scrollbarCover');
     
-    // בדיקה אם זה אפליקציה מותקנת
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+    // בדיקה אם זה אפליקציה מותקנת (כולל minimal-ui!)
+    const isStandalone = window.matchMedia('(display-mode: minimal-ui)').matches ||
+                         window.matchMedia('(display-mode: standalone)').matches || 
                          window.navigator.standalone === true ||
                          document.referrer.includes('android-app://');
     
@@ -1425,6 +1428,7 @@ function handleScrollbarCoverInFullscreen() {
             if (isStandalone) {
                 // באפליקציה - חצי מהמרחק (67px)
                 scrollbarCover.style.setProperty('right', '67px', 'important');
+                console.log('🔄 handleScrollbar: 67px (אפליקציה)');
             } else {
                 // בדפדפן - מיקום מקורי (135px)
                 scrollbarCover.style.right = '135px';
