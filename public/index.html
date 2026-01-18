@@ -913,7 +913,7 @@ const URLS = {
     cityPopulation: "https://app.powerbi.com/reportEmbed?reportId=eccd0612-6bc4-47da-95b7-4df5603e6120&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
     neighborhoodPopulation: "https://app.powerbi.com/reportEmbed?reportId=d7b55659-3e5e-4b9c-87a4-fd226d334351&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
     vehicles: "https://app.powerbi.com/reportEmbed?reportId=0cfe591f-05ba-4f53-8ee3-470740ab0dc1&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
-    garbage: "https://app.powerbi.com/reportEmbed?reportId=b2f1dc67-f563-4155-b0d9-4960d0d31005&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
+    garbage: "https://app.powerbi.com/reportEmbed?reportId=9e6e7356-faa3-4b6e-bfbe-8694d7ff8172&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
     water: "https://app.powerbi.com/reportEmbed?reportId=a3653bce-8962-4adb-92c0-b94745dd6873&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
     appointments: "https://app.powerbi.com/reportEmbed?reportId=78578cd7-4e9a-4fb5-8985-4b207509e8fd&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=ReportSection",
     arnona: "https://app.powerbi.com/reportEmbed?reportId=c75b1a6f-9818-418b-955d-834040cab1a6&autoAuth=true&ctid=a8bf01d5-f36b-4b08-ad19-18fe50aa833c&navContentPaneEnabled=false&filterPaneEnabled=false&language=en-US&formatLocale=en-US&pageName=ReportSection",
@@ -1008,6 +1008,32 @@ window.addEventListener('load', () => {
     main.style.display = 'flex';
     
     console.log('✅ מסך הבית מוצג ישירות');
+    
+    // בדיקת זיהוי אפליקציה - הצגה ויזואלית
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true ||
+                         document.referrer.includes('android-app://') ||
+                         window.matchMedia('(display-mode: fullscreen)').matches ||
+                         window.matchMedia('(display-mode: minimal-ui)').matches;
+    
+    // יצירת הודעה גדולה באמצע המסך
+    const testDiv = document.createElement('div');
+    testDiv.style.position = 'fixed';
+    testDiv.style.top = '50%';
+    testDiv.style.left = '50%';
+    testDiv.style.transform = 'translate(-50%, -50%)';
+    testDiv.style.fontSize = '200px';
+    testDiv.style.fontWeight = 'bold';
+    testDiv.style.color = isStandalone ? '#00ff00' : '#ff0000';
+    testDiv.style.zIndex = '99999';
+    testDiv.style.textShadow = '0 0 20px rgba(0,0,0,0.8)';
+    testDiv.textContent = isStandalone ? '1' : '0';
+    document.body.appendChild(testDiv);
+    
+    // הסרת ההודעה אחרי 3 שניות
+    setTimeout(() => {
+        testDiv.remove();
+    }, 3000);
 });
 
 window.addEventListener('resize', scaleIframeToFit);
