@@ -996,19 +996,16 @@ function updateButtonPosition() {
                          window.navigator.standalone === true ||
                          document.referrer.includes('android-app://');
     
+    // באפליקציה - לא עושים כלום (האלמנט נמחק)
+    if (isStandalone) {
+        return;
+    }
+    
+    // רק בדפדפן רגיל
     if (isFullscreen()) {
-        // מסך מלא - תמיד 0
-        btnContainer.setAttribute('style', btnContainer.getAttribute('style').replace(/right:\s*[^;]+;?/, '') + 'right: 0 !important;');
+        btnContainer.style.right = '0';
     } else {
-        // מסך רגיל
-        if (isStandalone) {
-            // באפליקציה - שליש מהמרחק (52px)
-            btnContainer.setAttribute('style', btnContainer.getAttribute('style').replace(/right:\s*[^;]+;?/, '') + 'right: 52px !important;');
-            console.log('🔧 כפתור: 52px (אפליקציה)');
-        } else {
-            // בדפדפן - מרחק מלא (157px)
-            btnContainer.setAttribute('style', btnContainer.getAttribute('style').replace(/right:\s*[^;]+;?/, '') + 'right: 157px !important;');
-        }
+        btnContainer.style.right = '157px';
     }
 }
 
@@ -1396,31 +1393,21 @@ function handleScrollbarCoverInFullscreen() {
                          window.navigator.standalone === true ||
                          document.referrer.includes('android-app://');
     
+    // באפליקציה - לא עושים כלום (האלמנט נמחק)
+    if (isStandalone) {
+        return;
+    }
+    
+    // רק בדפדפן רגיל
     if (scrollbarCover) {
         if (isFullscreen()) {
-            // מסך מלא - הפס נעלם
             scrollbarCover.style.display = 'none';
         } else {
-            // מסך רגיל - הפס מופיע
             scrollbarCover.style.display = 'block';
-            
-            // התאמת מיקום הפס - בכוח עם !important
-            if (isStandalone) {
-                // באפליקציה - שליש מהמרחק (45px)
-                const currentStyle = scrollbarCover.getAttribute('style') || '';
-                const newStyle = currentStyle.replace(/right:\s*[^;]+;?/, '') + 'right: 45px !important;';
-                scrollbarCover.setAttribute('style', newStyle);
-                console.log('🔧 פס: 45px (אפליקציה)');
-            } else {
-                // בדפדפן - מיקום מקורי
-                const currentStyle = scrollbarCover.getAttribute('style') || '';
-                const newStyle = currentStyle.replace(/right:\s*[^;]+;?/, '') + 'right: 135px !important;';
-                scrollbarCover.setAttribute('style', newStyle);
-            }
+            scrollbarCover.style.right = '135px';
         }
     }
     
-    // ⭐ התיקון: עדכון מיקום הכפתור כל פעם שמסך מלא משתנה
     updateButtonPosition();
 }
 
