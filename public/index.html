@@ -989,15 +989,16 @@ function updateButtonPosition() {
     
     if (isFullscreen()) {
         // מסך מלא - תמיד 0
-        btnContainer.style.right = '0';
+        btnContainer.setAttribute('style', btnContainer.getAttribute('style').replace(/right:\s*[^;]+;?/, '') + 'right: 0 !important;');
     } else {
         // מסך רגיל
         if (isStandalone) {
             // באפליקציה - שליש מהמרחק (52px)
-            btnContainer.style.right = '52px';
+            btnContainer.setAttribute('style', btnContainer.getAttribute('style').replace(/right:\s*[^;]+;?/, '') + 'right: 52px !important;');
+            console.log('🔧 כפתור: 52px (אפליקציה)');
         } else {
             // בדפדפן - מרחק מלא (157px)
-            btnContainer.style.right = '157px';
+            btnContainer.setAttribute('style', btnContainer.getAttribute('style').replace(/right:\s*[^;]+;?/, '') + 'right: 157px !important;');
         }
     }
 }
@@ -1376,13 +1377,18 @@ function handleScrollbarCoverInFullscreen() {
             // מסך רגיל - הפס מופיע
             scrollbarCover.style.display = 'block';
             
-            // התאמת מיקום הפס
+            // התאמת מיקום הפס - בכוח עם !important
             if (isStandalone) {
                 // באפליקציה - שליש מהמרחק (45px)
-                scrollbarCover.style.right = '45px';
+                const currentStyle = scrollbarCover.getAttribute('style') || '';
+                const newStyle = currentStyle.replace(/right:\s*[^;]+;?/, '') + 'right: 45px !important;';
+                scrollbarCover.setAttribute('style', newStyle);
+                console.log('🔧 פס: 45px (אפליקציה)');
             } else {
                 // בדפדפן - מיקום מקורי
-                scrollbarCover.style.right = '135px';
+                const currentStyle = scrollbarCover.getAttribute('style') || '';
+                const newStyle = currentStyle.replace(/right:\s*[^;]+;?/, '') + 'right: 135px !important;';
+                scrollbarCover.setAttribute('style', newStyle);
             }
         }
     }
