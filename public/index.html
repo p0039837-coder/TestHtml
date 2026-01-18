@@ -50,17 +50,19 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
     display: none;
 }
 
-/* באפליקציה מותקנת - ברירת מחדל שונה */
+/* באפליקציה מותקנת - מוחק הכל */
 @media all and (display-mode: standalone) {
-    /* מסתיר רק את החץ/הכפתור */
+    /* מחיקת החץ והמלבן */
     .top-right-button {
         display: none !important;
     }
-    /* תפריט הצד - צמוד לגמרי לשוליים הימניים */
+    /* מחיקת הפס הצר */
+    #scrollbarCover {
+        display: none !important;
+    }
+    /* מחיקת תפריט הצד */
     .sidebar {
-        display: flex !important;
-        right: 0 !important;
-        margin-right: 0 !important;
+        display: none !important;
     }
 }
 
