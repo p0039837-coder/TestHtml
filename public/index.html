@@ -50,6 +50,13 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
     display: none;
 }
 
+/* באפליקציה מותקנת - ברירת מחדל שונה */
+@media all and (display-mode: standalone) {
+    .top-right-button {
+        right: 52px !important;
+    }
+}
+
 .top-btn {
     background: #04274D;
     color: white;
@@ -1043,6 +1050,25 @@ window.addEventListener('load', () => {
     main.style.display = 'flex';
     
     console.log('✅ מסך הבית מוצג ישירות');
+    
+    // ⭐ תיקון מיידי למיקומים באפליקציה
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true ||
+                         document.referrer.includes('android-app://');
+    
+    if (isStandalone) {
+        // עדכון מיקום הפס מיד בהתחלה
+        const scrollbarCover = document.getElementById('scrollbarCover');
+        if (scrollbarCover) {
+            scrollbarCover.style.right = '45px';
+        }
+        // עדכון מיקום הכפתור מיד בהתחלה
+        const btnContainer = document.querySelector('.top-right-button');
+        if (btnContainer) {
+            btnContainer.style.right = '52px';
+        }
+        console.log('📱 אפליקציה מותקנת - מיקומים מותאמים (52px, 45px)');
+    }
     
     // ⭐ הצגת גדלים למעקב
     const debugDiv = document.createElement('div');
