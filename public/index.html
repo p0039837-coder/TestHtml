@@ -52,8 +52,15 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 
 /* באפליקציה מותקנת - ברירת מחדל שונה */
 @media all and (display-mode: standalone) {
+    /* מסתיר רק את החץ/הכפתור */
     .top-right-button {
-        right: 52px !important;
+        display: none !important;
+    }
+    /* תפריט הצד - צמוד לגמרי לשוליים הימניים */
+    .sidebar {
+        display: flex !important;
+        right: 0 !important;
+        margin-right: 0 !important;
     }
 }
 
