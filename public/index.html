@@ -50,19 +50,13 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
     display: none;
 }
 
-/* באפליקציה מותקנת - מוחק הכל */
+/* באפליקציה מותקנת - הזזה ימינה */
 @media all and (display-mode: standalone) {
-    /* מחיקת החץ והמלבן */
     .top-right-button {
-        display: none !important;
+        right: 78px !important;
     }
-    /* מחיקת הפס הצר */
     #scrollbarCover {
-        display: none !important;
-    }
-    /* מחיקת תפריט הצד */
-    .sidebar {
-        display: none !important;
+        right: 67px !important;
     }
 }
 
@@ -996,16 +990,18 @@ function updateButtonPosition() {
                          window.navigator.standalone === true ||
                          document.referrer.includes('android-app://');
     
-    // באפליקציה - לא עושים כלום (האלמנט נמחק)
-    if (isStandalone) {
-        return;
-    }
-    
-    // רק בדפדפן רגיל
     if (isFullscreen()) {
-        btnContainer.style.right = '0';
+        // מסך מלא - תמיד 0
+        btnContainer.style.setProperty('right', '0', 'important');
     } else {
-        btnContainer.style.right = '157px';
+        // מסך רגיל
+        if (isStandalone) {
+            // באפליקציה - חצי מהמרחק (78px)
+            btnContainer.style.setProperty('right', '78px', 'important');
+        } else {
+            // בדפדפן - מרחק מלא (157px)
+            btnContainer.style.right = '157px';
+        }
     }
 }
 
@@ -1058,39 +1054,43 @@ window.addEventListener('load', () => {
     
     console.log('✅ מסך הבית מוצג ישירות');
     
-    // ⭐ תיקון מיידי למיקומים באפליקציה
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                         window.navigator.standalone === true ||
-                         document.referrer.includes('android-app://');
+    // ⭐ באפליקציה - הזזה ימינה של כל האלמנטים
+    const check1 = window.matchMedia('(display-mode: standalone)').matches;
+    const check2 = window.navigator.standalone === true;
+    const check3 = document.referrer.includes('android-app://');
+    const check4 = window.matchMedia('(display-mode: fullscreen)').matches;
+    const check5 = window.matchMedia('(display-mode: minimal-ui)').matches;
+    
+    console.log('🔍 בדיקת זיהוי אפליקציה:');
+    console.log('  display-mode: standalone:', check1);
+    console.log('  navigator.standalone:', check2);
+    console.log('  android-app:', check3);
+    console.log('  display-mode: fullscreen:', check4);
+    console.log('  display-mode: minimal-ui:', check5);
+    console.log('  window.location.href:', window.location.href);
+    
+    const isStandalone = check1 || check2 || check3 || check4 || check5;
+    
+    console.log('📱 תוצאה סופית - isStandalone:', isStandalone);
     
     if (isStandalone) {
-        console.log('📱 זוהתה אפליקציה מותקנת - מוחק אלמנטים...');
+        console.log('📱 זוהתה אפליקציה מותקנת - מזיז אלמנטים ימינה...');
         
-        // מחיקת הכפתור והמלבן
+        // הזזת הכפתור והמלבן ימינה (חצי מ-157px = 78px)
         const btnContainer = document.querySelector('.top-right-button');
         if (btnContainer) {
-            btnContainer.style.display = 'none';
-            btnContainer.style.visibility = 'hidden';
-            btnContainer.remove(); // מחיקה מוחלטת!
-            console.log('✅ כפתור נמחק');
+            btnContainer.style.setProperty('right', '78px', 'important');
+            console.log('✅ כפתור: 78px');
         }
         
-        // מחיקת הפס הצר
+        // הזזת הפס הצר ימינה (חצי מ-135px = 67px)
         const scrollbarCover = document.getElementById('scrollbarCover');
         if (scrollbarCover) {
-            scrollbarCover.style.display = 'none';
-            scrollbarCover.style.visibility = 'hidden';
-            scrollbarCover.remove(); // מחיקה מוחלטת!
-            console.log('✅ פס נמחק');
+            scrollbarCover.style.setProperty('right', '67px', 'important');
+            console.log('✅ פס: 67px');
         }
         
-        // מחיקת תפריט הצד (לעכשיו)
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) {
-            sidebar.style.display = 'none';
-            sidebar.style.visibility = 'hidden';
-            console.log('✅ תפריט צד מוסתר');
-        }
+        console.log('📱 אלמנטים הוזזו ימינה (חצי מהמרחק)');
     } else {
         console.log('🌐 דפדפן רגיל - לא נוגעים בכלום');
     }
@@ -1393,18 +1393,21 @@ function handleScrollbarCoverInFullscreen() {
                          window.navigator.standalone === true ||
                          document.referrer.includes('android-app://');
     
-    // באפליקציה - לא עושים כלום (האלמנט נמחק)
-    if (isStandalone) {
-        return;
-    }
-    
-    // רק בדפדפן רגיל
     if (scrollbarCover) {
         if (isFullscreen()) {
+            // מסך מלא - הפס נעלם
             scrollbarCover.style.display = 'none';
         } else {
+            // מסך רגיל - הפס מופיע
             scrollbarCover.style.display = 'block';
-            scrollbarCover.style.right = '135px';
+            
+            if (isStandalone) {
+                // באפליקציה - חצי מהמרחק (67px)
+                scrollbarCover.style.setProperty('right', '67px', 'important');
+            } else {
+                // בדפדפן - מיקום מקורי (135px)
+                scrollbarCover.style.right = '135px';
+            }
         }
     }
     
