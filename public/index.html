@@ -973,10 +973,23 @@ document.addEventListener('keydown', (e) => {
 // פונקציה חדשה שמעדכנת את מיקום הכפתור לפי מצב המסך
 function updateButtonPosition() {
     const btnContainer = document.querySelector('.top-right-button');
-    if (btnContainer) {
-        if (isFullscreen()) {
-            btnContainer.style.right = '0';
+    if (!btnContainer) return;
+    
+    // בדיקה אם זה אפליקציה מותקנת
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true ||
+                         document.referrer.includes('android-app://');
+    
+    if (isFullscreen()) {
+        // מסך מלא - תמיד 0
+        btnContainer.style.right = '0';
+    } else {
+        // מסך רגיל
+        if (isStandalone) {
+            // באפליקציה - חצי מהמרחק
+            btnContainer.style.right = '78px';
         } else {
+            // בדפדפן - מרחק מלא
             btnContainer.style.right = '157px';
         }
     }
