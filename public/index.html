@@ -56,7 +56,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
         right: 78px !important;
     }
     #scrollbarCover {
-        right: 67px !important;
+        right: 58px !important;
     }
 }
 
@@ -1085,11 +1085,11 @@ window.addEventListener('load', () => {
             console.log('✅ כפתור: 78px');
         }
         
-        // הזזת הפס הצר ימינה (חצי מ-135px = 67px)
+        // הזזת הפס הצר ימינה (58px)
         const scrollbarCover = document.getElementById('scrollbarCover');
         if (scrollbarCover) {
-            scrollbarCover.style.setProperty('right', '67px', 'important');
-            console.log('✅ פס: 67px');
+            scrollbarCover.style.setProperty('right', '58px', 'important');
+            console.log('✅ פס: 58px');
         }
         
         console.log('📱 אלמנטים הוזזו ימינה (חצי מהמרחק)');
@@ -1301,8 +1301,8 @@ function loadReport(key) {
                          window.navigator.standalone === true;
     
     if (isStandalone && scrollbarCover) {
-        scrollbarCover.style.setProperty('right', '67px', 'important');
-        console.log('📱 loadReport: הזזת פס ל-67px');
+        scrollbarCover.style.setProperty('right', '58px', 'important');
+        console.log('📱 loadReport: הזזת פס ל-58px');
     }
     
     if (isFirstDashboardClick) {
@@ -1426,9 +1426,9 @@ function handleScrollbarCoverInFullscreen() {
             scrollbarCover.style.display = 'block';
             
             if (isStandalone) {
-                // באפליקציה - חצי מהמרחק (67px)
-                scrollbarCover.style.setProperty('right', '67px', 'important');
-                console.log('🔄 handleScrollbar: 67px (אפליקציה)');
+                // באפליקציה - 58px
+                scrollbarCover.style.setProperty('right', '58px', 'important');
+                console.log('🔄 handleScrollbar: 58px (אפליקציה)');
             } else {
                 // בדפדפן - מיקום מקורי (135px)
                 scrollbarCover.style.right = '135px';
