@@ -1009,58 +1009,11 @@ window.addEventListener('load', () => {
     
     console.log('✅ מסך הבית מוצג ישירות');
     
-    // בדיקה אם זה אפליקציה מותקנת
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                         window.navigator.standalone === true ||
-                         document.referrer.includes('android-app://') ||
-                         window.matchMedia('(display-mode: fullscreen)').matches ||
-                         window.matchMedia('(display-mode: minimal-ui)').matches;
-    
-    // רק באפליקציה - הצג בדיקת מסך מלא
-    if (isStandalone) {
-        const checkFullscreen = () => {
-            const fullscreenAPI = !!(document.fullscreenElement || 
-                                     document.webkitFullscreenElement || 
-                                     document.msFullscreenElement);
-            
-            // יצירת הודעה גדולה באמצע המסך
-            const testDiv = document.createElement('div');
-            testDiv.id = 'fullscreenTest';
-            testDiv.style.position = 'fixed';
-            testDiv.style.top = '50%';
-            testDiv.style.left = '50%';
-            testDiv.style.transform = 'translate(-50%, -50%)';
-            testDiv.style.fontSize = '200px';
-            testDiv.style.fontWeight = 'bold';
-            testDiv.style.color = fullscreenAPI ? '#00ff00' : '#ff0000';
-            testDiv.style.zIndex = '99999';
-            testDiv.style.textShadow = '0 0 20px rgba(0,0,0,0.8)';
-            testDiv.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            testDiv.style.padding = '50px';
-            testDiv.style.borderRadius = '20px';
-            testDiv.textContent = fullscreenAPI ? '1' : '0';
-            
-            // הסרת הודעה קודמת אם קיימת
-            const oldTest = document.getElementById('fullscreenTest');
-            if (oldTest) oldTest.remove();
-            
-            document.body.appendChild(testDiv);
-            
-            // הסרת ההודעה אחרי 2 שניות
-            setTimeout(() => {
-                testDiv.remove();
-            }, 2000);
-        };
-        
-        // בדיקה ראשונית
-        setTimeout(checkFullscreen, 500);
-        
-        // בדיקה כל פעם שמשנים מצב מסך מלא
-        document.addEventListener('fullscreenchange', checkFullscreen);
-        document.addEventListener('webkitfullscreenchange', checkFullscreen);
-        document.addEventListener('mozfullscreenchange', checkFullscreen);
-        document.addEventListener('msfullscreenchange', checkFullscreen);
-    }
+    // ⭐ הוספה: קריאה ראשונית לעדכון מיקום כפתורים והפס
+    setTimeout(() => {
+        handleScrollbarCoverInFullscreen();
+        updateButtonPosition();
+    }, 100);
 });
 
 window.addEventListener('resize', scaleIframeToFit);
