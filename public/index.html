@@ -1266,6 +1266,17 @@ function loadReport(key) {
         btn.style.background = '#04274D';
         btn.style.display = 'flex';
         btnContainer.style.display = 'block';
+        
+        // ⭐ הזזה מיידית באפליקציה
+        const isStandalone = window.matchMedia('(display-mode: minimal-ui)').matches || 
+                             window.matchMedia('(display-mode: standalone)').matches || 
+                             window.navigator.standalone === true;
+        
+        if (isStandalone) {
+            btnContainer.style.setProperty('right', '78px', 'important');
+            console.log('📱 loadReport: הזזת כפתור ל-78px');
+        }
+        
         // ⭐ התיקון: עדכון מיקום לפי מצב מסך מלא
         updateButtonPosition();
     }
@@ -1281,6 +1292,16 @@ function loadReport(key) {
     document.body.classList.add('loading-active');
     
     const scrollbarCover = document.getElementById('scrollbarCover');
+    
+    // ⭐ הזזה מיידית של הפס באפליקציה
+    const isStandalone = window.matchMedia('(display-mode: minimal-ui)').matches || 
+                         window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true;
+    
+    if (isStandalone && scrollbarCover) {
+        scrollbarCover.style.setProperty('right', '67px', 'important');
+        console.log('📱 loadReport: הזזת פס ל-67px');
+    }
     
     if (isFirstDashboardClick) {
         container.style.background = '#ffffff';
