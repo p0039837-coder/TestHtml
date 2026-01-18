@@ -1067,17 +1067,35 @@ window.addEventListener('load', () => {
                          document.referrer.includes('android-app://');
     
     if (isStandalone) {
-        // עדכון מיקום הפס מיד בהתחלה
-        const scrollbarCover = document.getElementById('scrollbarCover');
-        if (scrollbarCover) {
-            scrollbarCover.style.right = '45px';
-        }
-        // עדכון מיקום הכפתור מיד בהתחלה
+        console.log('📱 זוהתה אפליקציה מותקנת - מוחק אלמנטים...');
+        
+        // מחיקת הכפתור והמלבן
         const btnContainer = document.querySelector('.top-right-button');
         if (btnContainer) {
-            btnContainer.style.right = '52px';
+            btnContainer.style.display = 'none';
+            btnContainer.style.visibility = 'hidden';
+            btnContainer.remove(); // מחיקה מוחלטת!
+            console.log('✅ כפתור נמחק');
         }
-        console.log('📱 אפליקציה מותקנת - מיקומים מותאמים (52px, 45px)');
+        
+        // מחיקת הפס הצר
+        const scrollbarCover = document.getElementById('scrollbarCover');
+        if (scrollbarCover) {
+            scrollbarCover.style.display = 'none';
+            scrollbarCover.style.visibility = 'hidden';
+            scrollbarCover.remove(); // מחיקה מוחלטת!
+            console.log('✅ פס נמחק');
+        }
+        
+        // מחיקת תפריט הצד (לעכשיו)
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.style.display = 'none';
+            sidebar.style.visibility = 'hidden';
+            console.log('✅ תפריט צד מוסתר');
+        }
+    } else {
+        console.log('🌐 דפדפן רגיל - לא נוגעים בכלום');
     }
     
     // ⭐ הצגת גדלים למעקב
