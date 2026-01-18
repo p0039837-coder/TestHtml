@@ -986,10 +986,10 @@ function updateButtonPosition() {
     } else {
         // מסך רגיל
         if (isStandalone) {
-            // באפליקציה - חצי מהמרחק
-            btnContainer.style.right = '78px';
+            // באפליקציה - שליש מהמרחק (52px)
+            btnContainer.style.right = '52px';
         } else {
-            // בדפדפן - מרחק מלא
+            // בדפדפן - מרחק מלא (157px)
             btnContainer.style.right = '157px';
         }
     }
@@ -1333,11 +1333,27 @@ setInterval(updateDateTime, 60000);
 function handleScrollbarCoverInFullscreen() {
     const scrollbarCover = document.getElementById('scrollbarCover');
     
+    // בדיקה אם זה אפליקציה מותקנת
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true ||
+                         document.referrer.includes('android-app://');
+    
     if (scrollbarCover) {
         if (isFullscreen()) {
+            // מסך מלא - הפס נעלם
             scrollbarCover.style.display = 'none';
         } else {
+            // מסך רגיל - הפס מופיע
             scrollbarCover.style.display = 'block';
+            
+            // התאמת מיקום הפס
+            if (isStandalone) {
+                // באפליקציה - שליש מהמרחק (45px)
+                scrollbarCover.style.right = '45px';
+            } else {
+                // בדפדפן - מיקום מקורי
+                scrollbarCover.style.right = '135px';
+            }
         }
     }
     
