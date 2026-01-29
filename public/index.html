@@ -1356,6 +1356,36 @@ function scaleIframeToFit() {
 let isInitialLoad = true;
 let isFirstDashboardClick = true;
 
+// ✨ ספירת כניסות למסך טעינה (לפיצ'ר +2.5 שניות בפעם השנייה)
+let loadingScreenCount = 0;
+
+// ✨ טיימר חוסר פעילות - 15 דקות
+let inactivityTimer;
+const INACTIVITY_TIMEOUT = 15 * 60 * 1000; // 15 דקות במילישניות
+
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(function() {
+        // חזרה למסך הבית אחרי 15 דקות חוסר פעילות
+        const container = document.getElementById("iframeContainer");
+        if (container && container.style.display !== 'none') {
+            console.log('⏰ חזרה למסך הבית אחרי 15 דקות חוסר פעילות');
+            returnToHome();
+        }
+    }, INACTIVITY_TIMEOUT);
+}
+
+// האזנה לכל סוגי הפעילות
+document.addEventListener('mousemove', resetInactivityTimer);
+document.addEventListener('mousedown', resetInactivityTimer);
+document.addEventListener('keypress', resetInactivityTimer);
+document.addEventListener('scroll', resetInactivityTimer);
+document.addEventListener('touchstart', resetInactivityTimer);
+document.addEventListener('click', resetInactivityTimer);
+
+// התחלת הטיימר
+resetInactivityTimer();
+
 window.addEventListener('load', function() {
     scaleIframeToFit();
     
@@ -1516,6 +1546,10 @@ function loadReport(key) {
     const loading = document.getElementById("loadingScreen");
     const main = document.querySelector('.main');
     
+    // ✨ ספירת כניסות למסך טעינה
+    loadingScreenCount++;
+    console.log('🔢 מסך טעינה - כניסה מספר: ' + loadingScreenCount);
+    
     document.getElementById("sidebar").classList.remove("open");
     
     const btn = document.querySelector('.top-right-button .top-btn');
@@ -1566,6 +1600,15 @@ function loadReport(key) {
         if (scrollbarCover) scrollbarCover.style.background = '#030E1D';
     }
     
+    // ✨ חישוב זמן טעינה: בפעם השנייה +2500ms (2.5 שניות)
+    var loadingTime = 4500; // ברירת מחדל
+    if (loadingScreenCount === 2) {
+        loadingTime = 7000; // 4500 + 2500 = 7000ms
+        console.log('⏱️ פעם שנייה - מסך טעינה 7 שניות (4.5 + 2.5)');
+    } else {
+        console.log('⏱️ מסך טעינה רגיל - 4.5 שניות');
+    }
+    
     setTimeout(function() {
         loading.style.display = "none";
         scaleIframeToFit();
@@ -1610,7 +1653,7 @@ function loadReport(key) {
         if (isFirstDashboardClick) {
             isFirstDashboardClick = false;
         }
-    }, 4500);
+    }, loadingTime); // ✨ משתמשים בזמן המחושב
 }
 
 function updateDateTime() {
