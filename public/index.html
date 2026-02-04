@@ -1024,6 +1024,7 @@ function returnToHome() {
 
 function loadReport(key) {
     const frame = document.getElementById("reportFrame");
+    const preAuthFrame = document.getElementById("preAuthFrame");
     const container = document.getElementById("iframeContainer");
     const loading = document.getElementById("loadingScreen");
     const main = document.querySelector('.main');
@@ -1045,63 +1046,73 @@ function loadReport(key) {
     
     main.style.display = 'none';
     loading.style.display = "flex";
-    frame.src = URLS[key];
-    container.style.display = "block";
-    
     document.body.classList.add('loading-active');
     
-    const scrollbarCover = document.getElementById('scrollbarCover');
+    // 🔧 שלב 1: Pre-Authentication - טוען ב-preAuthFrame קודם
+    console.log('🔐 מתחיל pre-authentication...');
+    preAuthFrame.src = URLS[key];
     
-    if (isFirstDashboardClick) {
-        container.style.background = '#ffffff';
-        if (scrollbarCover) scrollbarCover.style.background = '#ffffff';
-    } else {
-        container.style.background = '#030E1D';
-        if (scrollbarCover) scrollbarCover.style.background = '#030E1D';
-    }
-    
+    // 🔧 שלב 2: מחכים שההתחברות תושלם (5 שניות)
     setTimeout(function() {
-        loading.style.display = "none";
-        scaleIframeToFit();
-        document.body.classList.remove('loading-active');
+        console.log('✅ Pre-authentication הושלם, טוען דשבורד ראשי...');
         
-        let isFirstLoad = isFirstDashboardClick;
-        let hasDetectedClick = false;
+        // עכשיו טוענים את הדשבורד האמיתי
+        frame.src = URLS[key];
+        container.style.display = "block";
         
-        const checkInterval = setInterval(function() {
-            if (document.activeElement === frame && !hasDetectedClick && isFirstLoad) {
-                hasDetectedClick = true;
-                clearInterval(checkInterval);
-                
-                setTimeout(function() {
-                    loading.style.display = "flex";
-                    document.body.classList.add('loading-active');
-                    
-                    const scrollbarCover = document.getElementById('scrollbarCover');
-                    container.style.background = '#030E1D';
-                    if (scrollbarCover) scrollbarCover.style.background = '#030E1D';
-                    
-                    setTimeout(function() {
-                        loading.style.display = "none";
-                        document.body.classList.remove('loading-active');
-                    }, 7300);
-                }, 300);
-            }
-        }, 200);
-        
-        const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
-        
-        if (additionalHideTime > 0) {
-            document.body.classList.add('loading-active');
-            setTimeout(function() {
-                document.body.classList.remove('loading-active');
-            }, additionalHideTime);
-        }
+        const scrollbarCover = document.getElementById('scrollbarCover');
         
         if (isFirstDashboardClick) {
-            isFirstDashboardClick = false;
+            container.style.background = '#ffffff';
+            if (scrollbarCover) scrollbarCover.style.background = '#ffffff';
+        } else {
+            container.style.background = '#030E1D';
+            if (scrollbarCover) scrollbarCover.style.background = '#030E1D';
         }
-    }, 4500);
+        
+        setTimeout(function() {
+            loading.style.display = "none";
+            scaleIframeToFit();
+            document.body.classList.remove('loading-active');
+            
+            let isFirstLoad = isFirstDashboardClick;
+            let hasDetectedClick = false;
+            
+            const checkInterval = setInterval(function() {
+                if (document.activeElement === frame && !hasDetectedClick && isFirstLoad) {
+                    hasDetectedClick = true;
+                    clearInterval(checkInterval);
+                    
+                    setTimeout(function() {
+                        loading.style.display = "flex";
+                        document.body.classList.add('loading-active');
+                        
+                        const scrollbarCover = document.getElementById('scrollbarCover');
+                        container.style.background = '#030E1D';
+                        if (scrollbarCover) scrollbarCover.style.background = '#030E1D';
+                        
+                        setTimeout(function() {
+                            loading.style.display = "none";
+                            document.body.classList.remove('loading-active');
+                        }, 7300);
+                    }, 300);
+                }
+            }, 200);
+            
+            const additionalHideTime = isFirstDashboardClick ? 8000 : 0;
+            
+            if (additionalHideTime > 0) {
+                document.body.classList.add('loading-active');
+                setTimeout(function() {
+                    document.body.classList.remove('loading-active');
+                }, additionalHideTime);
+            }
+            
+            if (isFirstDashboardClick) {
+                isFirstDashboardClick = false;
+            }
+        }, 4500);
+    }, 5000); // 5 שניות pre-authentication
 }
 
 function updateDateTime() {
